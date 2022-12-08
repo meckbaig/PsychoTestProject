@@ -15,6 +15,8 @@ namespace PsychoTestCourseProject.Extensions
         private List<QuestionClass> questions;
         public List<QuestionClass> Questions { get => questions ??(questions = ParseFile(Filename)); }
         public string Filename { get; set; }
+        //public Array AnswersValues { get; set; }
+        //public Array AnswersPoints { get; set; }
 
         public TestClass()
         {

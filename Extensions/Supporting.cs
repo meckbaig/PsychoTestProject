@@ -11,6 +11,9 @@ namespace PsychoTestCourseProject.Extensions
         public static object testFrame { get; set; }
         public static bool testStarted { get; set; }
 
+        public static TestClass CurrentTest { get; set; }
+        public static int CurrentQuestion { get; set; }
+
         public static List<T> Shuffle<T>(List<T> list)
         {
             Random rand = new Random();

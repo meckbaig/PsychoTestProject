@@ -10,6 +10,6 @@
       Title="Test">
 
     <Grid Background="White">
-        <local:Question x:Name="Question" VerticalAlignment="Center" Width="300" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" Loaded="Question_Loaded" ExtNextButton_Click="Question_ExtNextButton_Click"/>
+        <local:Question x:Name="Question" VerticalAlignment="Center" Width="300" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" TimeOut="NextQuestion"/>
     </Grid>
 </Page>

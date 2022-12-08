@@ -25,8 +25,8 @@ namespace PsychoTestCourseProject.View
     public partial class Test : Page
     {
         int currentScore = 0;
-        int totalScore = 1;
-        //TestsViewModel testsViewModel;
+        int totalScore;
+
         public Test(TestClass newTest)
         {
             InitializeComponent();
@@ -35,9 +35,10 @@ namespace PsychoTestCourseProject.View
         private void Question_Loaded(object sender, RoutedEventArgs e)
         {
             Question.Initialize();
+            totalScore = Supporting.CurrentTest.Questions.Count;
         }
 
-        private void Question_ExtNextButton_Click(object sender, EventArgs e)
+        private void NextQuestion(object sender, EventArgs e)
         {
             var nextQuestion = (DataContext as TestViewModel).NextQuestion();
 
@@ -45,7 +46,6 @@ namespace PsychoTestCourseProject.View
                 currentScore++;
             if (nextQuestion != null)
             {
-                totalScore++;
                 Question.Initialize(nextQuestion);
             }
             else

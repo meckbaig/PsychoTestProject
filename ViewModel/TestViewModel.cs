@@ -10,26 +10,34 @@ namespace PsychoTestCourseProject.ViewModel
 {
     public class TestViewModel
     {
-        TestClass test;
-        int idQuestion;
 
         public TestViewModel(TestClass test)
         {
-            this.test = test;
+            Supporting.CurrentTest = test;
+            Supporting.CurrentQuestion = 0;
         }
 
         public QuestionClass CurrentQuestion
         {
-            get => test.Questions[idQuestion];
+            get => Supporting.CurrentTest.Questions[Supporting.CurrentQuestion];
         }
 
         public QuestionClass NextQuestion()
         {
-            if (idQuestion == (test.Questions.Count - 1))
+            if (Supporting.CurrentQuestion == (Supporting.CurrentTest.Questions.Count - 1))
             {
                 return null;
             }
-            return test.Questions[++idQuestion];
+            return Supporting.CurrentTest.Questions[++Supporting.CurrentQuestion];
         }
+
+        //public QuestionClass PreviousQuestion()
+        //{
+        //    if (idQuestion == 0)
+        //    {
+        //        return null;
+        //    }
+        //    return Supporting.CurrentTest.Questions[--idQuestion];
+        //}
     }
 }

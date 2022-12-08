@@ -8,10 +8,12 @@
       d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
         <StackPanel>
-            <TextBlock TextWrapping="Wrap" Text="{Binding QuestionText}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding StringFormat = Осталось: {0}с., Path=QuestionTime}" Foreground="{Binding TimerColor}" FontFamily="Microsoft YaHei UI" FontSize="15"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding QuestionText}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="20" Margin="0,5,0,5"/>
             <StackPanel x:Name="ShowedAnswers">
             </StackPanel>
-            <Button x:Name="NextButton" Content="Далее" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="NextButton_Click"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding QuestionCount}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="13" Margin="0,5,0,5"/>
+            <Button x:Name="NextButton" Content="Далее" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="NextButton_Click" Margin="0,5,0,0"/>
         </StackPanel>
     </Grid>
 </UserControl>
