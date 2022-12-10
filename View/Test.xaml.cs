@@ -24,8 +24,8 @@ namespace PsychoTestCourseProject.View
     /// </summary>
     public partial class Test : Page
     {
-        int currentScore = 0;
-        int totalScore;
+        double currentScore = 0;
+        double totalScore;
 
         public Test(TestClass newTest)
         {
@@ -41,9 +41,8 @@ namespace PsychoTestCourseProject.View
         private void NextQuestion(object sender, EventArgs e)
         {
             var nextQuestion = (DataContext as TestViewModel).NextQuestion();
+            currentScore += Question.CheckAnswer();
 
-            if (Question.CheckAnswer())
-                currentScore++;
             if (nextQuestion != null)
             {
                 Question.Initialize(nextQuestion);

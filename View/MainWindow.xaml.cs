@@ -1,4 +1,5 @@
 ﻿using PsychoTestCourseProject.ViewModel;
+using PsychoTestCourseProject.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,8 @@ namespace PsychoTestCourseProject.View
         {
             InitializeComponent(); 
             DataContext = new MainViewModel(MainFrame);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
             MainFrame.Navigate(new Welcome());
+            Supporting.mainFrame = MainFrame;
         }
     }
 }

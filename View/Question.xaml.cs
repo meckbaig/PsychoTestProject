@@ -1,20 +1,11 @@
 ﻿using PsychoTestCourseProject.Extensions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PsychoTestCourseProject.View
 {
@@ -52,12 +43,12 @@ namespace PsychoTestCourseProject.View
             PrintAnswers(QuestionClass);
             Timer(QuestionClass);
         }
-        public QuestionClass QuestionClass 
-        { 
+        public QuestionClass QuestionClass
+        {
             get { return (QuestionClass)GetValue(QuestionProperty); }
-            set 
-            { 
-                SetValue(QuestionProperty, value); 
+            set
+            {
+                SetValue(QuestionProperty, value);
                 OnPropertyChanged("QuestionText");
             }
         }
@@ -99,10 +90,10 @@ namespace PsychoTestCourseProject.View
                     QuestionTime = 30;
                     break;
                 case QuestionType.Multiple:
-                    QuestionTime = 45;
+                    QuestionTime = 60;
                     break;
                 case QuestionType.String:
-                    QuestionTime = 60;
+                    QuestionTime = 90;
                     break;
             }
             MaxQuestionTime = QuestionTime;
@@ -112,7 +103,7 @@ namespace PsychoTestCourseProject.View
 
         public void PrintAnswers(QuestionClass question)
         {
-            QuestionCount = (Supporting.CurrentQuestion+1)+" из "+Supporting.CurrentTest.Questions.Count;
+            QuestionCount = (Supporting.CurrentQuestion + 1) + " из " + Supporting.CurrentTest.Questions.Count;
             OnPropertyChanged("QuestionCount");
             ShowedAnswers.Children.Clear();
             foreach (var answer in question.Answers)
@@ -146,26 +137,58 @@ namespace PsychoTestCourseProject.View
             }
         }
 
-        public bool CheckAnswer()
+        public double CheckAnswer()
         {
-            bool сorrect = true;
-            foreach (var answer in ShowedAnswers.Children)
+            double maxPoint = 0;
+            double point = 0;
+            var answ = ShowedAnswers.Children[0];
+            switch (answ)
             {
-                if (answer is RadioButton radioButton)
-                {
-                    сorrect = ((AnswerClass)radioButton.Tag).IsCorrect == (radioButton.IsChecked ?? false);
-                }
-                else if (answer is CheckBox checkBox)
-                {
-                    сorrect = ((AnswerClass)checkBox.Tag).IsCorrect == (checkBox.IsChecked ?? false);
-                }
-                else if (answer is TextBox textBox)
-                {
-                    сorrect = ((AnswerClass)textBox.Tag).Text == textBox.Text;
-                }
-                if (!сorrect) return false;
+                case (RadioButton):
+                    foreach (var answer in ShowedAnswers.Children)
+                    {
+                        RadioButton radioButton = (RadioButton)answer;
+                        if (((AnswerClass)radioButton.Tag).IsCorrect == (radioButton.IsChecked ?? false))
+                            point = 1;
+                    }
+                    break;
+                case (CheckBox):
+                    foreach (var answer in ShowedAnswers.Children)
+                    {
+                        CheckBox checkBox = (CheckBox)answer;
+                        if (((AnswerClass)checkBox.Tag).IsCorrect == true)
+                        {
+                            maxPoint++;
+                            if (checkBox.IsChecked ?? false)
+                                point++;
+                        }
+                    }
+                    point /= maxPoint;
+                    break;
+                case (TextBox):
+                    TextBox textBox = (TextBox)answ;
+                    var correctAnswers = ((AnswerClass)textBox.Tag).Text.Split(", ");
+                    var answers = textBox.Text.ToLower().Split(", ");
+                    maxPoint = correctAnswers.Length;
+                    foreach (var correctAnswer in correctAnswers)
+                    {
+                        foreach (var variableAnswer in correctAnswer.Split("(/)"))
+                        {
+                            foreach (var answer in answers)
+                            {
+                                if (variableAnswer.Equals(answer))
+                                {
+                                    point++;
+                                    goto Outer;
+                                }
+                            }
+                        }
+                    Outer:;
+                    }
+                    point /= maxPoint;
+                    break;
             }
-            return true;
+            return point;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

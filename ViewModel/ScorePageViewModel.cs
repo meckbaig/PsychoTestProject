@@ -13,7 +13,7 @@ namespace PsychoTestCourseProject.ViewModel
         public string Score { get; set; }
         public int Result { get => result; }
 
-        public ScorePageViewModel(int totalScore, int currentScore)
+        public ScorePageViewModel(double totalScore, double currentScore)
         {
             result = Calculate(totalScore, currentScore);
             Score = currentScore + "/" + totalScore;
@@ -23,7 +23,7 @@ namespace PsychoTestCourseProject.ViewModel
         public int Calculate(double totalScore, double currentScore)
         {
             double percentage = currentScore/totalScore*100;
-            if (percentage > 90)
+            if (percentage > 85)
                 return 5;
             if (percentage > 75)
                 return 4;

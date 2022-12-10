@@ -10,10 +10,10 @@
 
     <Grid Background="Azure">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="6*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Background="Azure" ItemsSource="{Binding lectionList}" HorizontalContentAlignment="Stretch">
+        <ListBox Background="Azure" ItemsSource="{Binding lectionList}" HorizontalContentAlignment="Stretch" Margin="0,0,0,25">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
@@ -23,11 +23,13 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Button  Content="{Binding Path=Name}" CommandParameter="{Binding Path=Url}" Command="{Binding ElementName=lecPage, Path=DataContext.OpenLectionCommand}"/>
+                        <Button Content="{Binding Path=Name}" CommandParameter="{Binding Path=Url}" Command="{Binding ElementName=lecPage, Path=DataContext.OpenLectionCommand}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <WebBrowser x:Name="Web" Grid.Column="1"/>
+        <Button Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" BorderBrush="{x:Null}" HorizontalAlignment="Center" 
+                VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click"/>
     </Grid>
 </Page>

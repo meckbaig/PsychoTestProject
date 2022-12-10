@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:PsychoTestCourseProject.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Loaded="Window_Loaded" MinWidth="450" MinHeight="350"
+        MinWidth="450" MinHeight="350"
         >
     <Grid>
-        <Frame x:Name="MainFrame" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+        <Frame x:Name="MainFrame" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

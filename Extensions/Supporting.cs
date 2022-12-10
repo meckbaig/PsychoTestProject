@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace PsychoTestCourseProject.Extensions
 {
     public static class Supporting
     {
         public static object testFrame { get; set; }
+        public static object mainFrame { get; set; }
+
         public static bool testStarted { get; set; }
 
         public static TestClass CurrentTest { get; set; }
@@ -27,6 +30,10 @@ namespace PsychoTestCourseProject.Extensions
                 list[i] = temporal;
             }
             return list;
+        }
+        public static void Back()
+        {
+            (mainFrame as Frame).Navigate(new Welcome());
         }
     }
 }

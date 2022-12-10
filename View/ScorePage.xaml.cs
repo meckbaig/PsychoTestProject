@@ -22,7 +22,7 @@ namespace PsychoTestCourseProject.View
     /// </summary>
     public partial class ScorePage : Page
     {
-        public ScorePage(int totalScore, int currentScore)
+        public ScorePage(double totalScore, double currentScore)
         {
             InitializeComponent();
             DataContext = new ScorePageViewModel(totalScore, currentScore);

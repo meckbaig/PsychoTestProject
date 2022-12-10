@@ -1,4 +1,5 @@
-﻿using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestCourseProject.Extensions;
+using PsychoTestCourseProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace PsychoTestCourseProject
         {
             InitializeComponent();
             DataContext = new LectionsViewModel(Web);
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            Supporting.Back();
         }
     }
 }
