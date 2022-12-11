@@ -16,7 +16,7 @@
         <ListBox x:Name="ListBox" Background="Azure" ItemsSource="{Binding TestList}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,25">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=Name}"/>
+                    <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" MaxWidth="140"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

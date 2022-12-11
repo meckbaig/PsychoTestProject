@@ -50,5 +50,10 @@ namespace PsychoTestCourseProject.View
             else
                 (Supporting.testFrame as Frame).Navigate(new ScorePage(totalScore, currentScore));
         }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            (DataContext as TestViewModel).ChangeQuestionMargin(QuestionGrid.ActualWidth, QuestionGrid.ActualHeight);
+        }
     }
 }
