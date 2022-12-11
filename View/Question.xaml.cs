@@ -71,15 +71,12 @@ namespace PsychoTestCourseProject.View
         {
             double percentage = (double)QuestionTime / (double)MaxQuestionTime;
             if (percentage <= 0.2)
-            {
                 TimerColor = "Red";
-                OnPropertyChanged("TimerColor");
-            }
             else if (percentage <= 0.4)
-            {
                 TimerColor = "Orange";
-                OnPropertyChanged("TimerColor");
-            }
+            else
+                TimerColor = "Green";
+            OnPropertyChanged("TimerColor");
         }
 
         public void Timer(QuestionClass question)
@@ -162,8 +159,12 @@ namespace PsychoTestCourseProject.View
                             if (checkBox.IsChecked ?? false)
                                 point++;
                         }
+                        else if (checkBox.IsChecked ?? false)
+                            point--;
                     }
                     point /= maxPoint;
+                    if (point < 0)
+                        point = 0;
                     break;
                 case (TextBox):
                     TextBox textBox = (TextBox)answ;

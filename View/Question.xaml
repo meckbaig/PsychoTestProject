@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-        <StackPanel>
+        <StackPanel Margin="20,20,20,20">
             <TextBlock TextWrapping="Wrap" Text="{Binding StringFormat = Осталось: {0}с., Path=QuestionTime}" Foreground="{Binding TimerColor}" FontFamily="Microsoft YaHei UI" FontSize="15"/>
             <TextBlock TextWrapping="Wrap" Text="{Binding QuestionText}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="20" Margin="0,5,0,5"/>
             <StackPanel x:Name="ShowedAnswers">

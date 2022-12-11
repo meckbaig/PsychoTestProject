@@ -21,7 +21,7 @@ namespace PsychoTestCourseProject.ViewModel
         {
             webContainer = web;
             lectionList = new List<LectionModel>();
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections")))
+            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections"), "*.html"))
             {
                 lectionList.Add(new LectionModel() { Name = Path.GetFileNameWithoutExtension(file), Url = file });
             }

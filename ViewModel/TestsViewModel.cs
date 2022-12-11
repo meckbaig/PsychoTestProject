@@ -61,7 +61,7 @@ namespace PsychoTestCourseProject.ViewModel
         {
             Supporting.testFrame = testFrame = frame;
             TestList = new List<TestClass>();
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests")))
+            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests"), "*.xml"))
             {
                 TestList.Add(new TestClass() { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
             }

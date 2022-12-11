@@ -10,6 +10,8 @@
       Title="Test">
 
     <Grid Background="White">
-        <local:Question x:Name="Question" VerticalAlignment="Center" Width="300" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" TimeOut="NextQuestion"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding ElementName=testPage, Path=DataContext.Picture}" Stretch="UniformToFill"/>
+        <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" 
+         Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" TimeOut="NextQuestion"/>
     </Grid>
 </Page>
