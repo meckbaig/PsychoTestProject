@@ -30,8 +30,10 @@ namespace PsychoTestCourseProject.View
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            Supporting.Back();
-            Supporting.testStarted = false;
+            MainViewModel.Back();
+            Question.qTimer?.Stop();
+            MainViewModel.TestStarted = false;
+
         }
     }
 }

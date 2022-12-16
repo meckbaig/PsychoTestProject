@@ -16,8 +16,8 @@ namespace PsychoTestCourseProject.ViewModel
         public ScorePageViewModel(double totalScore, double currentScore)
         {
             result = Calculate(totalScore, currentScore);
-            Score = currentScore + "/" + totalScore;
-            Supporting.testStarted = false;
+            Score = Math.Round(currentScore, 1) + "/" + totalScore;
+            MainViewModel.TestStarted = false;
         }
 
         public int Calculate(double totalScore, double currentScore)

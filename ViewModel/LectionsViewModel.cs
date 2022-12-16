@@ -1,4 +1,5 @@
-﻿using PsychoTestCourseProject.Extensions;
+﻿using Microsoft.Web.WebView2.Wpf;
+using PsychoTestCourseProject.Extensions;
 using PsychoTestCourseProject.Model;
 using PsychoTestCourseProject.View;
 using System;
@@ -15,9 +16,9 @@ namespace PsychoTestCourseProject.ViewModel
 {
     internal class LectionsViewModel : INotifyPropertyChanged
     {
-        WebBrowser webContainer;
+        WebView2 webContainer;
         public List<LectionModel> lectionList { get; set; }
-        public LectionsViewModel(WebBrowser web)
+        public LectionsViewModel(WebView2 web)
         {
             webContainer = web;
             lectionList = new List<LectionModel>();
@@ -36,7 +37,7 @@ namespace PsychoTestCourseProject.ViewModel
                 return openLectionCommand ??
                      (openLectionCommand = new Command(obj =>
                      {
-                         webContainer.Navigate(new Uri(obj.ToString()));
+                         webContainer.CoreWebView2.Navigate(obj.ToString());
                      }));
             }
         }

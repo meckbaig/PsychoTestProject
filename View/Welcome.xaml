@@ -16,11 +16,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="Добро пожаловать!" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Height="112" Width="800" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3"/>
-        <Button Content="Изучить лекции" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="LectionsButton_Click"/>
-        <Button Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Height="51" Width="170" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="TestsButton_Click"  Grid.Column="3"/>
+        <Label Content="Добро пожаловать!" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="40" Height="112" Width="800" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3"/>
+        <Button Content="Изучить лекции" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="LectionsButton_Click" Margin="0,20,0,0"/>
+        <Button Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Height="51" Width="170" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="TestsButton_Click"  Grid.Column="3" Margin="0,20,0,0"/>
 
     </Grid>
 </Page>

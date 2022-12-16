@@ -18,24 +18,24 @@ namespace PsychoTestCourseProject.ViewModel
         public Thickness Margin { get; set; }
         public TestViewModel(TestClass test)
         {
-            Supporting.CurrentTest = test;
-            Supporting.CurrentQuestion = 0;
+            MainViewModel.CurrentTest = test;
+            MainViewModel.CurrentQuestion = 0;
             Picture = Path.GetDirectoryName(test.Filename)+"/"+test.Name+".jpg";
         }
 
         public QuestionClass CurrentQuestion
         {
-            get => Supporting.CurrentTest.Questions[Supporting.CurrentQuestion];
+            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestion];
         }
 
 
         public QuestionClass NextQuestion()
         {
-            if (Supporting.CurrentQuestion == (Supporting.CurrentTest.Questions.Count - 1))
+            if (MainViewModel.CurrentQuestion == (MainViewModel.CurrentTest.Questions.Count - 1))
             {
                 return null;
             }
-            return Supporting.CurrentTest.Questions[++Supporting.CurrentQuestion];
+            return MainViewModel.CurrentTest.Questions[++MainViewModel.CurrentQuestion];
         }
 
         public void ChangeQuestionMargin(double width, double height)

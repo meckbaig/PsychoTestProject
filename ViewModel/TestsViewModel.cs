@@ -27,7 +27,7 @@ namespace PsychoTestCourseProject.ViewModel
         {
             get => test; set
             {
-                if (Supporting.testStarted)
+                if (MainViewModel.TestStarted)
                 {
                     if (MessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         ShowTestPreviewMethod(value);
@@ -43,7 +43,7 @@ namespace PsychoTestCourseProject.ViewModel
             OnPropertyChanged("Test");
             Visibility = Visibility.Visible;
             OnPropertyChanged("Visibility");
-            Supporting.testStarted = false;
+            MainViewModel.TestStarted = false;
             testFrame.Content = null;
         }
 
@@ -59,7 +59,7 @@ namespace PsychoTestCourseProject.ViewModel
 
         public TestsViewModel(Frame frame)
         {
-            Supporting.testFrame = testFrame = frame;
+            MainViewModel.TestFrame = testFrame = frame;
             TestList = new List<TestClass>();
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests"), "*.xml"))
             {
@@ -83,9 +83,22 @@ namespace PsychoTestCourseProject.ViewModel
             {
                 return openTestCommand ?? (openTestCommand = new Command(obj =>
                 {
-                    testFrame.Navigate(new Test((TestClass)obj));
-                    Visibility = Visibility.Hidden;
-                    Supporting.testStarted = true;
+                    try
+                    {
+                        MainViewModel.CurrentTest = (obj as TestClass);
+                        if (MainViewModel.CurrentTest?.Questions?[0] == null)
+                            MessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                        else
+                        {
+                            testFrame.Navigate(new Test((TestClass)obj));
+                            Visibility = Visibility.Hidden;
+                            MainViewModel.TestStarted = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }));
             }
         }

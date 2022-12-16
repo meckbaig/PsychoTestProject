@@ -29,13 +29,20 @@ namespace PsychoTestCourseProject.View
 
         public Test(TestClass newTest)
         {
-            InitializeComponent();
-            DataContext = new TestViewModel(newTest);
+            try
+            {
+                InitializeComponent();
+                DataContext = new TestViewModel(newTest);
+            }
+            catch (System.Xml.XmlException)
+            {
+                MessageBox.Show("Выбранный файл повреждён или не совместим с текущей версией программы", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void Question_Loaded(object sender, RoutedEventArgs e)
         {
             Question.Initialize();
-            totalScore = Supporting.CurrentTest.Questions.Count;
+            totalScore = MainViewModel.CurrentTest.Questions.Count;
         }
 
         private void NextQuestion(object sender, EventArgs e)
@@ -48,7 +55,7 @@ namespace PsychoTestCourseProject.View
                 Question.Initialize(nextQuestion);
             }
             else
-                (Supporting.testFrame as Frame).Navigate(new ScorePage(totalScore, currentScore));
+                (MainViewModel.TestFrame as Frame).Navigate(new ScorePage(totalScore, currentScore));
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)

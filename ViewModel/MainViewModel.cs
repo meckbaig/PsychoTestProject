@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PsychoTestCourseProject.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
@@ -18,6 +19,17 @@ namespace PsychoTestCourseProject.ViewModel
         }
 
         public static Frame? MainFrame { get; set; }
+        public static object TestFrame { get; set; }
 
+        public static bool TestStarted { get; set; }
+
+        public static TestClass CurrentTest { get; 
+            set; }
+        public static int CurrentQuestion { get; set; }
+
+        public static void Back()
+        {
+            MainFrame.Navigate(new Welcome());
+        }
     }
 }

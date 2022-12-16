@@ -26,11 +26,13 @@ namespace PsychoTestCourseProject
         {
             InitializeComponent();
             DataContext = new LectionsViewModel(Web);
+            Web.EnsureCoreWebView2Async();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            Supporting.Back();
+            MainViewModel.Back();
+            Web.Dispose();
         }
     }
 }

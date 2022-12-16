@@ -1,6 +1,9 @@
 ﻿using PsychoTestCourseProject.Extensions;
+using PsychoTestCourseProject.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,10 +19,11 @@ namespace PsychoTestCourseProject.View
     {
         public static readonly DependencyProperty QuestionProperty = DependencyProperty.Register("QuestionClass", typeof(QuestionClass), typeof(Question));
 
-        public System.Windows.Threading.DispatcherTimer qTimer;
+        public static System.Windows.Threading.DispatcherTimer qTimer { get; set; }
         public string TimerColor { get; set; }
         public int MaxQuestionTime { get; set; }
-        public int QuestionTime { get; set; }
+        public int QuestionTime { get; 
+            set; }
         public string QuestionCount { get; set; }
         public string QuestionText { get => QuestionClass?.Text; }
 
@@ -100,7 +104,7 @@ namespace PsychoTestCourseProject.View
 
         public void PrintAnswers(QuestionClass question)
         {
-            QuestionCount = (Supporting.CurrentQuestion + 1) + " из " + Supporting.CurrentTest.Questions.Count;
+            QuestionCount = (MainViewModel.CurrentQuestion + 1) + " из " + MainViewModel.CurrentTest.Questions.Count;
             OnPropertyChanged("QuestionCount");
             ShowedAnswers.Children.Clear();
             foreach (var answer in question.Answers)
@@ -145,7 +149,7 @@ namespace PsychoTestCourseProject.View
                     foreach (var answer in ShowedAnswers.Children)
                     {
                         RadioButton radioButton = (RadioButton)answer;
-                        if (((AnswerClass)radioButton.Tag).IsCorrect == (radioButton.IsChecked ?? false))
+                        if (((AnswerClass)radioButton.Tag).IsCorrect && (radioButton.IsChecked ?? false))
                             point = 1;
                     }
                     break;
@@ -163,30 +167,35 @@ namespace PsychoTestCourseProject.View
                             point--;
                     }
                     point /= maxPoint;
-                    if (point < 0)
-                        point = 0;
                     break;
                 case (TextBox):
                     TextBox textBox = (TextBox)answ;
                     var correctAnswers = ((AnswerClass)textBox.Tag).Text.Split(", ");
                     var answers = textBox.Text.ToLower().Split(", ");
+                    int answersChecked = 0;
                     maxPoint = correctAnswers.Length;
-                    foreach (var correctAnswer in correctAnswers)
+                    foreach (var correctAnswer in correctAnswers) // крутит все варианты ответов
                     {
-                        foreach (var variableAnswer in correctAnswer.Split("(/)"))
+                        foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
                         {
-                            foreach (var answer in answers)
+                            foreach (var answer in answers) // крутит все ответы под текущий вариант
                             {
-                                if (variableAnswer.Equals(answer))
+                                if (variableAnswer.Equals(answer)) // если совпало
                                 {
                                     point++;
+                                    answersChecked++;
                                     goto Outer;
                                 }
+                                point--;
+                                answersChecked++;
                             }
                         }
                     Outer:;
                     }
+                    point -= (answers.Length - answersChecked);
                     point /= maxPoint;
+                    if (point < 0)
+                        point = 0;
                     break;
             }
             return point;

@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
       xmlns:local="clr-namespace:PsychoTestCourseProject"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -28,7 +29,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <WebBrowser x:Name="Web" Grid.Column="1"/>
+        <wv2:WebView2 x:Name="Web" Grid.Column="1"/>
         <Button Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" BorderBrush="{x:Null}" HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click"/>
     </Grid>

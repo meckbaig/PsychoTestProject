@@ -26,7 +26,6 @@ namespace PsychoTestCourseProject.View
             InitializeComponent(); 
             DataContext = new MainViewModel(MainFrame);
             MainFrame.Navigate(new Welcome());
-            Supporting.mainFrame = MainFrame;
         }
     }
 }
