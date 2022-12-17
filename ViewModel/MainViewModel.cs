@@ -23,8 +23,7 @@ namespace PsychoTestCourseProject.ViewModel
 
         public static bool TestStarted { get; set; }
 
-        public static TestClass CurrentTest { get; 
-            set; }
+        public static TestClass CurrentTest { get; set; }
         public static int CurrentQuestion { get; set; }
 
         public static void Back()

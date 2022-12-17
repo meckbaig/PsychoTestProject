@@ -12,12 +12,14 @@ namespace PsychoTestCourseProject.Extensions
         public string Text { get; set; }
         public List<AnswerClass> Answers { get; set; }
         public QuestionType Type { get; set; }
+        public bool IsExact { get; set; }  
 
         public QuestionClass()
         {
             Text = "";
             Answers = new List<AnswerClass>();
             Type = QuestionType.String;
+            IsExact = true;
         }
     }
 }

@@ -22,8 +22,7 @@ namespace PsychoTestCourseProject.View
         public static System.Windows.Threading.DispatcherTimer qTimer { get; set; }
         public string TimerColor { get; set; }
         public int MaxQuestionTime { get; set; }
-        public int QuestionTime { get; 
-            set; }
+        public int QuestionTime { get; set; }
         public string QuestionCount { get; set; }
         public string QuestionText { get => QuestionClass?.Text; }
 
@@ -136,6 +135,7 @@ namespace PsychoTestCourseProject.View
                 item.KeyDown += NextKeyDown;
                 ShowedAnswers.Children.Add(item);
             }
+
         }
 
         public double CheckAnswer()
@@ -178,17 +178,28 @@ namespace PsychoTestCourseProject.View
                     {
                         foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
                         {
-                            foreach (var answer in answers) // крутит все ответы под текущий вариант
+                            if (QuestionClass.IsExact)
                             {
-                                if (variableAnswer.Equals(answer)) // если совпало
+                                foreach (var answer in answers) // крутит все ответы под текущий вариант
                                 {
-                                    point++;
+                                    if (variableAnswer.Equals(answer)) // сравнивает требуемые ответы с полученными
+                                    {
+                                        point++;
+                                        answersChecked++;
+                                        goto Outer;
+                                    }
+                                    point--;
                                     answersChecked++;
-                                    goto Outer;
                                 }
-                                point--;
-                                answersChecked++;
                             }
+                            else if (!QuestionClass.IsExact && textBox.Text.ToLower().Contains(variableAnswer)) // ищет требуемые ответы в полученном
+                            {
+                                point++;
+                                answersChecked++;
+                                goto Outer;
+                            }
+                            point--;
+                            answersChecked++;
                         }
                     Outer:;
                     }

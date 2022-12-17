@@ -38,6 +38,8 @@ namespace PsychoTestCourseProject.Extensions
                     QuestionClass question = new QuestionClass();
                     question.Text = item.Attributes["Text"].Value;
                     question.Type = (QuestionType)Enum.Parse(typeof(QuestionType), item.Attributes["Type"]?.Value);
+                    if (question.Type == QuestionType.String)
+                        question.IsExact = Convert.ToBoolean(item.Attributes["IsExact"].Value);
                     foreach (XmlElement answ in item.ChildNodes)
                     {
                         AnswerClass answer = new AnswerClass();
