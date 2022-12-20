@@ -1,4 +1,5 @@
 ﻿using PsychoTestCourseProject.Extensions;
+using PsychoTestCourseProject.View;
 using PsychoTestCourseProject.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace PsychoTestCourseProject
         {
             InitializeComponent();
             DataContext = new LectionsViewModel(Web);
+            MainViewModel.MainWindow.Title = "Лекции";
             Web.EnsureCoreWebView2Async();
         }
 

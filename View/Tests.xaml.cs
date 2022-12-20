@@ -26,14 +26,27 @@ namespace PsychoTestCourseProject.View
         {
             InitializeComponent();
             DataContext = new TestsViewModel(TestFrame);
+            MainViewModel.MainWindow.Title = "Тесты";
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            if (MainViewModel.TestStarted)
+            {
+                if (MessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    Exit();
+                }
+            }
+            else
+                Exit();
+        }
+
+        private void Exit()
+        {
             MainViewModel.Back();
             Question.qTimer?.Stop();
             MainViewModel.TestStarted = false;
-
         }
     }
 }

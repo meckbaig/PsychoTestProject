@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="View\icons8-information-48.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="2560px-P_psychology2.svg.ico" />
   </ItemGroup>
 
@@ -18,6 +22,10 @@
 
   <ItemGroup>
     <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\icons8-information-48.png" />
   </ItemGroup>
 
 </Project>

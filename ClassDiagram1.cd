@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PsychoTestCourseProject.Extensions.AnswerClass">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIACAAAAAA=</HashCode>
+      <FileName>Extensions\AnswerClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.Extensions.Command">
+    <Position X="4" Y="5.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAQAAEAEAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\Command.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.Extensions.QuestionClass">
+    <Position X="7.5" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAQQAACAAAAAA=</HashCode>
+      <FileName>Extensions\QuestionClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.Extensions.Supporting">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Extensions\Supporting.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.Extensions.TestClass">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAABAAQAAAQAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\TestClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.Model.LectionModel">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Model\LectionModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.Lections">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>View\Lections.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.View.MainWindow">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.View.Question">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>GAAABAgAAECAAQLBoAACAAAEgAAAAAQAAEAAAAAEAAA=</HashCode>
+      <FileName>View\Question.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.View.ScorePage">
+    <Position X="9.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\ScorePage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.View.Test">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAIAAEAAAAAAAAAAAIAAAAAACA=</HashCode>
+      <FileName>View\Test.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.View.Tests">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIIAAAAAAAAAA=</HashCode>
+      <FileName>View\Tests.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.Welcome">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\Welcome.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.ViewModel.LectionsViewModel">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAIAAAAAAAgAQAAAAEAAAAAAQAAAA=</HashCode>
+      <FileName>ViewModel\LectionsViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.ViewModel.MainViewModel">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AQAAABAAAAAAQAAAIAAEAAAAgAAgAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.ViewModel.ScorePageViewModel">
+    <Position X="7.5" Y="5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgABAAAAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\ScorePageViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PsychoTestCourseProject.ViewModel.TestsViewModel">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gEAAAAAAAAAAAAAAIAAAAAAAgAAAAAAIIEAACIDAAAA=</HashCode>
+      <FileName>ViewModel\TestsViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PsychoTestCourseProject.ViewModel.TestViewModel">
+    <Position X="5.75" Y="3" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAgBAQAAAAAAAAIAAAAAAAgAAAAEEAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\TestViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="PsychoTestCourseProject.Extensions.QuestionType">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAUAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\QuestionType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

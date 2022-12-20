@@ -23,8 +23,8 @@ namespace PsychoTestCourseProject.View
     {
         public MainWindow()
         {
-            InitializeComponent(); 
-            DataContext = new MainViewModel(MainFrame);
+            InitializeComponent();
+            DataContext = new MainViewModel(MainFrame, this);
             MainFrame.Navigate(new Welcome());
         }
     }

@@ -14,7 +14,7 @@
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="6*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Background="Azure" ItemsSource="{Binding lectionList}" HorizontalContentAlignment="Stretch" Margin="0,0,0,25">
+        <ListBox Background="Azure" ItemsSource="{Binding lectionList}" Margin="0,0,0,25">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
@@ -24,7 +24,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Button Content="{Binding Path=Name}" CommandParameter="{Binding Path=Url}" Command="{Binding ElementName=lecPage, Path=DataContext.OpenLectionCommand}"/>
+                        <Button Content="{Binding Path=Name}" CommandParameter="{Binding Path=Url}" Command="{Binding ElementName=lecPage, Path=DataContext.OpenLectionCommand}" Background="#00000000" BorderBrush="{x:Null}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

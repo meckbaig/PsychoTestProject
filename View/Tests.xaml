@@ -24,7 +24,9 @@
         <Button x:Name="StartTestButton" Visibility="{Binding ElementName=testPage, Path=DataContext.Visibility}" Content="Начать тест" CommandParameter="{Binding ElementName=testPage, Path=DataContext.Test}" Command="{Binding ElementName=testPage, 
          Path=DataContext.OpenTestCommand}" Height="30" Width="112" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6"
          BorderBrush="{x:Null}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock x:Name="TitleTextBlock" Visibility="{Binding ElementName=testPage, Path=DataContext.Visibility}" Grid.Column="1" TextWrapping="Wrap" DataContext="{Binding Test}" Text="{Binding StringFormat = Тест {0}, Path=Name}" HorizontalAlignment="Center" Margin="0,0,0,80" FontFamily="Microsoft YaHei UI" FontSize="20" VerticalAlignment="Center"/>
+        <TextBlock x:Name="TitleTextBlock" Visibility="{Binding ElementName=testPage, Path=DataContext.Visibility}" Grid.Column="1" TextWrapping="Wrap"
+         DataContext="{Binding Test}" Text="{Binding StringFormat = Тест {0}, Path=Name}" HorizontalAlignment="Center" Margin="0,0,0,80"
+         FontFamily="Microsoft YaHei UI" FontSize="20" VerticalAlignment="Center"/>
         <Button Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" BorderBrush="{x:Null}" HorizontalAlignment="Center" 
             VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click"/>
     </Grid>

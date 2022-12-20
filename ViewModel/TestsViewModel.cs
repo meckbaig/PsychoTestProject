@@ -65,7 +65,6 @@ namespace PsychoTestCourseProject.ViewModel
             {
                 TestList.Add(new TestClass() { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
             }
-
         }
 
         Command openTestCommand;

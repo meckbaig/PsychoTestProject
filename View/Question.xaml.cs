@@ -223,6 +223,7 @@ namespace PsychoTestCourseProject.View
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             ExtNextButton_Click?.Invoke(sender, e);
+            TimerColorChange();
         }
 
         private void NextKeyDown(object sender, KeyEventArgs e)

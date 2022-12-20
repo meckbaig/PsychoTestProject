@@ -1,14 +1,15 @@
-﻿<Window x:Class="PsychoTestCourseProject.View.MainWindow"
+﻿<Window x:Name="mainWindow"
+        x:Class="PsychoTestCourseProject.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PsychoTestCourseProject.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800"
+        Title="Психо-тест" Height="600" Width="800"
         MinWidth="450" MinHeight="350"
         >
     <Grid>
-        <Frame x:Name="MainFrame" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="MainFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

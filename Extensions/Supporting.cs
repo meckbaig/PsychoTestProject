@@ -10,7 +10,6 @@ namespace PsychoTestCourseProject.Extensions
 {
     public static class Supporting
     {
-
         public static List<T> Shuffle<T>(List<T> list)
         {
             Random rand = new Random();
