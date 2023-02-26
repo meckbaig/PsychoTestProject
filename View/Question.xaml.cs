@@ -1,5 +1,5 @@
-﻿using PsychoTestCourseProject.Extensions;
-using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace PsychoTestCourseProject.View
+namespace PsychoTestProject.View
 {
     /// <summary>
     /// Логика взаимодействия для Question.xaml
@@ -103,7 +103,7 @@ namespace PsychoTestCourseProject.View
 
         public void PrintAnswers(QuestionClass question)
         {
-            QuestionCount = (MainViewModel.CurrentQuestion + 1) + " из " + MainViewModel.CurrentTest.Questions.Count;
+            QuestionCount = (MainViewModel.CurrentQuestionId) + " из " + MainViewModel.CurrentTest.Questions.Count;
             OnPropertyChanged("QuestionCount");
             ShowedAnswers.Children.Clear();
             foreach (var answer in question.Answers)
@@ -134,8 +134,9 @@ namespace PsychoTestCourseProject.View
                 item.Margin = margin;
                 item.KeyDown += NextKeyDown;
                 ShowedAnswers.Children.Add(item);
+                if (question.Type == QuestionType.String)
+                    break;
             }
-
         }
 
         public double CheckAnswer()
@@ -170,7 +171,12 @@ namespace PsychoTestCourseProject.View
                     break;
                 case (TextBox):
                     TextBox textBox = (TextBox)answ;
-                    var correctAnswers = ((AnswerClass)textBox.Tag).Text.Split(", ");
+                    int correctAnswersCount = MainViewModel.CurrentQuestion.Answers.Count;
+                    string[] correctAnswers = new string[correctAnswersCount];
+                    for (int i = 0; i < correctAnswersCount; i++)
+                    {
+                        correctAnswers[i] = MainViewModel.CurrentQuestion.Answers[i].Text;
+                    }
                     var answers = textBox.Text.ToLower().Split(", ");
                     int answersChecked = 0;
                     maxPoint = correctAnswers.Length;
@@ -188,8 +194,6 @@ namespace PsychoTestCourseProject.View
                                         answersChecked++;
                                         goto Outer;
                                     }
-                                    point--;
-                                    answersChecked++;
                                 }
                             }
                             else if (!QuestionClass.IsExact && textBox.Text.ToLower().Contains(variableAnswer)) // ищет требуемые ответы в полученном
@@ -198,9 +202,9 @@ namespace PsychoTestCourseProject.View
                                 answersChecked++;
                                 goto Outer;
                             }
-                            point--;
-                            answersChecked++;
                         }
+                        point--;
+                        answersChecked++;
                     Outer:;
                     }
                     point -= (answers.Length - answersChecked);

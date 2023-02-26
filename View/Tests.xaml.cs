@@ -1,5 +1,5 @@
-﻿using PsychoTestCourseProject.Extensions;
-using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PsychoTestCourseProject.View
+namespace PsychoTestProject.View
 {
     /// <summary>
     /// Логика взаимодействия для Tests.xaml

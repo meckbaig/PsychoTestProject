@@ -1,5 +1,5 @@
-﻿using PsychoTestCourseProject.Extensions;
-using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace PsychoTestCourseProject.View
+namespace PsychoTestProject.View
 {
     /// <summary>
     /// Логика взаимодействия для Test.xaml
@@ -47,15 +47,18 @@ namespace PsychoTestCourseProject.View
 
         private void NextQuestion(object sender, EventArgs e)
         {
-            var nextQuestion = (DataContext as TestViewModel).NextQuestion();
             currentScore += Question.CheckAnswer();
+            var nextQuestion = (DataContext as TestViewModel).NextQuestion();
 
             if (nextQuestion != null)
             {
                 Question.Initialize(nextQuestion);
             }
             else
+            {
                 (MainViewModel.TestFrame as Frame).Navigate(new ScorePage(totalScore, currentScore));
+                Question.qTimer.Stop(); 
+            }
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)

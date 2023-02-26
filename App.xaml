@@ -1,7 +1,7 @@
-﻿<Application x:Class="PsychoTestCourseProject.App"
+﻿<Application x:Class="PsychoTestProject.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PsychoTestCourseProject"
+             xmlns:local="clr-namespace:PsychoTestProject"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
          

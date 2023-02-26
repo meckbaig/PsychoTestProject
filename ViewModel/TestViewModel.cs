@@ -1,5 +1,5 @@
-﻿using PsychoTestCourseProject.Extensions;
-using PsychoTestCourseProject.View;
+﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,8 +9,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
-namespace PsychoTestCourseProject.ViewModel
+namespace PsychoTestProject.ViewModel
 {
     public class TestViewModel : INotifyPropertyChanged
     {
@@ -19,23 +20,37 @@ namespace PsychoTestCourseProject.ViewModel
         public TestViewModel(TestClass test)
         {
             MainViewModel.CurrentTest = test;
-            MainViewModel.CurrentQuestion = 0;
-            Picture = Path.GetDirectoryName(test.Filename)+"/"+test.Name+".jpg";
+            MainViewModel.CurrentQuestionId = 1;
+            LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            string path;
+            for (int i = 0; i < 5; i++)
+            {
+                path = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + $".{(ImageExtension)i}");
+                if (File.Exists(path))
+                {
+                    Picture = path;
+                    break;
+                }
+            }
         }
 
         public QuestionClass CurrentQuestion
         {
-            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestion];
+            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionId-1];
         }
 
 
         public QuestionClass NextQuestion()
         {
-            if (MainViewModel.CurrentQuestion == (MainViewModel.CurrentTest.Questions.Count - 1))
+            if (MainViewModel.CurrentQuestionId == (MainViewModel.CurrentTest.Questions.Count))
             {
                 return null;
             }
-            return MainViewModel.CurrentTest.Questions[++MainViewModel.CurrentQuestion];
+            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionId++];
         }
 
         public void ChangeQuestionMargin(double width, double height)

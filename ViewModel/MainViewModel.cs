@@ -1,8 +1,9 @@
-﻿using PsychoTestCourseProject.Extensions;
-using PsychoTestCourseProject.View;
+﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PsychoTestCourseProject.ViewModel
+namespace PsychoTestProject.ViewModel
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
@@ -28,13 +29,16 @@ namespace PsychoTestCourseProject.ViewModel
         public static bool TestStarted { get; set; }
 
         public static TestClass CurrentTest { get; set; }
-        public static int CurrentQuestion { get; set; }
+        public static int CurrentQuestionId { get; set; }
+        public static QuestionClass CurrentQuestion { get => CurrentTest.Questions[CurrentQuestionId-1]; set => CurrentTest.Questions[CurrentQuestionId-1] = value; }
 
         public static void Back()
         {
+            CurrentTest = null;
             MainFrame.Navigate(new Welcome());
-            MainWindow.Title = "Психо-тест";
+            MainWindow.Title = "PsychoTest";
         }
+
         
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

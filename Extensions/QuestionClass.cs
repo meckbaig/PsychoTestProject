@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace PsychoTestCourseProject.Extensions
+namespace PsychoTestProject.Extensions
 {
     public class QuestionClass
     {
+        public int Id { get; set; }
         public string Text { get; set; }
         public List<AnswerClass> Answers { get; set; }
         public QuestionType Type { get; set; }
@@ -16,10 +17,11 @@ namespace PsychoTestCourseProject.Extensions
 
         public QuestionClass()
         {
+            Id = 1;
             Text = "";
             Answers = new List<AnswerClass>();
             Type = QuestionType.String;
-            IsExact = true;
+            IsExact = false;
         }
     }
 }

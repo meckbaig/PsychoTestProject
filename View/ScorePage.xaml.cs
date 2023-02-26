@@ -1,4 +1,4 @@
-﻿using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace PsychoTestCourseProject.View
+namespace PsychoTestProject.View
 {
     /// <summary>
     /// Логика взаимодействия для ScorePage.xaml

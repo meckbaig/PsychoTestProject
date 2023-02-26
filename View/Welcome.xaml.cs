@@ -1,5 +1,5 @@
-﻿using PsychoTestCourseProject.View;
-using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.View;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PsychoTestCourseProject
+namespace PsychoTestProject
 {
     /// <summary>
     /// Логика взаимодействия для Welcome.xaml
@@ -30,7 +30,7 @@ namespace PsychoTestCourseProject
 
         private void LectionsButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new Lections());
+            MainViewModel.MainFrame.Navigate(new Lections(false));
 
         }
 
@@ -43,6 +43,11 @@ namespace PsychoTestCourseProject
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show($"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\nПо вопросам обращаться на почту: meckbaig@yandex.ru", "Информация о программе PsychoTest", MessageBoxButton.OK);
+        }
+
+        private void AdminButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new TestEditor());
         }
     }
 }

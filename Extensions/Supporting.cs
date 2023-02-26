@@ -1,4 +1,4 @@
-﻿using PsychoTestCourseProject.ViewModel;
+﻿using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace PsychoTestCourseProject.Extensions
+namespace PsychoTestProject.Extensions
 {
     public static class Supporting
     {

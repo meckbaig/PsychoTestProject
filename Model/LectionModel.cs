@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsychoTestCourseProject.Model
+namespace PsychoTestProject.Model
 {
     public class LectionModel
     {

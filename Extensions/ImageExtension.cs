@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace PsychoTestProject.Extensions
 {
-    public enum QuestionType
+    internal enum ImageExtension
     {
-        String,
-        Single,
-        Multiple
+        jpg, 
+        jpeg,
+        png,
+        bmp,
+        gif
     }
 }

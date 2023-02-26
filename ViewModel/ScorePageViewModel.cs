@@ -1,11 +1,11 @@
-﻿using PsychoTestCourseProject.Extensions;
+﻿using PsychoTestProject.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsychoTestCourseProject.ViewModel
+namespace PsychoTestProject.ViewModel
 {
     public class ScorePageViewModel
     {
@@ -16,7 +16,7 @@ namespace PsychoTestCourseProject.ViewModel
         public ScorePageViewModel(double totalScore, double currentScore)
         {
             result = Calculate(totalScore, currentScore);
-            Score = Math.Round(currentScore, 1) + "/" + totalScore;
+            Score = Math.Round(currentScore, 3) + "/" + totalScore;
             MainViewModel.TestStarted = false;
         }
 
