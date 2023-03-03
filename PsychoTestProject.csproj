@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>2560px-P_psychology2.svg.ico</ApplicationIcon>
+    <Authors>$(meckbaig)</Authors>
+    <FileVersion></FileVersion>
+    <AssemblyVersion>1.0.0.8</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

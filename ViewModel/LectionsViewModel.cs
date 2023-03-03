@@ -4,6 +4,7 @@ using PsychoTestProject.Model;
 using PsychoTestProject.View;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -18,17 +19,43 @@ namespace PsychoTestProject.ViewModel
     internal class LectionsViewModel : INotifyPropertyChanged
     {
         WebView2 webContainer;
-        public List<LectionModel> lectionList { get; set; }
+        private  ObservableCollection<LectionModel> lectionList;
+        private string lectionTitle;
+        public ObservableCollection<LectionModel> LectionList
+        {
+            get => lectionList;
+            set
+            {
+                lectionList = value;
+                OnPropertyChanged("LectionList");
+            }
+        }
+        public string LectionTitle 
+        {
+            get => lectionTitle;
+            set
+            {
+                lectionTitle = value;
+                OnPropertyChanged("LectionTitle");
+            }
+        }
         public LectionsViewModel(WebView2 web, ScrollViewer topScroll)
         {
             webContainer = web;
             webContainer.Margin = new Thickness(0, topScroll.ActualHeight, 0, 0);
-            lectionList = new List<LectionModel>();
+            UpdateLectionList();
+            webContainer.CoreWebView2.Navigate(LectionList[0].Url);
+            Lections.LectionSource = LectionList[0].Url;
+            LectionTitle = Path.GetFileNameWithoutExtension(LectionList[0].Url);
+        }
+
+        public void UpdateLectionList()
+        {
+            LectionList = new ObservableCollection<LectionModel>();
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections"), "*.html"))
             {
-                lectionList.Add(new LectionModel() { Name = Path.GetFileNameWithoutExtension(file), Url = file });
+                LectionList.Add(new LectionModel() { Name = Path.GetFileNameWithoutExtension(file), Url = file });
             }
-            webContainer.CoreWebView2.Navigate(lectionList[0].Url);
         }
 
         Command openLectionCommand;
@@ -40,6 +67,8 @@ namespace PsychoTestProject.ViewModel
                      (openLectionCommand = new Command(obj =>
                      {
                          webContainer.CoreWebView2.Navigate(obj.ToString());
+                         Lections.LectionSource = obj.ToString();
+                         LectionTitle = Path.GetFileNameWithoutExtension(obj.ToString());
                      }));
             }
         }
