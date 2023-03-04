@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -18,7 +19,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PsychoTestProject
 {
@@ -28,22 +28,27 @@ namespace PsychoTestProject
     public partial class Lections : Page
     {
         public static string LectionSource;
+        public static bool Admin;
         public Lections(bool admin)
         {
             InitializeComponent();
             InitializeBrowser();
-            MainViewModel.MainWindow.Title = "Лекции";
+            Admin = admin;
+            TopStackPanelScroll.IsEnabled = admin;
+            TopStackPanelScroll.Visibility = (Visibility)(!admin ? 1 : 0);
+            TopStackPanelScroll.Height = admin ? Double.NaN : 0;
             Web.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight, 0, 0);
+            MainViewModel.MainWindow.Title = "Лекции";
         }
 
         private async void InitializeBrowser()
         {
-            var userDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
-            var env = await CoreWebView2Environment.CreateAsync(null, userDataFolder);
+            var env = await CoreWebView2Environment.CreateAsync(null, MainViewModel.UserDataFolder);
             await Web.EnsureCoreWebView2Async(env);
             Thread.Sleep(50);
             DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
         }
+
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.Back();
@@ -55,24 +60,30 @@ namespace PsychoTestProject
             Web.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight, 0, 0);
         }
 
-        private async void DevButton_Click(object sender, RoutedEventArgs e)
-        {
-            await Web.ExecuteScriptAsync("document.designMode = \"on\"");
-        }
-
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            string html = File.ReadAllText(LectionSource, Encoding.UTF8);
-            html = html.Remove(html.IndexOf("<body"));
+            string html = GetHtmlHead(LectionSource);
+            string outerHTML = await GetHtmlBody();
 
+            string fullHtml = html + outerHTML;
+            File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{LectionTitleTB.Text}.html", fullHtml);
+            (DataContext as LectionsViewModel).UpdateLectionList();
+        }
+
+        private async Task<string> GetHtmlBody()
+        {
             string outerHTML = await Web.ExecuteScriptAsync("document.body.outerHTML.toString()");
             outerHTML = Regex.Unescape(outerHTML);
             outerHTML = outerHTML.Remove(0, 1);
             outerHTML = outerHTML.Remove(outerHTML.Length - 1, 1);
+            return outerHTML;
+        }
 
-            string fullHtml = html+outerHTML;
-            File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{LectionTitleTB.Text}.html", fullHtml);
-            (DataContext as LectionsViewModel).UpdateLectionList();
+        public static string GetHtmlHead(string source)
+        {
+            string html = File.ReadAllText(source, Encoding.UTF8);
+            html = html.Remove(html.IndexOf("<body"));
+            return html;
         }
 
         private void DeleteLectionBT_Click(object sender, RoutedEventArgs e)
@@ -81,6 +92,12 @@ namespace PsychoTestProject
             File.Delete(LectionSource);
             (DataContext as LectionsViewModel).UpdateLectionList();
             (DataContext as LectionsViewModel).LectionTitle = null;
+        }
+
+        private async void BoldBT_Click(object sender, RoutedEventArgs e)
+        {
+            string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection()");
+
         }
     }
 }

@@ -20,9 +20,19 @@ namespace PsychoTestProject.ViewModel
         {
             MainFrame = mainFrame;
             MainWindow = thisMainWindow;
+            try
+            {
+                Directory.Delete(UserDataFolder, true);
+                File.Delete($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html");
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+            }
         }
 
         public static MainWindow MainWindow;
+
+        public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
         public static Frame? MainFrame { get; set; }
         public static object TestFrame { get; set; }
 

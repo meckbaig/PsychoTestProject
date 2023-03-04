@@ -44,9 +44,7 @@ namespace PsychoTestProject.ViewModel
             webContainer = web;
             webContainer.Margin = new Thickness(0, topScroll.ActualHeight, 0, 0);
             UpdateLectionList();
-            webContainer.CoreWebView2.Navigate(LectionList[0].Url);
-            Lections.LectionSource = LectionList[0].Url;
-            LectionTitle = Path.GetFileNameWithoutExtension(LectionList[0].Url);
+            OpenLectionCommand.Execute(LectionList[0].Url);
         }
 
         public void UpdateLectionList()
@@ -54,7 +52,8 @@ namespace PsychoTestProject.ViewModel
             LectionList = new ObservableCollection<LectionModel>();
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections"), "*.html"))
             {
-                LectionList.Add(new LectionModel() { Name = Path.GetFileNameWithoutExtension(file), Url = file });
+                if (Path.GetFileNameWithoutExtension(file)!="temp")
+                    LectionList.Add(new LectionModel() { Name = Path.GetFileNameWithoutExtension(file), Url = file });
             }
         }
 
@@ -66,9 +65,18 @@ namespace PsychoTestProject.ViewModel
                 return openLectionCommand ??
                      (openLectionCommand = new Command(obj =>
                      {
-                         webContainer.CoreWebView2.Navigate(obj.ToString());
                          Lections.LectionSource = obj.ToString();
                          LectionTitle = Path.GetFileNameWithoutExtension(obj.ToString());
+                         if (Lections.Admin)
+                         {
+                             //string lection = File.ReadAllText(obj.ToString());
+                             //lection = lection.Replace("</style>", "</style><script src=\"https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js\"></script>");
+                             //File.WriteAllText($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html", lection);
+                             //webContainer.CoreWebView2.Navigate($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html");
+                             webContainer.ExecuteScriptAsync("document.designMode = \"on\"");
+                         }
+                         //else
+                             webContainer.CoreWebView2.Navigate(obj.ToString());
                      }));
             }
         }
