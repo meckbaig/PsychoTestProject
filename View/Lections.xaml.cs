@@ -96,7 +96,7 @@ namespace PsychoTestProject
 
         private async void BoldBT_Click(object sender, RoutedEventArgs e)
         {
-            string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection()");
+            string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection().toString()");
 
         }
     }
