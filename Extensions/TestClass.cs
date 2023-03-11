@@ -47,6 +47,8 @@ namespace PsychoTestProject.Extensions
                         question.Id = questionId++;
                         question.Text = item.Attributes["Text"].Value;
                         question.Type = (QuestionType)Enum.Parse(typeof(QuestionType), item.Attributes["Type"]?.Value);
+                        question.Value = Convert.ToInt32(item.Attributes["Value"]?.Value ?? "1");
+                        question.AnswersTarget = Convert.ToInt32(item.Attributes["AnswersTarget"]?.Value ?? "1");
                         if (question.Type == QuestionType.String)
                         {
                             if (Convert.ToBoolean(item.Attributes["IsExact"]?.Value == null))

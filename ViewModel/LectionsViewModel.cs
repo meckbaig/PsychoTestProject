@@ -67,6 +67,7 @@ namespace PsychoTestProject.ViewModel
                      {
                          Lections.LectionSource = obj.ToString();
                          LectionTitle = Path.GetFileNameWithoutExtension(obj.ToString());
+                         webContainer.CoreWebView2.Navigate(obj.ToString());
                          if (Lections.Admin)
                          {
                              //string lection = File.ReadAllText(obj.ToString());
@@ -75,8 +76,6 @@ namespace PsychoTestProject.ViewModel
                              //webContainer.CoreWebView2.Navigate($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html");
                              webContainer.ExecuteScriptAsync("document.designMode = \"on\"");
                          }
-                         //else
-                             webContainer.CoreWebView2.Navigate(obj.ToString());
                      }));
             }
         }

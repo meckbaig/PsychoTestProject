@@ -39,10 +39,15 @@ namespace PsychoTestProject.View
                 MessageBox.Show("Выбранный файл повреждён или не совместим с текущей версией программы", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void Question_Loaded(object sender, RoutedEventArgs e)
         {
             Question.Initialize();
-            totalScore = MainViewModel.CurrentTest.Questions.Count;
+            totalScore = 0;
+            foreach (var question in MainViewModel.CurrentTest.Questions)
+            {
+                totalScore += question.Value;
+            }
         }
 
         private void NextQuestion(object sender, EventArgs e)

@@ -31,12 +31,12 @@ namespace PsychoTestProject
         public static bool Admin;
         public Lections(bool admin)
         {
+            Admin = admin;
             InitializeComponent();
             InitializeBrowser();
-            Admin = admin;
-            TopStackPanelScroll.IsEnabled = admin;
-            TopStackPanelScroll.Visibility = (Visibility)(!admin ? 1 : 0);
-            TopStackPanelScroll.Height = admin ? Double.NaN : 0;
+            TopStackPanelScroll.IsEnabled = Admin;
+            TopStackPanelScroll.Visibility = (Visibility)(!Admin ? 1 : 0);
+            TopStackPanelScroll.Height = Admin ? Double.NaN : 0;
             Web.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight, 0, 0);
             MainViewModel.MainWindow.Title = "Лекции";
         }
@@ -47,6 +47,9 @@ namespace PsychoTestProject
             await Web.EnsureCoreWebView2Async(env);
             Thread.Sleep(50);
             DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
+            Thread.Sleep(50);
+            if (Admin)
+                Web.ExecuteScriptAsync("document.designMode = \"on\"");
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

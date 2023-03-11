@@ -14,6 +14,8 @@ namespace PsychoTestProject.Extensions
         public List<AnswerClass> Answers { get; set; }
         public QuestionType Type { get; set; }
         public bool IsExact { get; set; }  
+        public int Value { get; set; }  
+        public int AnswersTarget { get; set; }
 
         public QuestionClass()
         {
@@ -22,6 +24,8 @@ namespace PsychoTestProject.Extensions
             Answers = new List<AnswerClass>();
             Type = QuestionType.String;
             IsExact = false;
+            Value = 1;
+            AnswersTarget = 1;
         }
     }
 }

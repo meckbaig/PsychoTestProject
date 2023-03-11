@@ -141,7 +141,7 @@ namespace PsychoTestProject.View
 
         public double CheckAnswer()
         {
-            double maxPoint = 0;
+            double maxPoint = QuestionClass.AnswersTarget;
             double point = 0;
             var answ = ShowedAnswers.Children[0];
             switch (answ)
@@ -160,14 +160,12 @@ namespace PsychoTestProject.View
                         CheckBox checkBox = (CheckBox)answer;
                         if (((AnswerClass)checkBox.Tag).IsCorrect == true)
                         {
-                            maxPoint++;
                             if (checkBox.IsChecked ?? false)
                                 point++;
                         }
                         else if (checkBox.IsChecked ?? false)
                             point--;
                     }
-                    point /= maxPoint;
                     break;
                 case (TextBox):
                     TextBox textBox = (TextBox)answ;
@@ -179,7 +177,6 @@ namespace PsychoTestProject.View
                     }
                     var answers = textBox.Text.ToLower().Split(", ");
                     int answersChecked = 0;
-                    maxPoint = correctAnswers.Length;
                     foreach (var correctAnswer in correctAnswers) // крутит все варианты ответов
                     {
                         foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
@@ -203,16 +200,20 @@ namespace PsychoTestProject.View
                                 goto Outer;
                             }
                         }
-                        point--;
+                        //point--;
                         answersChecked++;
                     Outer:;
                     }
-                    point -= (answers.Length - answersChecked);
-                    point /= maxPoint;
-                    if (point < 0)
-                        point = 0;
+                    if (answers.Length >= answersChecked)
+                        point -= (answers.Length - answersChecked);
                     break;
             }
+            if (point < 0)
+                point = 0;
+            if (point > maxPoint)
+                point = maxPoint;
+            point /= maxPoint;
+            point *= QuestionClass.Value;
             return point;
         }
 

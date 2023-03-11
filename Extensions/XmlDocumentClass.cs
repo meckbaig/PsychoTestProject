@@ -73,6 +73,8 @@ namespace PsychoTestProject.Extensions
         {
             questionElement.Attributes.Append(AddAttribute("Text", question.Text));
             questionElement.Attributes.Append(AddAttribute("Type", question.Type.ToString()));
+            questionElement.Attributes.Append(AddAttribute("Value", question.Value.ToString()));
+            questionElement.Attributes.Append(AddAttribute("AnswersTarget", question.AnswersTarget.ToString()));
             if (question.Type == QuestionType.String)
                 questionElement.Attributes.Append(AddAttribute("IsExact", question.IsExact.ToString()));
             questionElement = AddAnswers(questionElement, question);

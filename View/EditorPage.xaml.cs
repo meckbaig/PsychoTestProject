@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -27,6 +28,7 @@ namespace PsychoTestProject.View
         private AnswerClass answer;
         private QuestionClass question = new QuestionClass();
         private string testTitle;
+        private int answersTarget;
         private Image backgroundImage;
 
         public Thickness DeleteButtonThickness { get; set; }
@@ -84,6 +86,19 @@ namespace PsychoTestProject.View
                 OnPropertyChanged("TestTitle");
             }
         }
+        public int AnswersTarget
+        {
+            get => answersTarget;
+            set
+            {
+                int correctAnswers = CorrectAnsvers();
+                if (value > correctAnswers)
+                    answersTarget = correctAnswers;
+                else
+                    answersTarget = value;
+                OnPropertyChanged("AnswersTarget");
+            }
+        }
         public Image BackgroundImage
         {
             get => backgroundImage;
@@ -114,6 +129,15 @@ namespace PsychoTestProject.View
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        private void PrevQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            Question = QuestionList[Question.Id-2];
+        }
+        private void NextQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            Question = QuestionList[Question.Id];
+        }
+
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
             for (int i = MainViewModel.CurrentTest.Questions.Count - 1; i >= 0; i--)
@@ -142,7 +166,7 @@ namespace PsychoTestProject.View
             AnswerClass newAnswer = new AnswerClass();
             newAnswer.Id = this.Question.Answers.Count + 1;
             this.Question.Answers.Add(newAnswer);
-            LoadAnswers();
+            LoadQuestion();
         }
 
         private void SaveQuestionButton_Click(object sender, RoutedEventArgs e)
@@ -154,7 +178,6 @@ namespace PsychoTestProject.View
         {
             DeleteQuestion();
         }
-
 
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -184,24 +207,63 @@ namespace PsychoTestProject.View
         {
             BackgroundImage = new Image();
             string path;
-            for (int i = 0; i < 5; i++)
+            if (MainViewModel.CurrentTest.Filename != null)
             {
-                path = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + $".{(ImageExtension)i}");
-                if (File.Exists(path))
+                for (int i = 0; i < Enum.GetNames(typeof(ImageExtension)).Length; i++)
                 {
-                    BackgroundImage.Source = new BitmapImage(new Uri(path));
-                    BackgroundImage.Visibility = Visibility.Visible;
-                    break;
+                    path = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + $".{(ImageExtension)i}");
+                    if (File.Exists(path))
+                    {
+                        BackgroundImage.Source = new BitmapImage(new Uri(path));
+                        BackgroundImage.Visibility = Visibility.Visible;
+                        break;
+                    }
+                    else
+                        BackgroundImage.Visibility = Visibility.Hidden;
                 }
-                else
-                    BackgroundImage.Visibility = Visibility.Hidden;
             }
+            else
+                BackgroundImage.Visibility = Visibility.Hidden;
+        }
+
+        private int CorrectAnsvers()
+        {
+            int correctAnswers = 0;
+            if (Question.Type == QuestionType.String)
+                foreach (StackPanel answerStackPanel in ShowedAnswers.Children)
+                {
+                    correctAnswers++;
+                }
+            else
+            {
+                int childrenCount = 0;
+                foreach (TextBox answer in ShowedAnswers.Children)
+                {
+                    switch (Question.Type)
+                    {
+                        case QuestionType.Single:
+                            if ((bool)((RadioButton)ShowedFlags.Children[childrenCount]).IsChecked)
+                                correctAnswers++;
+                            break;
+                        case QuestionType.Multiple:
+                            if ((bool)((CheckBox)ShowedFlags.Children[childrenCount]).IsChecked)
+                                correctAnswers++;
+                            break;
+                        default:
+                            break;
+                    }
+                    childrenCount++;
+                }
+            }
+            return correctAnswers;
         }
 
         private QuestionClass ReadQuestion()
         {
             QuestionClass newQuestion = new QuestionClass();
             newQuestion.Type = Question.Type;
+            newQuestion.Value = (int)QuestionValueUpDown.Value;
+            newQuestion.AnswersTarget = AnswersTarget;
             newQuestion.Id = Question.Id;
             newQuestion.Text = QuestionTitle.Text;
 
@@ -222,11 +284,11 @@ namespace PsychoTestProject.View
                                 answerString = answer.Text;
                         }
                     }
-                        AnswerClass newAnswer = new AnswerClass();
-                        newAnswer.Id = answerCount++;
-                        newAnswer.Text = answerString;
-                        newAnswer.IsCorrect = true;
-                        newQuestion.Answers.Add(newAnswer);
+                    AnswerClass newAnswer = new AnswerClass();
+                    newAnswer.Id = answerCount++;
+                    newAnswer.Text = answerString;
+                    newAnswer.IsCorrect = true;
+                    newQuestion.Answers.Add(newAnswer);
                 }
             }
             else
@@ -235,7 +297,7 @@ namespace PsychoTestProject.View
                 foreach (TextBox answer in ShowedAnswers.Children)
                 {
                     AnswerClass newAnswer = new AnswerClass();
-                        newAnswer.Id = answerCount++;
+                    newAnswer.Id = answerCount++;
                     newAnswer.Text = answer.Text;
                     switch (newQuestion.Type)
                     {
@@ -259,7 +321,7 @@ namespace PsychoTestProject.View
         public void SaveQuestion()
         {
             MainViewModel.CurrentTest.Name = TestTitleTB.Text;
-            MainViewModel.CurrentTest.Take = (int)(TakeUpDown.Value);
+            MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
             QuestionClass newQuestion = ReadQuestion();
             this.Question = MainViewModel.CurrentTest.Questions[newQuestion.Id - 1] = newQuestion;
         }
@@ -272,7 +334,7 @@ namespace PsychoTestProject.View
             MainViewModel.CurrentTest.Questions.Add(newQuestion);
             QuestionList = MainViewModel.CurrentTest.Questions;
             this.Question = QuestionList.ToList()[QuestionList.Count - 1];
-            LoadAnswers();
+            LoadQuestion();
         }
 
         private void DeleteQuestion()
@@ -291,14 +353,16 @@ namespace PsychoTestProject.View
                 Question = QuestionList[0];
         }
 
-        private void LoadAnswers()
+        private void LoadQuestion()
         {
             ShowedFlags.Children.Clear();
             ShowedAnswers.Children.Clear();
             AnswerButtons.Children.Clear();
-            TestSettingsStackPanel.Children.Clear();
+            TestSettingsStackPanel.Children.Remove(IsExactCheckBox);
 
             AnswerList = this.Question.Answers;
+            QuestionValueUpDown.Value = Question.Value;
+            MovementButtonsAvailability();
 
             if (Question.Type == QuestionType.String)
             {
@@ -342,12 +406,25 @@ namespace PsychoTestProject.View
                     answerCount++;
                 }
             }
+            AnswersTarget = Question.AnswersTarget;
+        }
+
+        private void MovementButtonsAvailability()
+        {
+            if (Question.Id == 1)
+                PrevQuestionButton.IsEnabled = false;
+            else 
+                PrevQuestionButton.IsEnabled = true;
+            if (Question.Id == QuestionList.Count)
+                NextQuestionButton.IsEnabled = false;
+            else 
+                NextQuestionButton.IsEnabled = true;
         }
 
         public void RecalculateValues()
         {
             QuestionTitle.Text = Question.Text;
-            LoadAnswers();
+            LoadQuestion();
         }
 
         #region Commands
@@ -359,8 +436,9 @@ namespace PsychoTestProject.View
                 return deleteAnswerCommand ??
                      (deleteAnswerCommand = new Command(obj =>
                      {
+                         SaveQuestion();
                          Question.Answers.Remove(obj as AnswerClass);
-                         LoadAnswers();
+                         LoadQuestion();
                      }));
             }
         }
@@ -376,7 +454,7 @@ namespace PsychoTestProject.View
                          SaveQuestion();
                          obj = Question.Answers.FirstOrDefault(a => a.Id == (obj as AnswerClass).Id);
                          (obj as AnswerClass).Text += "(/)";
-                         LoadAnswers();
+                         LoadQuestion();
                      }));
             }
         }
@@ -397,6 +475,7 @@ namespace PsychoTestProject.View
         {
             ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanel.ActualHeight);
         }
-        #endregion 
+        #endregion
+
     }
 }
