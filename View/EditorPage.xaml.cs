@@ -437,7 +437,7 @@ namespace PsychoTestProject.View
                      (deleteAnswerCommand = new Command(obj =>
                      {
                          SaveQuestion();
-                         Question.Answers.Remove(obj as AnswerClass);
+                         Question.Answers.Remove(Question.Answers.First(a => a.Id == (obj as AnswerClass).Id));
                          LoadQuestion();
                      }));
             }
@@ -473,7 +473,21 @@ namespace PsychoTestProject.View
 
         private void ChangeMargin()
         {
-            ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanel.ActualHeight);
+            ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanelScroll.ActualHeight);
+            StackPanel sp = new StackPanel();
+            foreach (var elem in ShowedAnswers.Children)
+            {
+                if (elem.GetType() == sp.GetType())
+                {
+                    (elem as StackPanel).MaxWidth = ContentViewer.ActualWidth - 260;
+                    foreach (TextBox item in (elem as StackPanel).Children)
+                    {
+                         item.MaxWidth = ((elem as StackPanel).MaxWidth-(elem as StackPanel).Children.Count*10)/(elem as StackPanel).Children.Count;
+                    }
+                }
+                else
+                    (elem as Control).MaxWidth = ContentViewer.ActualWidth - 200;
+            }
         }
         #endregion
 

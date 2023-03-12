@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PsychoTestProject.View"
         mc:Ignorable="d"
         Title="PsychoTest" Height="600" Width="800"
-        MinWidth="700" MinHeight="500"
+        MinWidth="720" MinHeight="490"
         >
     <Grid>
         <Frame x:Name="MainFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>

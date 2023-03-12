@@ -57,6 +57,7 @@ namespace PsychoTestProject.ViewModel
             TextBox itemText = new TextBox();
             itemText.Name = "itemText" + (answerCount - 1);
             itemText.Text = word;
+            itemText.TextWrapping = TextWrapping.Wrap;
             Control item = itemText;
             item = Fonts(item);
             item.Margin = new Thickness(5, 1, 5, 1);
@@ -67,6 +68,7 @@ namespace PsychoTestProject.ViewModel
             TextBox textBox = new TextBox(); // текст ответа
             textBox.Name = "textBox" + (answerCount - 1);
             textBox.Text = answer.Text;
+            textBox.TextWrapping = TextWrapping.Wrap;
             Control item = textBox;
             item = Fonts(item, answer);
             item.Margin = new Thickness(5, 2, 5, 2);

@@ -21,7 +21,7 @@ namespace PsychoTestProject.ViewModel
     {
         Frame EditFrame;
         EditorPage editorPage;
-        public static List<TestClass> TestList { get; set; }
+        public ObservableCollection<TestClass> TestList { get; set; }
         public static List<Image> ImageList { get; set; }
         private TestClass test;
 
@@ -55,12 +55,18 @@ namespace PsychoTestProject.ViewModel
 
         private void UpdateTestList()
         {
-            TestList = new List<TestClass>();
+            TestList = GetTestList();
+            OnPropertyChanged("TestList");
+        }
+
+        private ObservableCollection<TestClass> GetTestList()
+        {
+            ObservableCollection<TestClass> testList = new ObservableCollection<TestClass>();
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests"), "*.xml"))
             {
-                TestList.Add(new TestClass(false) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
+                testList.Add(new TestClass(false) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
             }
-            OnPropertyChanged("TestList");
+            return testList;
         }
 
         public ICommand CreateNewTestBTCommand { get; set; }
@@ -71,7 +77,14 @@ namespace PsychoTestProject.ViewModel
         public void CreateNewTest(object sender)
         {
             MainViewModel.CurrentTest = new TestClass(false);
+            ObservableCollection<TestClass> testList = GetTestList();
             MainViewModel.CurrentTest.Name = "Новый тест";
+            for (int i = 1; i < testList.Count; i++)
+            {
+                if (testList.FirstOrDefault(tl => tl.Name == MainViewModel.CurrentTest.Name) != null)
+                    MainViewModel.CurrentTest.Name = $"Новый тест {i}";
+                else break;
+            }
             MainViewModel.CurrentTest.Questions.Add(new QuestionClass());
             editorPage = new EditorPage();
             EditFrame.Navigate(editorPage);
@@ -106,9 +119,13 @@ namespace PsychoTestProject.ViewModel
         {
             if (Test != null)
             {
-                EditFrame.Content = null;
-                File.Delete(Test.Filename);
-                UpdateTestList();
+                if (MessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    EditFrame.Content = null;
+                    File.Delete(Test.Filename);
+                    UpdateTestList();
+
+                }
             }
             else
                 MessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
