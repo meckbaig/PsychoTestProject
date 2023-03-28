@@ -25,6 +25,9 @@ using Microsoft.Win32;
 using Microsoft.VisualBasic.FileIO;
 using Ionic.Zip;
 using Ionic.Zlib;
+using System.Xml;
+using System.Windows.Shell;
+using System.Drawing.Drawing2D;
 
 namespace PsychoTestProject
 {
@@ -77,23 +80,48 @@ namespace PsychoTestProject
 
         private static void Import(string fileName)
         {
-            string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
-            string zipPath = Path.Combine(Environment.CurrentDirectory, "tmp.zip");
-            Directory.CreateDirectory(tmpPath);
+            if (Path.GetExtension(fileName) == ".psychoExp")
+            {
+                DecodeExtract(fileName);
+                MessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+                MessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
 
+        private static void DecodeExtract(string fileName)
+        {
+            string tmpPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
+            if (Path.GetExtension(fileName) == ".psychoExp")
+                tmpPath = Environment.CurrentDirectory;
+            else
+                Directory.CreateDirectory(tmpPath);
+            string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
             File.WriteAllBytes(zipPath, CryptoMethod.Decrypt(fileName));
             ExtractFiles(zipPath, tmpPath);
+            File.Delete(zipPath);
 
             foreach (string file in Directory.GetFiles(tmpPath))
             {
-                string filePath = Path.Combine(tmpPath, Path.GetFileNameWithoutExtension(file) + ".zip");
-                File.WriteAllBytes(filePath, CryptoMethod.Decrypt(file));
-                ExtractFiles(filePath, Path.Combine(Environment.CurrentDirectory, Path.GetFileNameWithoutExtension(file)));
-                File.Delete(filePath);
+                if (Path.GetExtension(file) == ".tmp")
+                {
+                    DecodeExtract(file);
+                    File.Delete(file);
+                }
             }
-            Directory.Delete(tmpPath, true);
-            File.Delete(zipPath);
-            MessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public static void ExtractFiles(string zipPath, string outFolder)
+        {
+            using (var zip = ZipFile.Read(zipPath))
+            {
+                zip.AlternateEncodingUsage = ZipOption.Always;
+                zip.AlternateEncoding = Encoding.UTF8;
+                foreach (ZipEntry e in zip)
+                {
+                    e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
         }
 
         private static void Export()
@@ -108,9 +136,10 @@ namespace PsychoTestProject
             {
                 string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
                 Directory.CreateDirectory(tmpPath);
-                File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip("Lections"));
-                File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip("Tests"));
-                File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip("tmp"));
+
+                File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(Path.Combine(Environment.CurrentDirectory, "Lections")));
+                File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(Path.Combine(Environment.CurrentDirectory, "Tests")));
+                File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(tmpPath));
                 Directory.Delete(tmpPath, true);
                 MessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -127,10 +156,9 @@ namespace PsychoTestProject
                 zip.Save();
             }
         }
-        public static byte[] CreateCryptedZip(string folderPath)
+        public static byte[] CreateCryptedZip(string folderPath, bool skipFolders=false)
         {
-            folderPath = Path.Combine(Environment.CurrentDirectory, folderPath);
-            string zipPath = Path.Combine(Environment.CurrentDirectory, "tmp.zip");
+            string zipPath = folderPath+"_tmp.zip";
             using (var zipFile = new ZipFile())
             {
                 zipFile.CompressionLevel = CompressionLevel.Default;
@@ -140,23 +168,22 @@ namespace PsychoTestProject
             {
                 AppendFilesToZip(file, zipPath);
             }
+            if (!skipFolders)
+            {
+                foreach (string subFolder in Directory.GetDirectories(folderPath))
+                {
+                    if (Directory.GetFiles(subFolder).Length > 0 || Directory.GetDirectories(subFolder).Length > 0)
+                    {
+                        string tmpSubFolderPath = subFolder+".tmp";
+                        File.WriteAllBytes(tmpSubFolderPath, CreateCryptedZip(subFolder));
+                        AppendFilesToZip(tmpSubFolderPath, zipPath);
+                        File.Delete(tmpSubFolderPath);
+                    }
+                }
+            }
             byte[] result = CryptoMethod.Encrypt(zipPath);
             File.Delete(zipPath);
             return result;
-        }
-
-        public static void ExtractFiles(string zipPath, string outFolder)
-        {
-            using (var zip = ZipFile.Read(zipPath))
-            {
-                zip.AlternateEncodingUsage = ZipOption.Always;
-                zip.AlternateEncoding = Encoding.UTF8;
-                foreach (ZipEntry e in zip)
-                {
-                    e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
-                }
-
-            }
         }
 
         public static void CreateAnimation(Button b, int duration, double x, double y, double reverseX = 0, double reverseY = 0)

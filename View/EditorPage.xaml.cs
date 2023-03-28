@@ -283,7 +283,10 @@ namespace PsychoTestProject.View
             QuestionClass newQuestion = new QuestionClass();
             newQuestion.Type = Question.Type;
             newQuestion.Value = (int)QuestionValueUpDown.Value;
-            newQuestion.AnswersTarget = AnswersTarget;
+            if (AnswersTarget>0)
+                newQuestion.AnswersTarget = AnswersTarget;
+            else
+                newQuestion.AnswersTarget = 1;
             newQuestion.Id = Question.Id;
             newQuestion.Text = QuestionTitle.Text;
 
@@ -341,7 +344,10 @@ namespace PsychoTestProject.View
         public void SaveQuestion()
         {
             MainViewModel.CurrentTest.Name = TestTitleTB.Text;
-            MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
+            if ((int)TakeUpDown.Value>0)
+                MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
+            else
+                MainViewModel.CurrentTest.Take = MainViewModel.CurrentTest.Questions.Count;
             QuestionClass newQuestion = ReadQuestion();
             this.Question = MainViewModel.CurrentTest.Questions[newQuestion.Id - 1] = newQuestion;
         }
