@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
+using System.Diagnostics;
 
 namespace PsychoTestProject.View
 {
@@ -24,6 +25,15 @@ namespace PsychoTestProject.View
     {
         public MainWindow()
         {
+            if (Process.GetProcesses().Where(p => p.ProcessName == 
+            System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count()>1)
+            {
+                if (MessageBox.Show("Копия программы уже открыта!", "Внимание!", 
+                    MessageBoxButton.OK, MessageBoxImage.Error) == MessageBoxResult.OK)
+                    this.Close();
+                else
+                    this.Close();
+            }
             InitializeComponent();
             DataContext = new MainViewModel(MainFrame, this);
             MainFrame.Navigate(new Welcome());

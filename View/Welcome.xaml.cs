@@ -1,6 +1,7 @@
 ﻿using PsychoTestProject.View;
 using PsychoTestProject.ViewModel;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,10 +12,19 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+using System.Drawing.Printing;
+using PsychoTestProject.Extensions;
+using System.Threading;
+using PsychoTestProject.View.TestKinds;
+using Microsoft.Win32;
+using Microsoft.VisualBasic.FileIO;
+using Ionic.Zip;
+using Ionic.Zlib;
 
 namespace PsychoTestProject
 {
@@ -23,31 +33,195 @@ namespace PsychoTestProject
     /// </summary>
     public partial class Welcome : Page
     {
+        /// <summary>
+        /// Возможность вызова анимации (чтобы не перекрывались)
+        /// </summary>
+        public static bool OpenedToAnimate { get; set; }
+        /// <summary>
+        /// Вызываем или скрываем кнопки
+        /// </summary>
+        public static bool ShowOrHide { get; set; }
+        AnimationClass animationClass { get; set; }
         public Welcome()
         {
             InitializeComponent();
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                Import(args[1]);
+            }
+            MainViewModel.AllButtonsHover(this.Content);
+            OpenedToAnimate = ShowOrHide = true;
+        }
+
+        /// <summary>
+        /// Универсальный метод для анимации
+        /// </summary>
+        /// <param name="animationOpened">Направленность действия (вызов или скрытие кнопок)</param>
+        /// <param name="duration">Длительность анимации в мс</param>
+        private void TestButtonsAnimation(bool animationOpened, int duration)
+        {
+            if (OpenedToAnimate && ShowOrHide == animationOpened)
+            {
+                OpenedToAnimate = false;
+                animationClass = new AnimationClass(this.Content, animationOpened, duration);
+                TestsButton.Visibility = animationOpened ? Visibility.Hidden : Visibility.Visible;
+                new Thread(() =>
+                {
+                    Thread.Sleep(duration);
+                    OpenedToAnimate = true;
+                    ShowOrHide = !animationOpened;
+                }).Start();
+            }
+        }
+
+        private static void Import(string fileName)
+        {
+            string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
+            string zipPath = Path.Combine(Environment.CurrentDirectory, "tmp.zip");
+            Directory.CreateDirectory(tmpPath);
+
+            File.WriteAllBytes(zipPath, CryptoMethod.Decrypt(fileName));
+            ExtractFiles(zipPath, tmpPath);
+
+            foreach (string file in Directory.GetFiles(tmpPath))
+            {
+                string filePath = Path.Combine(tmpPath, Path.GetFileNameWithoutExtension(file) + ".zip");
+                File.WriteAllBytes(filePath, CryptoMethod.Decrypt(file));
+                ExtractFiles(filePath, Path.Combine(Environment.CurrentDirectory, Path.GetFileNameWithoutExtension(file)));
+                File.Delete(filePath);
+            }
+            Directory.Delete(tmpPath, true);
+            File.Delete(zipPath);
+            MessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static void Export()
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog()
+            {
+                Title = "Сохранение файлов",
+                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
+                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
+                Directory.CreateDirectory(tmpPath);
+                File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip("Lections"));
+                File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip("Tests"));
+                File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip("tmp"));
+                Directory.Delete(tmpPath, true);
+                MessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        public static void AppendFilesToZip(string filePath, string zipPath)
+        {
+            using (ZipFile zip = ZipFile.Read(zipPath))
+            {
+                zip.AlternateEncodingUsage = ZipOption.Always;
+                zip.AlternateEncoding = Encoding.UTF8;
+                zip.CompressionLevel = CompressionLevel.Default;
+                zip.AddFile(filePath, ""); ;
+                zip.Save();
+            }
+        }
+        public static byte[] CreateCryptedZip(string folderPath)
+        {
+            folderPath = Path.Combine(Environment.CurrentDirectory, folderPath);
+            string zipPath = Path.Combine(Environment.CurrentDirectory, "tmp.zip");
+            using (var zipFile = new ZipFile())
+            {
+                zipFile.CompressionLevel = CompressionLevel.Default;
+                zipFile.Save(zipPath);
+            }
+            foreach (string file in Directory.GetFiles(folderPath))
+            {
+                AppendFilesToZip(file, zipPath);
+            }
+            byte[] result = CryptoMethod.Encrypt(zipPath);
+            File.Delete(zipPath);
+            return result;
+        }
+
+        public static void ExtractFiles(string zipPath, string outFolder)
+        {
+            using (var zip = ZipFile.Read(zipPath))
+            {
+                zip.AlternateEncodingUsage = ZipOption.Always;
+                zip.AlternateEncoding = Encoding.UTF8;
+                foreach (ZipEntry e in zip)
+                {
+                    e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
+                }
+
+            }
+        }
+
+        public static void CreateAnimation(Button b, int duration, double x, double y, double reverseX = 0, double reverseY = 0)
+        {
+            ThicknessAnimation animation = new ThicknessAnimation();
+            animation.From = b.Margin;
+            animation.To = new Thickness(b.Margin.Left + x, b.Margin.Top + y, b.Margin.Right + reverseX, b.Margin.Bottom + reverseY);
+            animation.Duration = TimeSpan.FromMilliseconds(duration);
+            b.BeginAnimation(Button.MarginProperty, animation);
         }
 
         private void LectionsButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.MainFrame.Navigate(new Lections(false));
-
         }
 
         private void TestsButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new Tests());
+            TestButtonsAnimation(true, 240);
+        }
 
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TestButtonsAnimation(false, 240);
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
+            MainViewModel.PerseveranceTest = null;
             MessageBox.Show($"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\nПо вопросам обращаться на почту: meckbaig@yandex.ru", "Информация о программе PsychoTest", MessageBoxButton.OK);
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.MainFrame.Navigate(new TestEditor());
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog()
+            {
+                Title = "Выберите файл",
+                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
+                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                Import(fileDialog.FileName);
+            }
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+            Export();
+        }
+
+        private void OpenTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new Tests());
+        }
+
+        private void PerseveranceTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.PerseveranceTest = new PerseveranceTest();
+            MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
         }
     }
 }

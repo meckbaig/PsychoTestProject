@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -113,6 +114,25 @@ namespace PsychoTestProject.View
         public EditorPage()
         {
             InitializeComponent();
+
+            foreach (DockPanel dockPanel in MainViewModel.GetVisualChilds<DockPanel>(this.Content as DependencyObject))
+            {
+                foreach (ScrollViewer scrollViewer in MainViewModel.GetVisualChilds<ScrollViewer>(dockPanel as DependencyObject))
+                {
+                    foreach (StackPanel stackPanel in (scrollViewer.Content as StackPanel).Children)
+                    {
+                        foreach (Button button in MainViewModel.GetVisualChilds<Button>(stackPanel))
+                        {
+                            if (button.Background.GetType() != (new ImageBrush()).GetType())
+                            {
+                                MainViewModel.MouseHover(button);
+                            }
+                        }
+                    }
+
+                }
+            }
+
             EditorControls = new EditorPageControls(this);
             QuestionList = MainViewModel.CurrentTest.Questions;
             this.Question = QuestionList.ToList()[0];
@@ -386,7 +406,7 @@ namespace PsychoTestProject.View
                         }
                         DeleteButtonThickness = new Thickness(5, 2.35, 5, 2);
 
-                        AnswerButtons.Children.Add(EditorControls.AnsverControlButtons(answer, add_white, true));
+                        AnswerButtons.Children.Add(EditorControls.AnsverControlButtons(answer, true));
                         answerCount++;
                     }
                 }
@@ -398,7 +418,7 @@ namespace PsychoTestProject.View
                 {
                     Control optionsAnswer = EditorControls.OptionsAnswer(question.Type, answer);
                     Control answerText = EditorControls.OptionsAnswerTextBox(answerCount, answer);
-                    StackPanel answerControlButtons = EditorControls.AnsverControlButtons(answer, add_white);
+                    StackPanel answerControlButtons = EditorControls.AnsverControlButtons(answer);
 
                     ShowedFlags.Children.Add(optionsAnswer);
                     ShowedAnswers.Children.Add(answerText);
@@ -407,6 +427,11 @@ namespace PsychoTestProject.View
                 }
             }
             AnswersTarget = Question.AnswersTarget;
+
+            foreach (StackPanel stack in MainViewModel.GetVisualChilds<StackPanel>(ContentViewer.Content as StackPanel))
+            {
+                MainViewModel.AllButtonsHover(stack);
+            }
         }
 
         private void MovementButtonsAvailability()

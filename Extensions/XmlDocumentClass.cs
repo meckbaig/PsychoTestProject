@@ -21,6 +21,7 @@ namespace PsychoTestProject.Extensions
         {
 
         }
+
         public XmlDocumentClass(TestClass currentTest)
         {
             CurrentTest = currentTest;
@@ -37,6 +38,7 @@ namespace PsychoTestProject.Extensions
         {
             string path = Environment.CurrentDirectory + "\\Tests\\" + CurrentTest.Name + ".xml";
             XmlDoc.Save(path);
+            File.WriteAllBytes(path, CryptoMethod.Encrypt(path));
         }
 
         public XmlElement AddQuestions(XmlElement array)

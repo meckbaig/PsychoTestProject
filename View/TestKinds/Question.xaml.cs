@@ -29,6 +29,7 @@ namespace PsychoTestProject.View
         public Question()
         {
             InitializeComponent();
+            MainViewModel.MouseHover(NextButton);
             DataContext = this;
             TimerColor = "Green";
             qTimer = new();

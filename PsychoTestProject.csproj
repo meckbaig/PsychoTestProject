@@ -8,12 +8,15 @@
     <ApplicationIcon>2560px-P_psychology2.svg.ico</ApplicationIcon>
     <Authors>$(meckbaig)</Authors>
     <FileVersion></FileVersion>
-    <AssemblyVersion>1.0.0.10</AssemblyVersion>
+    <AssemblyVersion>1.0.0.11</AssemblyVersion>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\delete.png" />
+    <None Remove="Resources\export.png" />
+    <None Remove="Resources\gear-48-hover.png" />
+    <None Remove="Resources\import.png" />
     <None Remove="Resourses\add_white.png" />
     <None Remove="View\add.png" />
     <None Remove="View\delete.png" />
@@ -23,6 +26,8 @@
     <None Remove="View\icons8-plus-math-60.png" />
     <None Remove="View\information-48.png" />
     <None Remove="View\save.png" />
+    <None Remove="View\TestKinds\1.jpg" />
+    <None Remove="View\TestKinds\1.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,8 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1462.37" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="WebView2.Runtime.X86" Version="109.0.1518.78" />
   </ItemGroup>
 
@@ -44,10 +51,14 @@
     <Resource Include="Resources\add_white.png" />
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\edit.png" />
+    <Resource Include="Resources\export.png" />
     <Resource Include="Resources\gear-48.png" />
+    <Resource Include="Resources\import.png" />
     <Resource Include="Resources\information-48.png" />
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\document-edit.png" />
+    <Resource Include="View\TestKinds\1.jpg" />
+    <Resource Include="View\TestKinds\1.png" />
   </ItemGroup>
 
   <ItemGroup>

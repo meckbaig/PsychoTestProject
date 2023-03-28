@@ -9,7 +9,17 @@
         MinWidth="700" MinHeight="450"
       Title="PsychoTest" WindowTitle="Welcome" Background="Azure">
 
-    <Grid Background="Azure">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/WelcomeResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="Azure" MouseDown="Grid_MouseDown">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition/>
@@ -21,19 +31,47 @@
         </Grid.RowDefinitions>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" 
          FontSize="40" Height="112" Width="800" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" 
-         Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center" Margin="0,0,0,20" ><Run Language="ru-ru" Text="Электронное пособие"/><LineBreak/><Run Language="ru-ru" Text="&quot;Основы психологии личности&quot;"/></TextBlock>
-        <Button Content="Изучить лекции" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="LectionsButton_Click" Margin="0,20,0,0"/>
-        <Button Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Height="51" Width="170" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="TestsButton_Click"  Grid.Column="3" Margin="0,20,0,0"/>
-        <Button Content="&#xD;&#xA;" Margin="0,10,10,0" Width="36" Height="36" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Click="InfoButton_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/Resources/information-48.png" Stretch="UniformToFill"/>
-            </Button.Background>
+         Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center" Margin="0,0,0,20" >
+         <Run Language="ru-ru" Text="Электронное пособие"/><LineBreak/><Run Language="ru-ru" Text="&quot;Основы психологии личности&quot;"/>
+        </TextBlock>
+        <Button x:Name="LectionsButton" Content="Изучить лекции" HorizontalAlignment="Right" Grid.Row="1" 
+                Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" 
+                BorderBrush="{x:Null}" Click="LectionsButton_Click" Margin="0,50,0,0" VerticalAlignment="Top"/>
+
+        <Button x:Name="LeongardTestButton" Style="{StaticResource TestButtonStyle}">
+            <TextBlock  Text="Тест акцентуации характера К. Леонгард" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button Content="&#xA;" Margin="10,10,0,0" Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Click="AdminButton_Click" RenderTransformOrigin="1.092,0.486">
-            <Button.Background>
-                <ImageBrush ImageSource="/Resources/gear-48.png" Stretch="UniformToFill"/>
-            </Button.Background>
+        <Button x:Name="PeoplePictureTestButton" Style="{StaticResource TestButtonStyle}">
+            <TextBlock  Text="Тест по картинкам" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
+        <Button x:Name="AizenkTestButton" Style="{StaticResource TestButtonStyle}">
+            <TextBlock  Text="Тест Айзенка" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button x:Name="PerseveranceTestButton" Style="{StaticResource TestButtonStyle}" Click="PerseveranceTestButton_Click">
+            <TextBlock  Text="Тест на усидчивость" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button x:Name="ProTestButton" Style="{StaticResource TestButtonStyle}">
+            <TextBlock  Text="Тест профессионализма" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button x:Name="OrientationTestButton" Style="{StaticResource TestButtonStyle}">
+            <TextBlock  Text="Тест направленности личности" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button x:Name="OpenTestsButton" Style="{StaticResource TestButtonStyle}" Click="OpenTestButton_Click">
+            <TextBlock  Text="Тесты с вариантами ответов" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+
+        <Button x:Name="TestsButton" Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" Height="51" 
+                Width="170" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
+                Click="TestsButton_Click"  Grid.Column="3" Margin="0,50,0,0" VerticalAlignment="Top"/>
+
+        <Button x:Name="InfoButton" Template="{DynamicResource InfoButtonTemplate}" Content="&#xD;&#xA;" Margin="0,10,10,0" Width="36" Height="36" 
+                VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Click="InfoButton_Click" Background="#00000000"/>
+        <Button x:Name="AdminButton" Template="{DynamicResource AdminButtonTemplate}" Content="&#xA;" Margin="10,10,0,0" Width="40" 
+                Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Click="AdminButton_Click" RenderTransformOrigin="1.092,0.486" Background="#00000000"/>
+        <Button x:Name="ImportButton" Template="{DynamicResource ImportButtonTemplate}" Content="&#xA;" Margin="10,0,0,10" Width="40" 
+            Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ImportButton_Click" RenderTransformOrigin="1.092,0.486" Background="#00000000" Grid.Row="1"/>
+        <Button x:Name="ExportButton" Template="{DynamicResource ExportButtonTemplate}" Content="&#xA;" Margin="55,0,0,10" Width="40" 
+            Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ExportButton_Click" RenderTransformOrigin="1.092,0.486" Background="#00000000" Grid.Row="1"/>
 
     </Grid>
 </Page>

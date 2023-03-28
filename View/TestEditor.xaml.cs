@@ -25,6 +25,7 @@ namespace PsychoTestProject.View
         {
             InitializeComponent();
             DataContext = new TestEditorViewModel(EditFrame);
+            MainViewModel.AllButtonsHover(this.Content);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

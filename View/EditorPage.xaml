@@ -9,6 +9,28 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EditorPage">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/EditorResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="5"
+                                Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+
     <Grid x:Name="PageGrid" Background="Azure" SizeChanged="PageSizeChanged">
         <DockPanel LastChildFill="False">
             <ScrollViewer x:Name="TopStackPanelScroll" DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
@@ -21,11 +43,8 @@
                             <TextBlock x:Name="Single">Один вар.</TextBlock>
                             <TextBlock x:Name="Multiple">Несколько вар.</TextBlock>
                         </ComboBox>
-                        <Button Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" 
+                        <Button Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" Template="{DynamicResource AddButtonTemplate}" Background="White"
                         Width="23" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Click="AddQuestionButton_Click">
-                            <Button.Background>
-                                <ImageBrush Stretch="UniformToFill" ImageSource="/Resources/add_white.png"/>
-                            </Button.Background>
                         </Button>
                     </StackPanel>
                     <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">

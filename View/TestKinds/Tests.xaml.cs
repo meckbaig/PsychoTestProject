@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,9 @@ namespace PsychoTestProject.View
             InitializeComponent();
             DataContext = new TestsViewModel(TestFrame);
             MainViewModel.MainWindow.Title = "Тесты";
+            MainViewModel.AllButtonsHover(this.Content);
         }
+
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {

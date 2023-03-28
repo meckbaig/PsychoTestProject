@@ -101,13 +101,13 @@ namespace PsychoTestProject.ViewModel
             return item;
         }
 
-        public StackPanel AnsverControlButtons(AnswerClass answer, Image add_white, bool isString = false)
+        public StackPanel AnsverControlButtons(AnswerClass answer, bool isString = false)
         {
             StackPanel stackPanel = new StackPanel();
             stackPanel.Orientation = Orientation.Horizontal;
 
             if (isString)
-                AddVariableAnswer(answer, add_white, stackPanel);
+                AddVariableAnswer(answer, stackPanel);
 
             Button deleteButton = new Button();
             deleteButton.Content = "Удалить";
@@ -117,21 +117,25 @@ namespace PsychoTestProject.ViewModel
             deleteButton.BorderBrush = null;
             deleteButton.Command = view.DeleteAnswerCommand;
             deleteButton.CommandParameter = answer;
+            deleteButton.Height = 25.05;
+            deleteButton.Width = 70;
             Control delButton = deleteButton;
             delButton = Fonts(delButton, null, 15);
             stackPanel.Children.Add(delButton);
             return stackPanel;
         }
 
-        private void AddVariableAnswer(AnswerClass answer, Image add_white, StackPanel stackPanel)
+        private void AddVariableAnswer(AnswerClass answer, StackPanel stackPanel)
         {
             Button addVariableAnswerButton = new Button();
             addVariableAnswerButton.Height = addVariableAnswerButton.Width = 23;
-            addVariableAnswerButton.Background = new ImageBrush(add_white.Source);
+            addVariableAnswerButton.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            addVariableAnswerButton.SetResourceReference(Button.TemplateProperty, "AddButtonTemplate");
             addVariableAnswerButton.Padding = new Thickness(5, 0, 5, 0);
             addVariableAnswerButton.BorderBrush = null;
             addVariableAnswerButton.Command = view.AddVariableAnswerCommand;
             addVariableAnswerButton.CommandParameter = answer;
+            addVariableAnswerButton.Height = 25.05;
             Control varAnswerButton = addVariableAnswerButton;
             varAnswerButton = Fonts(varAnswerButton, null, 17);
             stackPanel.Children.Add(varAnswerButton);

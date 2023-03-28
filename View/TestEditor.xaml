@@ -9,6 +9,28 @@
         MinWidth="700" MinHeight="450"
       Title="TestEditor">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/EditorResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="8"
+                                Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <Grid Background="Azure">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -20,40 +42,26 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="26" Height="28" 
-            CommandParameter="{Binding ElementName=testEditorPage, Path=DataContext.Test}" 
-            Command="{Binding ElementName=testEditorPage, Path=DataContext.OpenTestCommand}" Margin="1,0,1,0">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/edit.png" Stretch="UniformToFill"/>
-                </Button.Background>
-            </Button>
+                CommandParameter="{Binding ElementName=testEditorPage, Path=DataContext.Test}" 
+                Command="{Binding ElementName=testEditorPage, Path=DataContext.OpenTestCommand}" Margin="1,0,1,0"
+                Template="{DynamicResource EditButtonTemplate}" Background="#FF6CFFB6"/>
+            
             <Button Name="CreateNewTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding CreateNewTestBTCommand}"
-                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0">
-                <Button.Background>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="/Resources/add.png"/>
-                </Button.Background>
-            </Button>
+                Command="{Binding CreateNewTestBTCommand}" Template="{DynamicResource AddButtonTemplate}"
+                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FF6CFFB6"/>
+
             <Button Name="SaveTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding SaveTestBTCommand}"
-                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/save.png" Stretch="UniformToFill" TileMode="Tile"/>
-                </Button.Background>
-            </Button>
+                Command="{Binding SaveTestBTCommand}" Template="{DynamicResource SaveButtonTemplate}"
+                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FF6CFFB6"/>
+
             <Button Name="DeleteTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding DeleteTestBTCommand}"
-                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/delete.png" Stretch="UniformToFill"/>
-                </Button.Background>
-            </Button>
+                Command="{Binding DeleteTestBTCommand}" Template="{DynamicResource DeleteButtonTemplate}"
+                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FFFF8F6C"/>
+
             <Button Name="EditLections" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding GoToLectionsEditorCommand}"
-                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/document-edit.png" Stretch="Uniform"/>
-                </Button.Background>
-            </Button>
+                Command="{Binding GoToLectionsEditorCommand}" Template="{DynamicResource EditLectionsButtonTemplate}"
+                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="White"/>
+
         </StackPanel>
         <Frame x:Name="EditFrame" Grid.Column="1" Grid.RowSpan="2"/>
         <ListBox x:Name="ListBox" Background="Azure"  Grid.Row="2" ItemsSource="{Binding TestList}"

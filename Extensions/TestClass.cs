@@ -36,7 +36,8 @@ namespace PsychoTestProject.Extensions
                 {
                     var questionList = new List<QuestionClass>();
                     XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(File.ReadAllText(fileName));
+                    doc.LoadXml(Encoding.UTF8.GetString(CryptoMethod.Decrypt(fileName)));
+                    //doc.LoadXml(File.ReadAllText(fileName));
                     var root = doc.DocumentElement;
                     var items = root.ChildNodes;
                     int questionId = 1;

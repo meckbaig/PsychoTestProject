@@ -50,6 +50,7 @@ namespace PsychoTestProject
             Thread.Sleep(50);
             if (Admin)
                 Web.ExecuteScriptAsync("document.designMode = \"on\"");
+            MainViewModel.AllButtonsHover(this.Content);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -91,10 +92,19 @@ namespace PsychoTestProject
 
         private void DeleteLectionBT_Click(object sender, RoutedEventArgs e)
         {
-            Web.Dispose();
-            File.Delete(LectionSource);
-            (DataContext as LectionsViewModel).UpdateLectionList();
-            (DataContext as LectionsViewModel).LectionTitle = null;
+            if (LectionSource != null)
+            {
+                if (MessageBox.Show($"Вы точно хотите удалить лекцию \"{(DataContext as LectionsViewModel).LectionTitle}\"?", 
+                    "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    Web.Dispose();
+                    File.Delete(LectionSource);
+                    (DataContext as LectionsViewModel).UpdateLectionList();
+                    (DataContext as LectionsViewModel).LectionTitle = null;
+                }
+            }
+            else
+                MessageBox.Show("Выберите лекцию", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void BoldBT_Click(object sender, RoutedEventArgs e)
