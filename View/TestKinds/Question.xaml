@@ -84,7 +84,10 @@
                 <StackPanel x:Name="ShowedAnswers">
                 </StackPanel>
                 <TextBlock TextWrapping="Wrap" Text="{Binding QuestionCount}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="13" Margin="0,5,0,5"/>
-                <Button x:Name="NextButton" Content="Далее" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="NextButton_Click" Margin="0,5,0,0"/>
+                <StackPanel x:Name="ButtonsStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="BackButton" Content="Назад" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FFFF8F6C" BorderBrush="{x:Null}" Click="BackButton_Click" Margin="0,5,20,0"/>
+                    <Button x:Name="NextButton" Content="Далее" Height="51" Width="160" FontFamily="Microsoft YaHei UI" FontSize="18" Background="#FF6CFFB6" BorderBrush="{x:Null}" Click="NextButton_Click" Margin="0,5,0,0"/>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

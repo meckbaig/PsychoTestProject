@@ -44,7 +44,7 @@ namespace PsychoTestProject.View.TestKinds
 
         private void Question_Loaded(object sender, RoutedEventArgs e)
         {
-            Question.Initialize(false);
+            Question.Initialize(false, true);
         }
 
         private void NextQuestion(object sender, EventArgs e)
@@ -116,6 +116,15 @@ namespace PsychoTestProject.View.TestKinds
                 else MessageBox.Show("Error 234-56:98");
             }
 
+        }
+
+        private void PreviousQuestion(object sender, EventArgs e)
+        {
+            var previousQuestion = viewModel.PreviousQuestion();
+            if (previousQuestion != null)
+            {
+                Question.Initialize(previousQuestion, false);
+            }
         }
 
         private (TextBlock title, TextBlock text) Title(PsychoType type, WpfPlot plot)

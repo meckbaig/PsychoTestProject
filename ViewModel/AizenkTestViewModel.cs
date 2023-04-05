@@ -41,6 +41,14 @@ namespace PsychoTestProject.ViewModel
             }
             return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber++];
         }
+        public QuestionClass PreviousQuestion()
+        {
+            if (MainViewModel.CurrentQuestionNumber == 1)
+            {
+                return null;
+            }
+            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber--];
+        }
 
         public int CalculateIndicator(int[] posIndicators, int[] negIndicators = null)
         {

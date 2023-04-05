@@ -33,6 +33,7 @@ namespace PsychoTestProject.View
         {
             InitializeComponent();
             MainViewModel.MouseHover(NextButton);
+            MainViewModel.MouseHover(BackButton);
             DataContext = this;
             TimerColor = "Green";
             qTimer = new();
@@ -40,12 +41,14 @@ namespace PsychoTestProject.View
             qTimer.Tick += Timer_Tick;
         }
 
-        public void Initialize(bool startTimer = true)
+        public void Initialize(bool startTimer = true, bool showBackButton = false)
         {
             this.startTimer = startTimer;
             PrintAnswers(QuestionClass);
             if (startTimer)
                 Timer(QuestionClass);
+            if (!showBackButton)
+                ButtonsStackPanel.Children.RemoveAt(0);
         }
         public void Initialize(QuestionClass question, bool startTimer = true)
         {
@@ -242,11 +245,19 @@ namespace PsychoTestProject.View
             if (startTimer)
                 TimerColorChange();
         }
+        public event EventHandler ExtBackButton_Click;
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            ExtBackButton_Click?.Invoke(sender, e);
+            if (startTimer)
+                TimerColorChange();
+        }
 
         private void NextKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 ExtNextButton_Click?.Invoke(sender, e);
         }
+
     }
 }
