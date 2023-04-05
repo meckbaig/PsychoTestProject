@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="Azure" MouseDown="Grid_MouseDown">
+    <Grid Background="Azure" MouseDown="Grid_MouseDown" Drop="Grid_Drop">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition/>
@@ -44,7 +44,7 @@
         <Button x:Name="PeoplePictureTestButton" Style="{StaticResource TestButtonStyle}">
             <TextBlock  Text="Тест по картинкам" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button x:Name="AizenkTestButton" Style="{StaticResource TestButtonStyle}">
+        <Button x:Name="AizenkTestButton" Style="{StaticResource TestButtonStyle}" Click="AizenkTestButton_Click">
             <TextBlock  Text="Тест Айзенка" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button x:Name="PerseveranceTestButton" Style="{StaticResource TestButtonStyle}" Click="PerseveranceTestButton_Click">

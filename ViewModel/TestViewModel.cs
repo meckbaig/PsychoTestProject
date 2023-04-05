@@ -20,7 +20,7 @@ namespace PsychoTestProject.ViewModel
         public TestViewModel(TestClass test)
         {
             MainViewModel.CurrentTest = test;
-            MainViewModel.CurrentQuestionId = 1;
+            MainViewModel.CurrentQuestionNumber = 1;
             LoadImage();
         }
 
@@ -40,17 +40,17 @@ namespace PsychoTestProject.ViewModel
 
         public QuestionClass CurrentQuestion
         {
-            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionId-1];
+            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber-1];
         }
 
 
         public QuestionClass NextQuestion()
         {
-            if (MainViewModel.CurrentQuestionId == (MainViewModel.CurrentTest.Questions.Count))
+            if (MainViewModel.CurrentQuestionNumber == (MainViewModel.CurrentTest.Questions.Count))
             {
                 return null;
             }
-            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionId++];
+            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber++];
         }
 
         public void ChangeQuestionMargin(double width, double height)

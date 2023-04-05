@@ -14,6 +14,56 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/EditorResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="RadioButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <BulletDecorator Background="Transparent">
+                                <BulletDecorator.Bullet>
+                                    <Grid Height="16" Width="16">
+                                        <Border x:Name="RadioOuter" Background="Transparent" BorderBrush="#FF7E7E7E" BorderThickness="2" CornerRadius="8"/>
+                                        <Border x:Name="RadioMark" Background="#FF4B4B4B" Margin="4" Visibility="Hidden" CornerRadius="8"/>
+                                    </Grid>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Margin="5,0,0,0">
+                                    <ContentPresenter/>
+                                </TextBlock>
+                            </BulletDecorator>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="RadioMark" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="RadioMark" Property="BorderBrush" Value="#FF4B4B4B"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="CheckBox">
+                            <BulletDecorator Background="Transparent">
+                                <BulletDecorator.Bullet>
+                                    <Grid Height="16" Width="16">
+                                        <Border x:Name="RadioOuter" Background="Transparent" BorderBrush="#FF7E7E7E" BorderThickness="2" CornerRadius="2"/>
+                                        <Border x:Name="RadioMark" Background="#FF4B4B4B" Margin="4" Visibility="Hidden" CornerRadius="0"/>
+                                    </Grid>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Margin="5,0,0,0">
+                                    <ContentPresenter/>
+                                </TextBlock>
+                            </BulletDecorator>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="RadioMark" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="RadioMark" Property="BorderBrush" Value="#FF4B4B4B"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style TargetType="Button">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -85,32 +135,32 @@
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
                             <TextBlock FontFamily="Microsoft YaHei UI" Text="Баллов за вопрос" VerticalAlignment="Center" 
                                    Margin="5,0,0,0" TextWrapping="Wrap"/>
-                            <xctk:IntegerUpDown Name="QuestionValueUpDown" Minimum="1" Width="60" Height="23" Margin="45.5,0,5,0"/>
+                            <xctk:IntegerUpDown Name="QuestionValueUpDown" Minimum="1" Width="60" Height="23" Margin="45.5,2,5,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,1,0,1">
                             <TextBlock FontFamily="Microsoft YaHei UI" Text="Ответов для макс. балла" VerticalAlignment="Center" 
                                    Margin="5,0,0,0" TextWrapping="Wrap"/>
                             <xctk:IntegerUpDown Name="TagretUpDown" Minimum="1" Width="60" Height="23" Margin="5,0,5,0" Value="{Binding AnswersTarget}"/>
                         </StackPanel>
-                        <CheckBox x:Name="IsExactCheckBox" Visibility="Hidden"/>
+                        <CheckBox x:Name="IsExactCheckBox" Visibility="Hidden" Margin="5,3,5,5"/>
                     </StackPanel>
                     <StackPanel x:Name="AddImageStackPanel" Background="#FFD6E8E8" Margin="1,0,1,0" Orientation="Horizontal">
                         <StackPanel Background="#FFD6E8E8">
                             <TextBlock FontFamily="Microsoft YaHei UI" FontSize="11" Text="Фоновое изображение" Margin="5,0,5,0" TextWrapping="Wrap" Width="77"/>
                             <Button Content="Добавить" FontFamily="Microsoft YaHei UI" FontSize="11" BorderBrush="{x:Null}" 
                             Width="68" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                            Margin="5,2,5,2" Click="AddImageButton_Click" HorizontalAlignment="Left" Background="#FFF8F8F8"/>
+                            Margin="5,2,5,2" Click="AddImageButton_Click" HorizontalAlignment="Left" Background="#FFF8F8F8" Height="20"/>
                         </StackPanel>
                         <Image x:Name="TestImage" Width="100" Height="45" Margin="5,5,5,5" Visibility="{Binding BackgroundImage.Visibility}" 
                            Source="{Binding BackgroundImage.Source}" Stretch="UniformToFill" VerticalAlignment="Top"/>
                     </StackPanel>
                     <StackPanel Background="#FFD6E8E8" Margin="1,0,0,0">
                         <Button Content="Сохранить вопрос" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
-                        Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" Width="120" Click="SaveQuestionButton_Click"/>
+                        Height="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" Width="120" Click="SaveQuestionButton_Click"/>
                         <!--<Button Content="Сохранить тест" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
                         Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" Click="SaveTestButton_Click"/>-->
                         <Button Content="Удалить вопрос" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FFFF8F6C" BorderBrush="{x:Null}" 
-                        Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" 
+                        Height="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" 
                         Width="120" Click="DeleteQuestionButton_Click"/>
                     </StackPanel>
                     <StackPanel Background="#FFD6E8E8" Margin="1,0,0,0">

@@ -3,6 +3,7 @@ using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -22,9 +23,11 @@ namespace PsychoTestProject.View
         public static System.Windows.Threading.DispatcherTimer qTimer { get; set; }
         public string TimerColor { get; set; }
         public int MaxQuestionTime { get; set; }
-        public int QuestionTime { get; set; }
+        public string QuestionTime { get; set; }
+        private int questionTime { get; set; }
         public string QuestionCount { get; set; }
         public string QuestionText { get => QuestionClass?.Text; }
+        private bool startTimer { get; set; }
 
         public Question()
         {
@@ -36,16 +39,21 @@ namespace PsychoTestProject.View
             qTimer.Interval = new TimeSpan(0, 0, 1);
             qTimer.Tick += Timer_Tick;
         }
-        public void Initialize()
+
+        public void Initialize(bool startTimer = true)
         {
+            this.startTimer = startTimer;
             PrintAnswers(QuestionClass);
-            Timer(QuestionClass);
+            if (startTimer)
+                Timer(QuestionClass);
         }
-        public void Initialize(QuestionClass question)
+        public void Initialize(QuestionClass question, bool startTimer = true)
         {
+            this.startTimer = startTimer;
             QuestionClass = question;
             PrintAnswers(QuestionClass);
-            Timer(QuestionClass);
+            if (startTimer)
+                Timer(QuestionClass);
         }
         public QuestionClass QuestionClass
         {
@@ -61,19 +69,20 @@ namespace PsychoTestProject.View
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            if (QuestionTime == 0)
+            if (questionTime == 0)
             {
                 qTimer.Stop();
                 TimeOut?.Invoke(this, EventArgs.Empty);
             }
-            QuestionTime--;
+            questionTime--;
             TimerColorChange();
+            QuestionTime = $"Осталось: {questionTime}с.";
             OnPropertyChanged("QuestionTime");
         }
 
         private void TimerColorChange()
         {
-            double percentage = (double)QuestionTime / (double)MaxQuestionTime;
+            double percentage = (double)questionTime / (double)MaxQuestionTime;
             if (percentage <= 0.2)
                 TimerColor = "Red";
             else if (percentage <= 0.4)
@@ -88,23 +97,24 @@ namespace PsychoTestProject.View
             switch (question.Type)
             {
                 case QuestionType.Single:
-                    QuestionTime = 30;
+                    questionTime = 30;
                     break;
                 case QuestionType.Multiple:
-                    QuestionTime = 60;
+                    questionTime = 60;
                     break;
                 case QuestionType.String:
-                    QuestionTime = 90;
+                    questionTime = 90;
                     break;
             }
-            MaxQuestionTime = QuestionTime;
+            MaxQuestionTime = questionTime;
+            QuestionTime = $"Осталось: {questionTime}с.";
             OnPropertyChanged("QuestionTime");
             qTimer.Start();
         }
 
         public void PrintAnswers(QuestionClass question)
         {
-            QuestionCount = (MainViewModel.CurrentQuestionId) + " из " + MainViewModel.CurrentTest.Questions.Count;
+            QuestionCount = (MainViewModel.CurrentQuestionNumber) + " из " + MainViewModel.CurrentTest.Questions.Count;
             OnPropertyChanged("QuestionCount");
             ShowedAnswers.Children.Clear();
             foreach (var answer in question.Answers)
@@ -229,7 +239,8 @@ namespace PsychoTestProject.View
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             ExtNextButton_Click?.Invoke(sender, e);
-            TimerColorChange();
+            if (startTimer)
+                TimerColorChange();
         }
 
         private void NextKeyDown(object sender, KeyEventArgs e)

@@ -82,21 +82,19 @@ namespace PsychoTestProject.ViewModel
             {
                 case QuestionType.Single:
                     RadioButton rb = new RadioButton();
-                    view.DeleteButtonThickness = new Thickness(5, 4.35, 5, 2);
                     rb.IsChecked = answer.IsCorrect;
                     item = rb;
-                    item.Margin = new Thickness(5, 9, 5, 8.4);
                     break;
                 case QuestionType.Multiple:
                     CheckBox cb = new CheckBox();
-                    view.DeleteButtonThickness = new Thickness(5, 4.35, 5, 2);
                     cb.IsChecked = answer.IsCorrect;
                     item = cb;
-                    item.Margin = new Thickness(5, 8, 5, 8.3);
                     break;
                 default:
                     item = new TextBox(); break;
             }
+            view.DeleteButtonThickness = new Thickness(5, 4.35, 5, 2);
+            item.Margin = new Thickness(5, 3, 0, 3);
             item = Fonts(item, answer);
             return item;
         }

@@ -39,10 +39,10 @@ namespace PsychoTestProject.View.TestKinds
 
         public int PreviousNumber
         {
-            get => previousNumber;
+            get => previousNumber+1;
             set
             {
-                previousNumber = value;
+                previousNumber = value-1;
                 OnPropertyChanged("PreviousNumber");
             }
         }
@@ -92,6 +92,9 @@ namespace PsychoTestProject.View.TestKinds
             {
                 PreviousNumber++;
 
+                if ((ThisGrid.Background as SolidColorBrush).Color.G < (ThisGrid.Background as SolidColorBrush).Color.R)
+                    (ThisGrid.Background as SolidColorBrush).Color = Color.FromRgb(30, 55, 30);
+
                 if (numberUp)
                 {
                     if ((ThisGrid.Background as SolidColorBrush).Color.G >= 55 && (ThisGrid.Background as SolidColorBrush).Color.G <= 235)
@@ -126,7 +129,7 @@ namespace PsychoTestProject.View.TestKinds
                     }
                 }
 
-                if (PreviousNumber == dictionary.NumberImages.Count-1)
+                if (PreviousNumber == dictionary.NumberImages.Count)
                 {
                     timer.Stop();
                     MessageBox.Show(Math.Round(time, 2).ToString()+" секунд на решение");

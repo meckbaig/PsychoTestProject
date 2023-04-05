@@ -250,5 +250,19 @@ namespace PsychoTestProject
             MainViewModel.PerseveranceTest = new PerseveranceTest();
             MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
         }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                Import(files[0]);
+            }
+        }
+
+        private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new AizenkTest());
+        }
     }
 }

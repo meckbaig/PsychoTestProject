@@ -1,0 +1,37 @@
+﻿<Page x:Name="aizenkTestPage"
+      x:Class="PsychoTestProject.View.TestKinds.AizenkTest"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PsychoTestProject.View"
+      mc:Ignorable="d" 
+        MinWidth="700" MinHeight="450" Background="Azure"
+      Title="Тест айзенка">
+
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    <Grid x:Name="ThisGrid">
+        <ScrollViewer x:Name="Scroll" Focusable="False">
+            <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=aizenkTestPage, Path=DataContext.CurrentQuestion}" 
+         Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" Margin="{Binding ElementName=aizenkTestPage, Path=DataContext.Margin}"/>
+        </ScrollViewer>
+        <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" 
+            BorderBrush="{x:Null}" Width="140" Height="25" Click="BackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Page>

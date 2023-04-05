@@ -45,8 +45,8 @@ namespace PsychoTestProject.ViewModel
         public static bool TestStarted { get; set; }
 
         public static TestClass CurrentTest { get; set; }
-        public static int CurrentQuestionId { get; set; }
-        public static QuestionClass CurrentQuestion { get => CurrentTest.Questions[CurrentQuestionId-1]; set => CurrentTest.Questions[CurrentQuestionId-1] = value; }
+        public static int CurrentQuestionNumber { get; set; }
+        public static QuestionClass CurrentQuestion { get => CurrentTest.Questions[CurrentQuestionNumber-1]; set => CurrentTest.Questions[CurrentQuestionNumber-1] = value; }
 
         public static void Back()
         {
