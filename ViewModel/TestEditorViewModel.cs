@@ -99,6 +99,7 @@ namespace PsychoTestProject.ViewModel
                 editorPage.SaveQuestion();
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
                 xmlDocument.Save();
+                MessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
             else if (Test == null)
@@ -109,7 +110,7 @@ namespace PsychoTestProject.ViewModel
             {
                 xmlDocument = new XmlDocumentClass(Test);
                 xmlDocument.Save();
-                
+                MessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
 

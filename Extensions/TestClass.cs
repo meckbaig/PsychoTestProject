@@ -20,9 +20,6 @@ namespace PsychoTestProject.Extensions
         public bool UseTake { get; set; }
         public int Take { get; set; }
 
-        //public Array AnswersValues { get; set; }
-        //public Array AnswersPoints { get; set; }
-
         public TestClass(bool useTake)
         {
             UseTake = useTake;

@@ -29,10 +29,9 @@
         <Grid Background="Azure">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="131*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ListBox" Background="Azure" ItemsSource="{Binding TestList}" 
+        <ListBox x:Name="ListBox" Background="Azure" ItemsSource="{Binding TestList}" BorderThickness="0"
             HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,25">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -40,7 +39,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Frame x:Name="TestFrame" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Frame x:Name="TestFrame" Grid.Column="1" Grid.ColumnSpan="2" BorderBrush="#FFDDDDDD" BorderThickness="1"/>
         <TextBlock x:Name="TitleTextBlock" Visibility="{Binding ElementName=testPage, Path=DataContext.TextVisibility}" Grid.Column="2" TextWrapping="Wrap"
             Text="{Binding Path=TestTitle}" HorizontalAlignment="Center" Margin="0,0,0,80"
             FontFamily="Microsoft YaHei UI" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" MaxWidth="700"/>
@@ -49,6 +48,6 @@
             Path=DataContext.OpenTestCommand}" Height="30" Width="112" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6"
             BorderBrush="{x:Null}" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" HorizontalAlignment="Left" 
-            VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click" Margin="0,425,0,0" Background="#FFFF8F6C"/>
+            VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click" Background="#FFFF8F6C"/>
     </Grid>
 </Page>

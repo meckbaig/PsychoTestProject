@@ -213,7 +213,12 @@ namespace PsychoTestProject
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.PerseveranceTest = null;
-            MessageBox.Show($"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\nПо вопросам обращаться на почту: meckbaig@yandex.ru", "Информация о программе PsychoTest", MessageBoxButton.OK);
+            MessageBox.Show($"Продукт предназначен для упрощения процесса обучения и тестирования по дисциплине «Основы психологии личности».\n" +
+                            $"Пользователи: студенты и преподаватель дисциплины\n" +
+                            $"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\n" +
+                            $"Год разработки: 2023. Год конечного сопровождения: 2024.\n" +
+                            $"По вопросам обращаться на почту: meckbaig@yandex.ru",
+                            "Информация о программе PsychoTest", MessageBoxButton.OK);
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)

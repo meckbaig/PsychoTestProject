@@ -24,7 +24,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    
+
     <Grid x:Name="ThisGrid">
         <ScrollViewer x:Name="Scroll" Focusable="False">
             <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=aizenkTestPage, Path=DataContext.CurrentQuestion}" 

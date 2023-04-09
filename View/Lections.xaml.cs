@@ -51,6 +51,7 @@ namespace PsychoTestProject
             if (Admin)
                 Web.ExecuteScriptAsync("document.designMode = \"on\"");
             MainViewModel.AllButtonsHover(this.Content);
+            
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -110,7 +111,7 @@ namespace PsychoTestProject
         private async void BoldBT_Click(object sender, RoutedEventArgs e)
         {
             string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection().toString()");
-
+            
         }
     }
 }

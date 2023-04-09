@@ -30,7 +30,17 @@ namespace PsychoTestProject.View
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.Back();
+            if (MainViewModel.CurrentTest != null)
+            {
+                if (MessageBox.Show($"Выбранный тест не сохранён. Вы точно хотите выйти?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    MainViewModel.CurrentTest = null;
+                    MainViewModel.Back();
+
+                }
+            }
+            else
+                MainViewModel.Back();
         }
     }
 }

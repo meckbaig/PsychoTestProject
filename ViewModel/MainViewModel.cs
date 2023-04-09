@@ -34,16 +34,12 @@ namespace PsychoTestProject.ViewModel
 
         public static PerseveranceTest PerseveranceTest { get; set; }
 
-
-
         public static MainWindow MainWindow;
 
         public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
         public static Frame? MainFrame { get; set; }
         public static object TestFrame { get; set; }
-
         public static bool TestStarted { get; set; }
-
         public static TestClass CurrentTest { get; set; }
         public static int CurrentQuestionNumber { get; set; }
         public static QuestionClass CurrentQuestion { get => CurrentTest.Questions[CurrentQuestionNumber-1]; set => CurrentTest.Questions[CurrentQuestionNumber-1] = value; }

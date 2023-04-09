@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="Azure" MouseDown="Grid_MouseDown" Drop="Grid_Drop">
+    <Grid Background="Azure" MouseDown="Grid_MouseDown" Drop="Grid_Drop" AllowDrop="true">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition/>

@@ -31,13 +31,13 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-    
+
     <Grid Background="Azure" SizeChanged="PageSizeChanged">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="6*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Background="Azure" ItemsSource="{Binding LectionList}" Margin="0,0,0,25">
+        <ListBox Background="Azure" ItemsSource="{Binding LectionList}" Margin="0,0,0,25" BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
@@ -78,6 +78,22 @@
             </StackPanel>
         </ScrollViewer>
         <wv2:WebView2 x:Name="Web" Grid.Column="1" Margin="0,28,0,0"/>
+        
+        
+        <!--<Button x:Name="ZoomPositiveButton" Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}"
+            Width="28" Height="28" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Panel.ZIndex="1000"
+            Click="SaveButton_Click" Template="{DynamicResource ZoomPositiveTemplate}" Margin="583,34,49,388" Grid.Column="1">
+            <Button.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.2"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="ZoomNegativeButton" Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}"
+            Width="28" Height="28" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Panel.ZIndex="1000"
+            Click="SaveButton_Click" Template="{DynamicResource ZoomNegativeTemplate}" Margin="616,34,16,388" Grid.Column="1">
+            <Button.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.2"/>
+            </Button.Background>
+        </Button>-->
 
     </Grid>
 </Page>

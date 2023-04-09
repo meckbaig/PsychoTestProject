@@ -1,0 +1,17 @@
+﻿<Page x:Class="PsychoTestProject.View.TestKinds.FunFact"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PsychoTestProject.View.TestKinds"
+      mc:Ignorable="d" Background="Azure"
+      Title="FunFact" Height="575" Width="371">
+
+    <Grid>
+        <Image x:Name="PeopleImage" HorizontalAlignment="Center" Height="359" Margin="0,55,0,0" VerticalAlignment="Top" Width="283" Source="{Binding Picture}" Stretch="UniformToFill"/>
+        <TextBlock HorizontalAlignment="Left" Margin="29,18,0,0" TextWrapping="Wrap" Text="Ваш темперамент совпадает с ..." VerticalAlignment="Top" FontSize="20" Width="332"/>
+        <TextBlock x:Name="PeopleName" HorizontalAlignment="Center" Margin="0,437,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" Width="266" Height="56" TextAlignment="Center"><Run Language="ru-ru" Text="{Binding PeopleNameText}"/></TextBlock>
+        <TextBlock x:Name="PeopleDescription" HorizontalAlignment="Center" Margin="0,498,0,0" TextWrapping="Wrap" Text="{Binding PeopleDiscripitonText}" VerticalAlignment="Top" FontSize="16" Width="332" TextAlignment="Center"/>
+
+    </Grid>
+</Page>

@@ -57,6 +57,28 @@
         </Border>
     </ControlTemplate>
 
-    
- 
+
+    <ControlTemplate x:Key="ZoomPositiveTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="10">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/add.png" Stretch="UniformToFill" Opacity="0.3"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ZoomNegativeTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="10">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/sub.png" Stretch="UniformToFill" Opacity="0.3"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+
 </ResourceDictionary>
