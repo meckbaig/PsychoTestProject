@@ -27,6 +27,8 @@ namespace PsychoTestProject.View.TestKinds
         public string Picture { get; set; }
         public string PeopleNameText { get; set; }
         public string PeopleDiscripitonText { get; set; }
+        public double TitleFont { get => ActualWidth / 18.5; }
+        public double DescriptionFont { get => ActualWidth / 23; }
 
         public FunFact(List<string> types)
         {
@@ -54,6 +56,12 @@ namespace PsychoTestProject.View.TestKinds
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            OnPropertyChanged("TitleFont");
+            OnPropertyChanged("DescriptionFont");
         }
     }
 }

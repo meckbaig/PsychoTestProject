@@ -26,6 +26,10 @@ namespace PsychoTestProject.ViewModel
         public int[] indexCPos = new int[] { 2, 4, 7, 9, 11, 14, 16, 19, 21, 23, 26, 28, 31, 33, 35, 38, 40, 43, 45, 47, 50, 52, 55, 57 };
         public FunFact FunFact { get; set; }
         public Frame FunFrame { get; set; }
+        public double PxPerUnit { get => (plot.Plot.XAxis.Dims.PxPerUnit + plot.Plot.YAxis.Dims.PxPerUnit) / 2; }
+        public Point hlPoint { get; set; }
+        public double pointHoverTarget = 0.5;
+        WpfPlot plot { get; set; }
 
         public AizenkTestViewModel()
         {
@@ -59,7 +63,7 @@ namespace PsychoTestProject.ViewModel
 
         public WpfPlot Plot(StackPanel stackPanel, int extraversion, int neuroticism, Grid ThisGrid)
         {
-            WpfPlot plot = new WpfPlot();
+            plot = new WpfPlot();
 
             plot.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             plot.RightClicked -= plot.DefaultRightClickEvent;
@@ -96,7 +100,7 @@ namespace PsychoTestProject.ViewModel
 
             ThisGrid.SizeChanged += (s, e) =>
             {
-                PlotResize(stackPanel, text1, text2, text3, text4, highlightedPoint, scatterPlot, ThisGrid);
+                PlotResize(stackPanel, text1, text2, text3, text4, highlightedPoint, scatterPlot, ThisGrid, plot);
                 plot.Refresh();
             };
 
@@ -105,10 +109,15 @@ namespace PsychoTestProject.ViewModel
                 (double mouseCoordX, double mouseCoordY) = plot.GetMouseCoordinates();
                 double xyRatio = plot.Plot.XAxis.Dims.PxPerUnit / plot.Plot.YAxis.Dims.PxPerUnit;
                 (double pointX, double pointY, int pointIndex) = scatterPlot.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
-                double diffX = Math.Abs(mouseCoordX - pointX);
-                double diffY = Math.Abs(mouseCoordY - pointY);
+                double diffX = mouseCoordX - pointX;
+                double diffY = mouseCoordY - pointY;
+                hlPoint = new Point() 
+                { 
+                    X = Mouse.GetPosition(ThisGrid).X - diffX * plot.Plot.XAxis.Dims.PxPerUnit, 
+                    Y = Mouse.GetPosition(ThisGrid).Y - diffY * plot.Plot.YAxis.Dims.PxPerUnit
+                };
 
-                if (diffX < 1 && diffY < 1)
+                if (Math.Abs(diffX) < pointHoverTarget && Math.Abs(diffY) < pointHoverTarget)
                 {
                     highlightedPoint.X = pointX;
                     highlightedPoint.Y = pointY;
@@ -142,15 +151,14 @@ namespace PsychoTestProject.ViewModel
 
             };
 
-
-            PlotResize(stackPanel, text1, text2, text3, text4, highlightedPoint, scatterPlot, ThisGrid);
+            PlotResize(stackPanel, text1, text2, text3, text4, highlightedPoint, scatterPlot, ThisGrid, plot);
             plot.Refresh();
             return plot;
         }
 
-        private void PlotResize(StackPanel stackPanel, Text text1, Text text2, Text text3, Text text4, MarkerPlot highlightedPoint, ScatterPlot scatterPlot, Grid ThisGrid)
+        private void PlotResize(StackPanel stackPanel, Text text1, Text text2, Text text3, Text text4, MarkerPlot highlightedPoint, ScatterPlot scatterPlot, Grid ThisGrid, WpfPlot plot)
         {
-            stackPanel.Margin = new Thickness(ThisGrid.ActualWidth / 20, ThisGrid.ActualWidth / 20, ThisGrid.ActualWidth / 20, ThisGrid.ActualWidth / 20);
+            stackPanel.Margin = new Thickness(ThisGrid.ActualWidth / 20, ThisGrid.ActualHeight / 20, ThisGrid.ActualWidth / 20, ThisGrid.ActualHeight / 20);
 
             if (ThisGrid.ActualWidth > ThisGrid.ActualHeight)
             {

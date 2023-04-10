@@ -5,13 +5,25 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PsychoTestProject.View.TestKinds"
       mc:Ignorable="d" Background="Azure"
-      Title="FunFact" Height="575" Width="371">
+      Title="FunFact" Height="529" Width="371" SizeChanged="Page_SizeChanged">
 
     <Grid>
-        <Image x:Name="PeopleImage" HorizontalAlignment="Center" Height="359" Margin="0,55,0,0" VerticalAlignment="Top" Width="283" Source="{Binding Picture}" Stretch="UniformToFill"/>
-        <TextBlock HorizontalAlignment="Left" Margin="29,18,0,0" TextWrapping="Wrap" Text="Ваш темперамент совпадает с ..." VerticalAlignment="Top" FontSize="20" Width="332"/>
-        <TextBlock x:Name="PeopleName" HorizontalAlignment="Center" Margin="0,437,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" Width="266" Height="56" TextAlignment="Center"><Run Language="ru-ru" Text="{Binding PeopleNameText}"/></TextBlock>
-        <TextBlock x:Name="PeopleDescription" HorizontalAlignment="Center" Margin="0,498,0,0" TextWrapping="Wrap" Text="{Binding PeopleDiscripitonText}" VerticalAlignment="Top" FontSize="16" Width="332" TextAlignment="Center"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="PeopleImage" Source="{Binding Picture}" Stretch="UniformToFill" Grid.Row="1" Grid.Column="1"/>
+        <TextBlock TextWrapping="Wrap" Text="Ваш темперамент совпадает с ..." FontSize="{Binding TitleFont}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
+        <TextBlock x:Name="PeopleName" TextWrapping="Wrap" FontSize="{Binding TitleFont}" TextAlignment="Center" Grid.Row="3" Grid.Column="1"> <Run Language="ru-ru" Text="{Binding PeopleNameText}"/></TextBlock>
+        <TextBlock x:Name="PeopleDescription" TextWrapping="Wrap" Text="{Binding PeopleDiscripitonText}" FontSize="{Binding DescriptionFont}" Grid.Row="4" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>

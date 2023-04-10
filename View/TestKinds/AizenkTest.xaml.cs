@@ -123,6 +123,32 @@ namespace PsychoTestProject.View.TestKinds
                         VerticalAlignment = System.Windows.VerticalAlignment.Top,
                         HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                     };
+                    viewModel.FunFact.MouseMove += (s, e) =>
+                    {
+                        Point point = Mouse.GetPosition(ThisGrid);
+                        if (point.X < viewModel.hlPoint.X + viewModel.PxPerUnit * viewModel.pointHoverTarget && point.Y < viewModel.hlPoint.Y + viewModel.PxPerUnit * viewModel.pointHoverTarget)
+                        {
+                            viewModel.FunFrame.Margin = new Thickness(point.X, point.Y, 0, 0);
+                        }
+                        else
+                            viewModel.FunFrame.Visibility = Visibility.Hidden;
+
+                    };
+
+                    ThisGrid.SizeChanged += (s, e) =>
+                    {
+                        if (ThisGrid.ActualHeight > ThisGrid.ActualWidth)
+                        {
+                            viewModel.FunFact.Width = ThisGrid.ActualWidth / 3;
+                            viewModel.FunFact.Height = viewModel.FunFact.Width * 1.5;
+                        }
+                        else
+                        {
+                            viewModel.FunFact.Height = ThisGrid.ActualHeight / 1.7;
+                            viewModel.FunFact.Width = viewModel.FunFact.Height / 1.5;
+                        }
+
+                    };
                     WpfPlot plot = viewModel.Plot(stackPanel, extraversion, neuroticism, ThisGrid);
 
                     stackPanel.Children.Add(titleText);
@@ -132,6 +158,14 @@ namespace PsychoTestProject.View.TestKinds
             
 
             Scroll.Content = stackPanel;
+
+
+
+                SizeChangedInfo sifo = new SizeChangedInfo(ThisGrid, new Size(Double.NaN, Double.NaN), true, true);
+                SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
+                ea.RoutedEvent = Panel.SizeChangedEvent;
+                ThisGrid.RaiseEvent(ea);
+
             }
             else MessageBox.Show("Error 234-56:98");
             //}
