@@ -49,23 +49,23 @@ namespace PsychoTestProject.View.TestKinds
 
         private void NextQuestion(object sender, EventArgs e)
         {
-            //viewModel.AnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswer();
-            //var nextQuestion = viewModel.NextQuestion();
+            viewModel.AnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswer();
+            var nextQuestion = viewModel.NextQuestion();
 
-            //if (nextQuestion != null)
-            //{
-            //    Question.Initialize(nextQuestion, false);
-            //}
-            //else
-            //{
+            if (nextQuestion != null)
+            {
+                Question.Initialize(nextQuestion, false);
+            }
+            else
+            {
                 if (viewModel.CalculateIndicator(viewModel.indexAPos, viewModel.indexANeg) <= 4)
                 {
-                //int extraversion = viewModel.CalculateIndicator(viewModel.indexBPos, viewModel.indexBNeg);
-                //int neuroticism = viewModel.CalculateIndicator(viewModel.indexCPos);
-                int extraversion = 17;
-                int neuroticism = 18;
+                    int extraversion = viewModel.CalculateIndicator(viewModel.indexBPos, viewModel.indexBNeg);
+                    int neuroticism = viewModel.CalculateIndicator(viewModel.indexCPos);
+                    //int extraversion = 17;
+                    //int neuroticism = 18;
 
-                string type;
+                    string type;
                     switch (extraversion)
                     {
                         case > 12:
@@ -156,22 +156,22 @@ namespace PsychoTestProject.View.TestKinds
                     stackPanel.Children.Add(plot);
                     stackPanel.Children.Add(textText);
                     ThisGrid.Children.Add(viewModel.FunFrame);
-            
-
-            Scroll.Content = stackPanel;
 
 
+                    Scroll.Content = stackPanel;
 
-                SizeChangedInfo sifo = new SizeChangedInfo(ThisGrid, new Size(Double.NaN, Double.NaN), true, true);
-                SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
-                ea.RoutedEvent = Panel.SizeChangedEvent;
-                ThisGrid.RaiseEvent(ea);
 
+
+                    SizeChangedInfo sifo = new SizeChangedInfo(ThisGrid, new Size(Double.NaN, Double.NaN), true, true);
+                    SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
+                    ea.RoutedEvent = Panel.SizeChangedEvent;
+                    ThisGrid.RaiseEvent(ea);
+
+                }
+                else MessageBox.Show("Error 234-56:98");
             }
-            else MessageBox.Show("Error 234-56:98");
-            //}
-
         }
+
 
         private void PreviousQuestion(object sender, EventArgs e)
         {
