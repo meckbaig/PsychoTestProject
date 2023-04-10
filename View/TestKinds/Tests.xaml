@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PsychoTestProject.View"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Tests">
+      Title="Тесты">
 
     <Page.Resources>
         <ResourceDictionary>

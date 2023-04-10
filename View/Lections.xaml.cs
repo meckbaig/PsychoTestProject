@@ -38,7 +38,7 @@ namespace PsychoTestProject
             TopStackPanelScroll.Visibility = (Visibility)(!Admin ? 1 : 0);
             TopStackPanelScroll.Height = Admin ? Double.NaN : 0;
             Web.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight, 0, 0);
-            MainViewModel.MainWindow.Title = "Лекции";
+            MainViewModel.MainWindow.Title = this.Title;
         }
 
         private async void InitializeBrowser()

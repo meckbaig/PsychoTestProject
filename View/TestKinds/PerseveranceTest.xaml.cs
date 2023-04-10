@@ -50,6 +50,7 @@ namespace PsychoTestProject.View.TestKinds
         public PerseveranceTest()
         {
             InitializeComponent();
+            MainViewModel.MainWindow.Title = this.Title;
             MainViewModel.MouseHover(BackButton);
             DataContext = this;
             dictionary = new PreseveranceTestDictionary();

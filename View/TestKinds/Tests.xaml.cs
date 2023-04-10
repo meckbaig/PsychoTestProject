@@ -27,7 +27,7 @@ namespace PsychoTestProject.View
         {
             InitializeComponent();
             DataContext = new TestsViewModel(TestFrame);
-            MainViewModel.MainWindow.Title = "Тесты";
+            MainViewModel.MainWindow.Title = this.Title;
             MainViewModel.AllButtonsHover(this.Content);
         }
 

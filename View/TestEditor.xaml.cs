@@ -24,6 +24,7 @@ namespace PsychoTestProject.View
         public TestEditor()
         {
             InitializeComponent();
+            MainViewModel.MainWindow.Title = this.Title;
             DataContext = new TestEditorViewModel(EditFrame);
             MainViewModel.AllButtonsHover(this.Content);
         }
@@ -36,7 +37,6 @@ namespace PsychoTestProject.View
                 {
                     MainViewModel.CurrentTest = null;
                     MainViewModel.Back();
-
                 }
             }
             else

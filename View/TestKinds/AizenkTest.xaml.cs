@@ -32,6 +32,7 @@ namespace PsychoTestProject.View.TestKinds
         public AizenkTest()
         {
             InitializeComponent();
+            MainViewModel.MainWindow.Title = this.Title;
             MainViewModel.MouseHover(BackButton);
             string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests\\Тест айзенка"), "*.xml")[0];
             MainViewModel.CurrentTest = new TestClass(true) { Name = Path.GetFileNameWithoutExtension(testPath), Filename = testPath };
@@ -114,7 +115,7 @@ namespace PsychoTestProject.View.TestKinds
 
                     StackPanel stackPanel = new StackPanel() { VerticalAlignment = System.Windows.VerticalAlignment.Top, Orientation = System.Windows.Controls.Orientation.Vertical };
 
-                    (TextBlock titleText, TextBlock textText, List<string> types) = Title(type);
+                    (TextBlock titleText, TextBlock textText, List<string> types) = CreateTitle(type);
                     viewModel.FunFact = new FunFact(types);
                     viewModel.FunFrame = new Frame()
                     {
@@ -181,7 +182,7 @@ namespace PsychoTestProject.View.TestKinds
             }
         }
 
-        private new (TextBlock title, TextBlock text, List<string> types) Title(string type)
+        private new (TextBlock title, TextBlock text, List<string> types) CreateTitle(string type)
         {
             TextBlock title = new TextBlock()
             {
