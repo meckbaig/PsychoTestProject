@@ -19,6 +19,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Xml.Linq;
+using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace PsychoTestProject
 {
@@ -51,7 +54,7 @@ namespace PsychoTestProject
             if (Admin)
                 Web.ExecuteScriptAsync("document.designMode = \"on\"");
             MainViewModel.AllButtonsHover(this.Content);
-            
+
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -98,10 +101,12 @@ namespace PsychoTestProject
                 if (MessageBox.Show($"Вы точно хотите удалить лекцию \"{(DataContext as LectionsViewModel).LectionTitle}\"?", 
                     "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    Web.Dispose();
                     File.Delete(LectionSource);
+                    DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
+                    Thread.Sleep(50);
+                    if (Admin)
+                        Web.ExecuteScriptAsync("document.designMode = \"on\"");
                     (DataContext as LectionsViewModel).UpdateLectionList();
-                    (DataContext as LectionsViewModel).LectionTitle = null;
                 }
             }
             else
@@ -110,8 +115,98 @@ namespace PsychoTestProject
 
         private async void BoldBT_Click(object sender, RoutedEventArgs e)
         {
-            string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection().toString()");
-            
+            //string sdgfsdg = await Web.ExecuteScriptAsync("window.getSelection().toString()");
+            AddModifierToText("bold");
+        }
+        private async void ItalicBT_Click(object sender, RoutedEventArgs e)
+        {
+            AddModifierToText("italic");
+        }
+        private async void UnderlineBT_Click(object sender, RoutedEventArgs e)
+        {
+            AddModifierToText("underline");
+        }
+        private async void StrikethroughBT_Click(object sender, RoutedEventArgs e)
+        {
+            AddModifierToText("strikethrough");
+        }
+
+        private async void AddModifierToText(string modifier)
+        {
+            List<string> modifiers = new List<string> { "h1", "h2", "h3", "h4", "italic", "bold", "underline", "strikethrough" }; // список модификаторов
+            modifiers.Remove(modifier);
+            string tag = ReturnTag(modifier);
+            string newNode = await Web.ExecuteScriptAsync("window.getSelection().toString()");
+
+            foreach (string m in modifiers) // устанавливаем все потерянные теги у текста
+            {
+                string t = ReturnTag(m);
+                if (await Web.ExecuteScriptAsync($"document.queryCommandState('{m}');") == "true")
+                    newNode = $"\"<{t}>\"+{newNode}+\"</{t}>\"";
+            }
+
+            if (await Web.ExecuteScriptAsync($"document.queryCommandState('{modifier}');") != "true")
+                newNode = $"\"<{tag}>\"+{newNode}+\"</{tag}>\"";
+            //    await Web.ExecuteScriptAsync($"document.execCommand('removeFormat', false, '{tag}')");
+            //else
+
+            await Web.ExecuteScriptAsync(
+                "var sel = window.getSelection();" +
+                "if (sel.rangeCount)" +
+                "{" +
+                    "var range = sel.getRangeAt(0);" +
+                    "var newNode = document.createElement(\"span\");" +
+                    $"newNode.innerHTML = {newNode};" +
+                    "range.deleteContents();" +
+                    "range.insertNode(newNode);" +
+                    "var parentElement = range.commonAncestorContainer;" +
+                    "while (parentElement.nodeName != 'SPAN') " +
+                    "{" +
+                        "parentElement = parentElement.parentNode;" +
+                    "}" +
+                    "var textInside = parentElement.textContent;" +
+                    "parentElement.outerHTML = textInside;" +
+                "};");
+
+        }
+
+        private static string ReturnTag(string modifier)
+        {
+            string tag;
+            switch (modifier)
+            {
+                case "italic": tag = "em"; break;
+                case "bold": tag = "strong"; break;
+                case "underline": tag = "u"; break;
+                case "strikethrough": tag = "s"; break;
+                default: tag = modifier; break;
+            }
+            return tag;
+        }
+
+        private async void GetFontSize()
+        {
+            FontSizeCB.SelectedItem = await Web.ExecuteScriptAsync("window.getComputedStyle(window.getSelection().anchorNode.parentElement).fontSize;");
+        }
+
+        private async void LeftBT_Click(object sender, RoutedEventArgs e)
+        {
+            await Web.ExecuteScriptAsync("document.execCommand('justifyLeft', false, null);");
+        }
+
+        private async void CenterBT_Click(object sender, RoutedEventArgs e)
+        {
+            await Web.ExecuteScriptAsync("document.execCommand('justifyCenter', false, null);");
+        }
+
+        private async void RightBT_Click(object sender, RoutedEventArgs e)
+        {
+            await Web.ExecuteScriptAsync("document.execCommand('justifyRight', false, null);");
+        }
+
+        private async void JustifyBT_Click(object sender, RoutedEventArgs e)
+        {
+            await Web.ExecuteScriptAsync("document.execCommand('justifyFull', false, null);");
         }
     }
 }

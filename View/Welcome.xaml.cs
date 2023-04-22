@@ -267,7 +267,12 @@ namespace PsychoTestProject
 
         private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new AizenkTest());
+            MainViewModel.MainFrame.Navigate(new MultiTest(0));
+        }
+
+        private void LeongardTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new MultiTest(1));
         }
     }
 }

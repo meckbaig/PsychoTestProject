@@ -116,6 +116,8 @@ namespace PsychoTestProject.ViewModel
 
         }
 
+
+
         public void DeleteTest(object sender)
         {
             if (Test != null)

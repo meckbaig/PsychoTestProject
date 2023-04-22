@@ -11,11 +11,13 @@ namespace PsychoTestProject.Extensions
         public int Id { get; set; }
         public string Text { get; set; }
         public bool IsCorrect { get; set; }
+        public double Value { get; set; }
         public AnswerClass()
         {
             Id = 1;  
             Text = "";
             IsCorrect = false;
+            Value = 1;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PsychoTestProject.Extensions
             UseTake = useTake;
         }
 
-        public ObservableCollection<QuestionClass> ParseFile(string fileName)
+        private ObservableCollection<QuestionClass> ParseFile(string fileName)
         {
             try
             {
@@ -45,8 +45,8 @@ namespace PsychoTestProject.Extensions
                         question.Id = questionId++;
                         question.Text = item.Attributes["Text"].Value;
                         question.Type = (QuestionType)Enum.Parse(typeof(QuestionType), item.Attributes["Type"]?.Value);
-                        question.Value = Convert.ToInt32(item.Attributes["Value"]?.Value ?? "1");
-                        question.AnswersTarget = Convert.ToInt32(item.Attributes["AnswersTarget"]?.Value ?? "1");
+                        question.Value = Convert.ToInt32(item.Attributes["Value"]?.Value ?? "0");
+                        question.AnswersTarget = Convert.ToInt32(item.Attributes["AnswersTarget"]?.Value ?? "0");
                         if (question.Type == QuestionType.String)
                         {
                             if (Convert.ToBoolean(item.Attributes["IsExact"]?.Value == null))
@@ -60,6 +60,7 @@ namespace PsychoTestProject.Extensions
                             answer.Id = answerCount++;
                             answer.Text = answ.Attributes["Text"].Value;
                             answer.IsCorrect = Convert.ToBoolean(answ.Attributes["IsCorrect"].Value);
+                            answer.Value = Convert.ToInt32(answ.Attributes["Value"]?.Value ?? "1");
                             question.Answers.Add(answer);
                         }
                         questionList.Add(question);

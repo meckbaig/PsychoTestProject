@@ -46,13 +46,22 @@ namespace PsychoTestProject.View
             totalScore = 0;
             foreach (var question in MainViewModel.CurrentTest.Questions)
             {
-                totalScore += question.Value;
+                if (question.Value != 0)
+                    totalScore += question.Value;
+                else
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        totalScore += answer.Value;
+                    }
+                }
             }
         }
 
         private void NextQuestion(object sender, EventArgs e)
         {
-            currentScore += Question.CheckAnswer();
+            double answerScore = Question.CheckAnswer();
+            currentScore += (answerScore < 0) ? 0 : answerScore;
             var nextQuestion = (DataContext as TestViewModel).NextQuestion();
 
             if (nextQuestion != null)

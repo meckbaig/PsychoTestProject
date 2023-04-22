@@ -56,9 +56,53 @@
             </Grid>
         </Border>
     </ControlTemplate>
+    <ControlTemplate x:Key="JustifyButtonTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="4">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/align-justify.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="LeftButtonTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="4">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/align-left.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="CenterButtonTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="4">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/align-center.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="RightButtonTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="4">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/align-right.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
 
 
-    <ControlTemplate x:Key="ZoomPositiveTemplate" TargetType="{x:Type Button}">
+    <!--<ControlTemplate x:Key="ZoomPositiveTemplate" TargetType="{x:Type Button}">
         <Border Background="{TemplateBinding Background}"  CornerRadius="10">
             <Grid>
                 <Grid.Background>
@@ -79,6 +123,6 @@
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Grid>
         </Border>
-    </ControlTemplate>
+    </ControlTemplate>-->
 
 </ResourceDictionary>

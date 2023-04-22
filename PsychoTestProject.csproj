@@ -8,11 +8,15 @@
     <ApplicationIcon>2560px-P_psychology2.svg.ico</ApplicationIcon>
     <Authors>$(meckbaig)</Authors>
     <FileVersion></FileVersion>
-    <AssemblyVersion>1.0.0.13</AssemblyVersion>
+    <AssemblyVersion>1.0.0.15</AssemblyVersion>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\align-center.png" />
+    <None Remove="Resources\align-justify.png" />
+    <None Remove="Resources\align-left.png" />
+    <None Remove="Resources\align-right.png" />
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\export.png" />
     <None Remove="Resources\gear-48-hover.png" />
@@ -40,6 +44,7 @@
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1462.37" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.62" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="WebView2.Runtime.X86" Version="109.0.1518.78" />
@@ -52,6 +57,10 @@
   <ItemGroup>
     <Resource Include="Resources\add.png" />
     <Resource Include="Resources\add_white.png" />
+    <Resource Include="Resources\align-center.png" />
+    <Resource Include="Resources\align-justify.png" />
+    <Resource Include="Resources\align-left.png" />
+    <Resource Include="Resources\align-right.png" />
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\edit.png" />
     <Resource Include="Resources\export.png" />

@@ -158,6 +158,7 @@ namespace PsychoTestProject.View
             double maxPoint = QuestionClass.AnswersTarget;
             double point = 0;
             var answ = ShowedAnswers.Children[0];
+            int answersChecked = 0;
             switch (answ)
             {
                 case (RadioButton):
@@ -165,7 +166,8 @@ namespace PsychoTestProject.View
                     {
                         RadioButton radioButton = (RadioButton)answer;
                         if (((AnswerClass)radioButton.Tag).IsCorrect && (radioButton.IsChecked ?? false))
-                            point = 1;
+                            point = MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                        answersChecked++;
                     }
                     break;
                 case (CheckBox):
@@ -175,10 +177,11 @@ namespace PsychoTestProject.View
                         if (((AnswerClass)checkBox.Tag).IsCorrect == true)
                         {
                             if (checkBox.IsChecked ?? false)
-                                point++;
+                                point+= MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
                         }
                         else if (checkBox.IsChecked ?? false)
-                            point--;
+                            point -= MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                        answersChecked++;
                     }
                     break;
                 case (TextBox):
@@ -190,7 +193,6 @@ namespace PsychoTestProject.View
                         correctAnswers[i] = MainViewModel.CurrentQuestion.Answers[i].Text;
                     }
                     var answers = textBox.Text.ToLower().Split(", ");
-                    int answersChecked = 0;
                     foreach (var correctAnswer in correctAnswers) // крутит все варианты ответов
                     {
                         foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
@@ -201,7 +203,7 @@ namespace PsychoTestProject.View
                                 {
                                     if (variableAnswer.Equals(answer)) // сравнивает требуемые ответы с полученными
                                     {
-                                        point++;
+                                        point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
                                         answersChecked++;
                                         goto Outer;
                                     }
@@ -209,7 +211,7 @@ namespace PsychoTestProject.View
                             }
                             else if (!QuestionClass.IsExact && textBox.Text.ToLower().Contains(variableAnswer)) // ищет требуемые ответы в полученном
                             {
-                                point++;
+                                point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
                                 answersChecked++;
                                 goto Outer;
                             }
@@ -222,12 +224,16 @@ namespace PsychoTestProject.View
                         point -= (answers.Length - answersChecked);
                     break;
             }
-            if (point < 0)
-                point = 0;
-            if (point > maxPoint)
-                point = maxPoint;
-            point /= maxPoint;
-            point *= QuestionClass.Value;
+            //if (point < 0)
+            //    point = 0;
+            if (maxPoint != 0)
+            {
+                if (point > maxPoint)
+                    point = maxPoint;
+                point /= maxPoint;
+                point *= QuestionClass.Value;
+            }
+            
             return point;
         }
 

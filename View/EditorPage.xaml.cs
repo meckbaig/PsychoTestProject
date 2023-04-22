@@ -278,7 +278,7 @@ namespace PsychoTestProject.View
             return correctAnswers;
         }
 
-        private QuestionClass ReadQuestion()
+        public QuestionClass ReadQuestion()
         {
             QuestionClass newQuestion = new QuestionClass();
             newQuestion.Type = Question.Type;

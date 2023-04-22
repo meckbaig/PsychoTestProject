@@ -70,10 +70,6 @@ namespace PsychoTestProject.ViewModel
                          webContainer.CoreWebView2.Navigate(obj.ToString());
                          if (Lections.Admin)
                          {
-                             //string lection = File.ReadAllText(obj.ToString());
-                             //lection = lection.Replace("</style>", "</style><script src=\"https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js\"></script>");
-                             //File.WriteAllText($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html", lection);
-                             //webContainer.CoreWebView2.Navigate($"{Path.Combine(Environment.CurrentDirectory, "Lections")}\\temp.html");
                              webContainer.ExecuteScriptAsync("document.designMode = \"on\"");
                          }
                      }));

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace PsychoTestProject.View
 {

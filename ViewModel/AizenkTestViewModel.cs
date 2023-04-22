@@ -13,55 +13,153 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.IO;
 
 namespace PsychoTestProject.ViewModel
 {
-    class AizenkTestViewModel : INotifyPropertyChanged
+    class AizenkTestViewModel : MultiTestViewModel
     {
-        public int[] AnswersArray { get; set; }
-        public int[] indexAPos = new int[] { 6, 24, 36 };
-        public int[] indexANeg = new int[] { 12, 18, 30, 42, 48, 54 };
-        public int[] indexBPos = new int[] { 1, 3, 8, 10, 13, 17, 22, 25, 27, 39, 44, 46, 49, 53, 56 };
-        public int[] indexBNeg = new int[] { 5, 15, 20, 29, 32, 34, 37, 41, 51 };
-        public int[] indexCPos = new int[] { 2, 4, 7, 9, 11, 14, 16, 19, 21, 23, 26, 28, 31, 33, 35, 38, 40, 43, 45, 47, 50, 52, 55, 57 };
-        public FunFact FunFact { get; set; }
-        public Frame FunFrame { get; set; }
-        public double PxPerUnit { get => (plot.Plot.XAxis.Dims.PxPerUnit + plot.Plot.YAxis.Dims.PxPerUnit) / 2; }
-        public Point hlPoint { get; set; }
-        public double pointHoverTarget = 0.5;
+        private int[] indexAPos = new int[] { 6, 24, 36 };
+        private int[] indexANeg = new int[] { 12, 18, 30, 42, 48, 54 };
+        private int[] indexBPos = new int[] { 1, 3, 8, 10, 13, 17, 22, 25, 27, 39, 44, 46, 49, 53, 56 };
+        private int[] indexBNeg = new int[] { 5, 15, 20, 29, 32, 34, 37, 41, 51 };
+        private int[] indexCPos = new int[] { 2, 4, 7, 9, 11, 14, 16, 19, 21, 23, 26, 28, 31, 33, 35, 38, 40, 43, 45, 47, 50, 52, 55, 57 };
+
+        private FunFact FunFact { get; set; }
+        private Frame FunFrame { get; set; }
+        private double PxPerUnit { get => (plot.Plot.XAxis.Dims.PxPerUnit + plot.Plot.YAxis.Dims.PxPerUnit) / 2; }
+        private Point hlPoint { get; set; }
+        private double pointHoverTarget = 0.5;
         WpfPlot plot { get; set; }
 
-        public AizenkTestViewModel()
+        public AizenkTestViewModel() : base()
         {
+            Title = "Тест айзенка";
+            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{Title}"), "*.xml")[0];
+            MainViewModel.CurrentTest = new TestClass(true) 
+            { 
+                Name = Path.GetFileNameWithoutExtension(testPath), 
+                Filename = testPath 
+            };
             MainViewModel.CurrentQuestionNumber = 1;
         }
-        public Thickness Margin { get; set; }
 
 
-        public QuestionClass CurrentQuestion
+        public override void PrintResults(Grid ThisGrid, ScrollViewer Scroll)
         {
-            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber - 1];
-        }
-
-
-        public QuestionClass NextQuestion()
-        {
-            if (MainViewModel.CurrentQuestionNumber == (MainViewModel.CurrentTest.Questions.Count))
+            if (CalculateIndicator(indexAPos, indexANeg) <= 4)
             {
-                return null;
+                int extraversion = CalculateIndicator(indexBPos, indexBNeg);
+                int neuroticism = CalculateIndicator(indexCPos);
+                Random random = new Random();
+                //int extraversion = random.Next(0, 24);
+                //int neuroticism = random.Next(0, 24);
+                string type = ExecuteType(extraversion, neuroticism);
+
+                StackPanel stackPanel = new StackPanel() { VerticalAlignment = System.Windows.VerticalAlignment.Top, Orientation = System.Windows.Controls.Orientation.Vertical };
+
+                (TextBlock titleText, TextBlock textText, List<string> types) = CreateTitle(type, ThisGrid);
+                FunFact = new FunFact(types);
+                FunFrame = new Frame()
+                {
+                    Content = FunFact,
+                    Visibility = Visibility.Hidden,
+                    VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                };
+
+                FunFact.MouseMove += (s, e) =>
+                {
+                    Point point = Mouse.GetPosition(ThisGrid);
+                    if (point.X < hlPoint.X + PxPerUnit * pointHoverTarget && point.Y < hlPoint.Y + PxPerUnit * pointHoverTarget)
+                    {
+                        double bottomSpace = ThisGrid.ActualHeight - point.Y - FunFact.ActualHeight;
+                        if (bottomSpace > 0)
+                        {
+                            bottomSpace = 0;
+                        }
+                        FunFrame.Margin = new Thickness(point.X, point.Y + bottomSpace, 0, 0);
+
+                    }
+                    else
+                        FunFrame.Visibility = Visibility.Hidden;
+
+                };
+
+                ThisGrid.SizeChanged += (s, e) =>
+                {
+                    if (ThisGrid.ActualHeight > ThisGrid.ActualWidth)
+                    {
+                        FunFact.Width = ThisGrid.ActualWidth / 3;
+                        FunFact.Height = FunFact.Width * 1.5;
+                    }
+                    else
+                    {
+                        FunFact.Height = ThisGrid.ActualHeight / 1.7;
+                        FunFact.Width = FunFact.Height / 1.5;
+                    }
+
+                };
+                WpfPlot plot = Plot(stackPanel, extraversion, neuroticism, ThisGrid);
+
+                stackPanel.Children.Add(titleText);
+                stackPanel.Children.Add(plot);
+                stackPanel.Children.Add(textText);
+                ThisGrid.Children.Add(FunFrame);
+
+
+                Scroll.Content = stackPanel;
+
+
+
+                SizeChangedInfo sifo = new SizeChangedInfo(ThisGrid, new Size(Double.NaN, Double.NaN), true, true);
+                SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
+                ea.RoutedEvent = Panel.SizeChangedEvent;
+                ThisGrid.RaiseEvent(ea);
+
             }
-            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber++];
-        }
-        public QuestionClass PreviousQuestion()
-        {
-            if (MainViewModel.CurrentQuestionNumber == 1)
-            {
-                return null;
-            }
-            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber--];
+
+            else MessageBox.Show("Error 234-56:98");
         }
 
-        public WpfPlot Plot(StackPanel stackPanel, int extraversion, int neuroticism, Grid ThisGrid)
+
+        private (TextBlock title, TextBlock text, List<string> types) CreateTitle(string type, Grid ThisGrid)
+        {
+            TextBlock title = new TextBlock()
+            {
+                Text = type,
+                FontSize = 32,
+                FontWeight = FontWeights.Bold,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                TextAlignment = System.Windows.TextAlignment.Center,
+                FontFamily = new FontFamily("Microsoft YaHei UI"),
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 0, 0, 20)
+            };
+            TextBlock text = new TextBlock()
+            {
+                FontSize = 16,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                FontFamily = new FontFamily("Microsoft YaHei UI"),
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 20, 0, 0)
+            };
+            List<string> types = TypesDescription(type, text);
+            ThisGrid.SizeChanged += (s, e) =>
+            {
+                float plotSize;
+                if (ThisGrid.ActualWidth > ThisGrid.ActualHeight)
+                    plotSize = (float)(ThisGrid.ActualHeight * 0.7);
+                else
+                    plotSize = (float)(ThisGrid.ActualWidth * 0.7);
+                title.FontSize = plotSize / 15; text.FontSize = plotSize / 30;
+            };
+
+
+            return (title, text, types);
+        }
+
+        private WpfPlot Plot(StackPanel stackPanel, int extraversion, int neuroticism, Grid ThisGrid)
         {
             plot = new WpfPlot();
 
@@ -111,9 +209,9 @@ namespace PsychoTestProject.ViewModel
                 (double pointX, double pointY, int pointIndex) = scatterPlot.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
                 double diffX = mouseCoordX - pointX;
                 double diffY = mouseCoordY - pointY;
-                hlPoint = new Point() 
-                { 
-                    X = Mouse.GetPosition(ThisGrid).X - diffX * plot.Plot.XAxis.Dims.PxPerUnit, 
+                hlPoint = new Point()
+                {
+                    X = Mouse.GetPosition(ThisGrid).X - diffX * plot.Plot.XAxis.Dims.PxPerUnit,
                     Y = Mouse.GetPosition(ThisGrid).Y - diffY * plot.Plot.YAxis.Dims.PxPerUnit
                 };
 
@@ -139,7 +237,12 @@ namespace PsychoTestProject.ViewModel
                     {
                         FunFrame.Visibility = Visibility.Visible;
                     }
-                    FunFrame.Margin = new Thickness(position.X, position.Y, 0, 0);
+                    double bottomSpace = ThisGrid.ActualHeight - Mouse.GetPosition(ThisGrid).Y - FunFact.ActualHeight;
+                    if (bottomSpace > 0)
+                    {
+                        bottomSpace = 0;
+                    }
+                    FunFrame.Margin = new Thickness(position.X, position.Y + bottomSpace, 0, 0);
                 }
                 else
                 {
@@ -186,19 +289,19 @@ namespace PsychoTestProject.ViewModel
             text.PixelOffsetY = -(float)(sheetY / 4 - text.FontSize * 2.1633333333333318 / 2 + (sheetY * yMultiplier));
         }
 
-        public int CalculateIndicator(int[] posIndicators, int[] negIndicators = null)
+        private int CalculateIndicator(int[] posIndicators, int[] negIndicators = null)
         {
             int result = 0;
             foreach (int i in posIndicators)
             {
-                if (AnswersArray[i-1] == 1)
+                if (AnswersArray[i - 1] == 1)
                     result++;
             }
             if (negIndicators != null)
             {
                 foreach (int i in negIndicators)
                 {
-                    if (AnswersArray[i-1] == 1)
+                    if (AnswersArray[i - 1] == 1)
                         result--;
                 }
             }
@@ -206,17 +309,104 @@ namespace PsychoTestProject.ViewModel
             return result;
         }
 
-        public void ChangeMargin(double width, double height)
+        private string ExecuteType(int extraversion, int neuroticism)
         {
-            Margin = new Thickness(width / 10, height / 15, width / 10, height / 15);
-            OnPropertyChanged("Margin");
+            string type;
+            switch (extraversion)
+            {
+                case > 12:
+                    switch (neuroticism)
+                    {
+                        case > 12:
+                            type = "Вы холерик";
+                            break;
+                        case < 12:
+                            type = "Вы сангвиник";
+                            break;
+                        default:
+                            type = "Между холериком и сангвиником";
+                            break;
+                    }
+                    break;
+                case < 12:
+                    switch (neuroticism)
+                    {
+                        case > 12:
+                            type = "Вы меланхолик";
+                            break;
+                        case < 12:
+                            type = "Вы флегматик";
+                            break;
+                        default:
+                            type = "Между меланхоликом и флегматиком";
+                            break;
+                    }
+                    break;
+                default:
+                    switch (neuroticism)
+                    {
+                        case > 12:
+                            type = "Между меланхоликом и холериком";
+                            break;
+                        case < 12:
+                            type = "Между флегматиком и сангвиником";
+                            break;
+                        default:
+                            type = "Наблюдаются черты всех типов";
+                            break;
+                    }
+                    break;
+            }
+
+            return type;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        private List<string> TypesDescription(string type, TextBlock text)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            List<string> types = new List<string>();
+            if (type.ToLower().Contains("меланхолик") || type == "Наблюдаются черты всех типов")
+            {
+                text.Text += "   У меланхолика реакция часто не соответствует силе раздражителя, присутствует глубина и устойчивость чувств при слабом их выражении. " +
+                    "Ему трудно долго на чем-то сосредоточиться. Сильные воздействия часто вызывают у меланхолика продолжительную тормозную реакцию " +
+                    "(опускаются руки). Ему свойственны сдержанность и приглушенность моторики и речи, застенчивость, робость, нерешительность. " +
+                    "В нормальных условиях меланхолик — человек глубокий, содержательный, может быть хорошим тружеником, успешно " +
+                    "справляться с жизненными задачами. При неблагоприятных условиях может превратиться в замкнутого, боязливого, тревожного, " +
+                    "ранимого человека, склонного к тяжелым внутренним переживаниям таких жизненных обстоятельств, которые вовсе этого не заслуживают.\n\n";
+                types.Add("Меланхолик");
+            }
+            if (type.ToLower().Contains("холерик") || type == "Наблюдаются черты всех типов")
+            {
+                text.Text += "   Холерик отличается повышенной возбудимостью, действия прерывисты. Ему свойственны резкость и стремительность движений, сила, " +
+                        "импульсивность, яркая выраженность эмоциональных переживаний. Вследствие неуравновешенности, увлекшись делом, склонен действовать изо " +
+                        "всех сил, истощаться больше, чем следует. Имея общественные интересы, темперамент проявляет в инициативности, энергичности, " +
+                        "принципиальности. При отсутствии духовной жизни холерический темперамент часто проявляется в раздражительности, эффективности, " +
+                        "несдержанности, вспыльчивости, неспособности к самоконтролю при эмоциональных обстоятельствах.\n\n";
+                types.Add("Холерик");
+            }
+            if (type.ToLower().Contains("флегматик") || type == "Наблюдаются черты всех типов")
+            {
+                text.Text += "   Флегматик характеризуется сравнительно низким уровнем активности поведения, новые формы которого вырабатываются медленно, " +
+                    "но являются стойкими. Обладает медлительностью и спокойствием в действиях, мимике и речи, ровностью, постоянством, глубиной чувств " +
+                    "и настроений. Настойчивый и упорный «труженик жизни», он редко выходит из себя, не склонен к аффектам, рассчитав свои силы, доводит " +
+                    "дело до конца, ровен в отношениях, в меру общителен, не любит попусту болтать. Экономит силы, попусту их не тратит. В зависимости " +
+                    "от условий в одних случаях флегматик может характеризоваться «положительными» чертами — выдержкой, глубиной мыслей, постоянством, " +
+                    "основательностью и т. д., в других — вялостью, безучастностью к окружающему, ленью и безволием, бедностью и слабостью эмоций, " +
+                    "склонностью к выполнению одних лишь привычных действий.\n\n";
+                types.Add("Флегматик");
+            }
+            if (type.ToLower().Contains("сангвиник") || type == "Наблюдаются черты всех типов")
+            {
+                text.Text += "   Сангвиник быстро приспосабливается к новым условиям, быстро сходится с людьми, общителен. Чувства легко возникают и " +
+                     "сменяются, эмоциональные переживания, как правило, неглубоки. Мимика богатая, подвижная, выразительная. Несколько непоседлив, " +
+                     "нуждается в новых впечатлениях, недостаточно регулирует свои импульсы, не умеет строго придерживаться выработанного распорядка, " +
+                     "жизни, системы в работе. В связи с этим не может успешно выполнять дело, требующее равной затраты сил, длительного и методичного " +
+                     "напряжения, усидчивости, устойчивости внимания, терпения. При отсутствии серьезных целей, глубоких мыслей, творческой деятельности " +
+                     "вырабатываются поверхностность и непостоянство.\n\n";
+                types.Add("Сангвиник");
+
+            }
+
+            return types;
         }
     }
 }
