@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.IO;
+using PsychoTestProject.View;
 
 namespace PsychoTestProject.ViewModel
 {
@@ -56,7 +57,11 @@ namespace PsychoTestProject.ViewModel
                 //int neuroticism = random.Next(0, 24);
                 string type = ExecuteType(extraversion, neuroticism);
 
-                StackPanel stackPanel = new StackPanel() { VerticalAlignment = System.Windows.VerticalAlignment.Top, Orientation = System.Windows.Controls.Orientation.Vertical };
+                StackPanel stackPanel = new StackPanel() 
+                { 
+                    VerticalAlignment = System.Windows.VerticalAlignment.Top, 
+                    Orientation = System.Windows.Controls.Orientation.Vertical 
+                };
 
                 (TextBlock titleText, TextBlock textText, List<string> types) = CreateTitle(type, ThisGrid);
                 FunFact = new FunFact(types);
@@ -113,13 +118,15 @@ namespace PsychoTestProject.ViewModel
 
 
                 SizeChangedInfo sifo = new SizeChangedInfo(ThisGrid, new Size(Double.NaN, Double.NaN), true, true);
-                SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
+                SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(
+                    new object[] { (ThisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
                 ea.RoutedEvent = Panel.SizeChangedEvent;
                 ThisGrid.RaiseEvent(ea);
 
             }
 
-            else MessageBox.Show("Error 234-56:98");
+            else WpfMessageBox.Show("Error 234-56:98");
         }
 
 

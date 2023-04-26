@@ -43,7 +43,7 @@ namespace PsychoTestProject.ViewModel
             {
                 return null;
             }
-            return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber--];
+            return MainViewModel.CurrentTest.Questions[--MainViewModel.CurrentQuestionNumber-1];
         }
 
         public void ChangeMargin(double width, double height)

@@ -24,7 +24,6 @@
             </Setter>
         </Style>
     </Page.Resources>
-
     <Grid x:Name="ThisGrid">
         <ScrollViewer x:Name="Scroll" Focusable="False">
             <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=multiTestPage, Path=DataContext.CurrentQuestion}" 
@@ -32,6 +31,6 @@
         </ScrollViewer>
         <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" 
             BorderBrush="{x:Null}" Width="140" Height="25" Click="BackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-
+        
     </Grid>
 </Page>

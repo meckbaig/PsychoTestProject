@@ -83,10 +83,10 @@ namespace PsychoTestProject
             if (Path.GetExtension(fileName) == ".psychoExp")
             {
                 DecodeExtract(fileName);
-                MessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
-                MessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private static void DecodeExtract(string fileName)
@@ -141,7 +141,7 @@ namespace PsychoTestProject
                 File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(Path.Combine(Environment.CurrentDirectory, "Tests")));
                 File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(tmpPath));
                 Directory.Delete(tmpPath, true);
-                MessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -213,7 +213,7 @@ namespace PsychoTestProject
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.PerseveranceTest = null;
-            MessageBox.Show($"Продукт предназначен для упрощения процесса обучения и тестирования по дисциплине «Основы психологии личности».\n" +
+            WpfMessageBox.Show($"Продукт предназначен для упрощения процесса обучения и тестирования по дисциплине «Основы психологии личности».\n" +
                             $"Пользователи: студенты и преподаватель дисциплины\n" +
                             $"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\n" +
                             $"Год разработки: 2023. Год конечного сопровождения: 2024.\n" +
@@ -242,7 +242,14 @@ namespace PsychoTestProject
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-            Export();
+            try
+            {
+                Export();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OpenTestButton_Click(object sender, RoutedEventArgs e)

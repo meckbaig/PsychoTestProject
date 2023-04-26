@@ -8,7 +8,7 @@
     <ApplicationIcon>2560px-P_psychology2.svg.ico</ApplicationIcon>
     <Authors>$(meckbaig)</Authors>
     <FileVersion></FileVersion>
-    <AssemblyVersion>1.0.0.15</AssemblyVersion>
+    <AssemblyVersion>1.0.0.16</AssemblyVersion>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -17,10 +17,16 @@
     <None Remove="Resources\align-justify.png" />
     <None Remove="Resources\align-left.png" />
     <None Remove="Resources\align-right.png" />
+    <None Remove="Resources\close.png" />
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\export.png" />
     <None Remove="Resources\gear-48-hover.png" />
     <None Remove="Resources\import.png" />
+    <None Remove="Resources\MessageBox\chat.png" />
+    <None Remove="Resources\MessageBox\error.png" />
+    <None Remove="Resources\MessageBox\exclamation.png" />
+    <None Remove="Resources\MessageBox\information.png" />
+    <None Remove="Resources\MessageBox\question.png" />
     <None Remove="Resources\sub.png" />
     <None Remove="Resourses\add_white.png" />
     <None Remove="View\add.png" />
@@ -38,6 +44,12 @@
 
   <ItemGroup>
     <Content Include="2560px-P_psychology2.svg.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+    <Resource Include="Resources\MessageBox\chat.png" />
+    <Resource Include="Resources\MessageBox\information.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +79,9 @@
     <Resource Include="Resources\gear-48.png" />
     <Resource Include="Resources\import.png" />
     <Resource Include="Resources\information-48.png" />
+    <Resource Include="Resources\MessageBox\error.png" />
+    <Resource Include="Resources\MessageBox\exclamation.png" />
+    <Resource Include="Resources\MessageBox\question.png" />
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\document-edit.png" />
     <Resource Include="Resources\sub.png" />
@@ -79,6 +94,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="View\TestKinds\LeongardFact.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 

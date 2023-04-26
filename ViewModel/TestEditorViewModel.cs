@@ -99,18 +99,18 @@ namespace PsychoTestProject.ViewModel
                 editorPage.SaveQuestion();
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
                 xmlDocument.Save();
-                MessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
             else if (Test == null)
-                MessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
             else if (Test?.Questions?[0] == null)
-                MessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
             else
             {
                 xmlDocument = new XmlDocumentClass(Test);
                 xmlDocument.Save();
-                MessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
 
@@ -122,7 +122,7 @@ namespace PsychoTestProject.ViewModel
         {
             if (Test != null)
             {
-                if (MessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     EditFrame.Content = null;
                     File.Delete(Test.Filename);
@@ -131,7 +131,7 @@ namespace PsychoTestProject.ViewModel
                 }
             }
             else
-                MessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void GoToLectionsEditor (object sender)
@@ -152,9 +152,9 @@ namespace PsychoTestProject.ViewModel
                     {
                         MainViewModel.CurrentTest = (obj as TestClass);
                         if (obj == null)
-                            MessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                            WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
                         else if (MainViewModel.CurrentTest?.Questions?[0] == null)
-                            MessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
                             editorPage = new EditorPage();
@@ -163,7 +163,7 @@ namespace PsychoTestProject.ViewModel
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }));
             }

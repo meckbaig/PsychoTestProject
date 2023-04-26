@@ -100,6 +100,18 @@
             </Grid>
         </Border>
     </ControlTemplate>
+    <ControlTemplate x:Key="CloseButtonTemplate" TargetType="{x:Type Button}">
+        <Border Background="{TemplateBinding Background}"  CornerRadius="4">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources/close.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    
 
 
     <!--<ControlTemplate x:Key="ZoomPositiveTemplate" TargetType="{x:Type Button}">

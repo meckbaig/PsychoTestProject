@@ -34,7 +34,7 @@ namespace PsychoTestProject.View
             //if (MainViewModel.CurrentTest != null)
             //{
             //    if (!(DataContext as TestEditorViewModel).CompareTest())
-            //        if (MessageBox.Show($"Выбранный тест не сохранён. Вы точно хотите выйти?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            //        if (WpfMessageBox.Show($"Выбранный тест не сохранён. Вы точно хотите выйти?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             //        {
             MainViewModel.Back();
             //        }

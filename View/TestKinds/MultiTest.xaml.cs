@@ -50,6 +50,7 @@ namespace PsychoTestProject.View.TestKinds
 
         private void NextQuestion(object sender, EventArgs e)
         {
+            //viewModel.PrintResults(ThisGrid, Scroll);
             viewModel.AnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswer();
             var nextQuestion = viewModel.NextQuestion();
 
@@ -79,7 +80,7 @@ namespace PsychoTestProject.View.TestKinds
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", 
+            if (WpfMessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Exit();

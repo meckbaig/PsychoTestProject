@@ -133,7 +133,7 @@ namespace PsychoTestProject.View.TestKinds
                 if (PreviousNumber == dictionary.NumberImages.Count)
                 {
                     timer.Stop();
-                    MessageBox.Show(Math.Round(time, 2).ToString()+" секунд на решение");
+                    WpfMessageBox.Show(Math.Round(time, 2).ToString()+" секунд на решение");
 
                 }
             }

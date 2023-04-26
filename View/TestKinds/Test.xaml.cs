@@ -36,7 +36,7 @@ namespace PsychoTestProject.View
             }
             catch (System.Xml.XmlException)
             {
-                MessageBox.Show("Выбранный файл повреждён или не совместим с текущей версией программы", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                WpfMessageBox.Show("Выбранный файл повреждён или не совместим с текущей версией программы", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

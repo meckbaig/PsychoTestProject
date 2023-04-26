@@ -98,7 +98,7 @@ namespace PsychoTestProject
         {
             if (LectionSource != null)
             {
-                if (MessageBox.Show($"Вы точно хотите удалить лекцию \"{(DataContext as LectionsViewModel).LectionTitle}\"?", 
+                if (WpfMessageBox.Show($"Вы точно хотите удалить лекцию \"{(DataContext as LectionsViewModel).LectionTitle}\"?", 
                     "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     File.Delete(LectionSource);
@@ -110,7 +110,7 @@ namespace PsychoTestProject
                 }
             }
             else
-                MessageBox.Show("Выберите лекцию", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Выберите лекцию", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void BoldBT_Click(object sender, RoutedEventArgs e)
@@ -186,7 +186,7 @@ namespace PsychoTestProject
 
         private async void GetFontSize()
         {
-            FontSizeCB.SelectedItem = await Web.ExecuteScriptAsync("window.getComputedStyle(window.getSelection().anchorNode.parentElement).fontSize;");
+            //FontSizeCB.SelectedItem = await Web.ExecuteScriptAsync("window.getComputedStyle(window.getSelection().anchorNode.parentElement).fontSize;");
         }
 
         private async void LeftBT_Click(object sender, RoutedEventArgs e)

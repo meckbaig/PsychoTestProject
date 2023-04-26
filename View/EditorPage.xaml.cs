@@ -168,7 +168,7 @@ namespace PsychoTestProject.View
             QuestionClass savedQuestion = Question;
             QuestionClass editedQuestion = ReadQuestion();
             if (!EditorControls.Equal(savedQuestion, editedQuestion))
-                switch (MessageBox.Show("Вопрос был изменён. Сохранить?", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
+                switch (WpfMessageBox.Show("Вопрос был изменён. Сохранить?", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
                 {
                     case MessageBoxResult.Yes:
                         SaveQuestion(); AddQuestion(); break;

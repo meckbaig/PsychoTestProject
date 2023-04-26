@@ -31,7 +31,7 @@ namespace PsychoTestProject.ViewModel
             {
                 if (MainViewModel.TestStarted)
                 {
-                    if (MessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (WpfMessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         ShowTestPreviewMethod(value);
                 }
                 else
@@ -107,7 +107,7 @@ namespace PsychoTestProject.ViewModel
                     {
                         MainViewModel.CurrentTest = (obj as TestClass);
                         if (MainViewModel.CurrentTest?.Questions?[0] == null)
-                            MessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
                             testFrame.Navigate(new Test((TestClass)obj));
@@ -117,7 +117,7 @@ namespace PsychoTestProject.ViewModel
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }));
             }
