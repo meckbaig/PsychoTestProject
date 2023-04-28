@@ -12,7 +12,7 @@
 ✔ Perseverance test<br/>
 ✔ Custom message boxes<br/>
 ✔ Professionalism test<br/>
-● Orientation test<br/>
+● Personality orientation test<br/>
 ● Picture test<br/>
 ● Admin app<br/>
 ● Tests descriptions<br/>
