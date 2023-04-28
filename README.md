@@ -1,7 +1,11 @@
 ## Roadmap
 
+✔ Regular tests<br/>
+✔ HTML lection<br/>
+✔ Editor for regular tests<br/>
 ✔ Aizenk test<br/>
 ✔ Leongard Test<br/>
+✔ Simple editor for lections<br/>
 ✔ Import/Export<br/>
 ✔ Pretty buttons (round corners, pictures, mouse hover etc)<br/>
 ✔ Buttons animations<br/>
