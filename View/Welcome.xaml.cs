@@ -195,19 +195,18 @@ namespace PsychoTestProject
             b.BeginAnimation(Button.MarginProperty, animation);
         }
 
-        private void LectionsButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainViewModel.MainFrame.Navigate(new Lections(false));
-        }
-
-        private void TestsButton_Click(object sender, RoutedEventArgs e)
-        {
-            TestButtonsAnimation(true, 240);
-        }
-
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TestButtonsAnimation(false, 240);
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                Import(files[0]);
+            }
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
@@ -251,6 +250,18 @@ namespace PsychoTestProject
                 WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void LectionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Environment.OSVersion.Version.Major < 10)
+                WpfMessageBox.Show("Внимание!", "Текущая версия операционной системы не совместима с данным модулем программы.", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+                MainViewModel.MainFrame.Navigate(new Lections(false));
+        }
+
+        private void TestsButton_Click(object sender, RoutedEventArgs e)
+        {
+            TestButtonsAnimation(true, 240);
+        }
 
         private void OpenTestButton_Click(object sender, RoutedEventArgs e)
         {
@@ -263,23 +274,25 @@ namespace PsychoTestProject
             MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
         }
 
-        private void Grid_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                Import(files[0]);
-            }
-        }
-
         private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new MultiTest(0));
+            MultiTest multiTest = new MultiTest(0);
+            if (!MainViewModel.CurrentTest.Error)
+                MainViewModel.MainFrame.Navigate(multiTest);
         }
 
         private void LeongardTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new MultiTest(1));
+            MultiTest multiTest = new MultiTest(1);
+            if (!MainViewModel.CurrentTest.Error)
+                MainViewModel.MainFrame.Navigate(multiTest);
+        }
+
+        private void ProTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MultiTest multiTest = new MultiTest(2);
+            if (!MainViewModel.CurrentTest.Error)
+                MainViewModel.MainFrame.Navigate(multiTest);
         }
     }
 }

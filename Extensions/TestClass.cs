@@ -19,6 +19,7 @@ namespace PsychoTestProject.Extensions
         public string Filename { get; set; }
         public bool UseTake { get; set; }
         public int Take { get; set; }
+        public bool Error { get; set; } = false;
 
         public TestClass(bool useTake)
         {
@@ -29,7 +30,7 @@ namespace PsychoTestProject.Extensions
         {
             try
             {
-                if (Filename != null)
+                if (Filename != null && !Error)
                 {
                     var questionList = new List<QuestionClass>();
                     XmlDocument doc = new XmlDocument();
@@ -73,6 +74,7 @@ namespace PsychoTestProject.Extensions
             }
             catch (Exception)
             {
+                Error = true;
                 WpfMessageBox.Show("Выбранный файл повреждён или не совместим с текущей версией программы", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }

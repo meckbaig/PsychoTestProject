@@ -41,7 +41,8 @@ namespace PsychoTestProject.View.TestKinds
         public void ParceData(string type)
         {
             string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{type}");
-            string peoplePath = Supporting.Shuffle(Directory.GetDirectories(typeFolder).ToList())[0];
+            var sdf = Supporting.Shuffle(Directory.GetDirectories(typeFolder).ToList());
+            string peoplePath = sdf[0];
             Picture = Directory.GetFiles(peoplePath, "*.jpg")[0];
 
             string information = Directory.GetFiles(peoplePath, "*.xml")[0];

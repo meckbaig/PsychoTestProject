@@ -50,7 +50,7 @@
         <Button x:Name="PerseveranceTestButton" Style="{StaticResource TestButtonStyle}" Click="PerseveranceTestButton_Click">
             <TextBlock  Text="Тест на усидчивость" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button x:Name="ProTestButton" Style="{StaticResource TestButtonStyle}">
+        <Button x:Name="ProTestButton" Style="{StaticResource TestButtonStyle}" Click="ProTestButton_Click">
             <TextBlock  Text="Тест профессионализма" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button x:Name="OrientationTestButton" Style="{StaticResource TestButtonStyle}">

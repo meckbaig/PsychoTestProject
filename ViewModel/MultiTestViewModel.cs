@@ -26,7 +26,7 @@ namespace PsychoTestProject.ViewModel
 
         public QuestionClass CurrentQuestion
         {
-            get => MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber - 1];
+            get => MainViewModel.CurrentTest?.Questions?[MainViewModel.CurrentQuestionNumber - 1];
         }
 
         public QuestionClass NextQuestion()

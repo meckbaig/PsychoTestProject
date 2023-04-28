@@ -31,16 +31,20 @@ namespace PsychoTestProject.View.TestKinds
 
         public MultiTest(int testId)
         {
-            InitializeComponent();
-            MainViewModel.MouseHover(BackButton);
             switch (testId)
             {
                 case 0: viewModel = new AizenkTestViewModel(); break;
                 case 1: viewModel = new LeongardTestViewModel(); break;
+                case 2: viewModel = new ProTestViewModel(); break;
             }
-            MainViewModel.MainWindow.Title = viewModel.Title;
-            DataContext = viewModel;
-            viewModel.AnswersArray = new int[MainViewModel.CurrentTest.Questions.Count];
+            if (MainViewModel.CurrentTest?.Questions?.Count > 0)
+            {
+                viewModel.AnswersArray = new int[MainViewModel.CurrentTest.Questions.Count];
+                DataContext = viewModel;
+                MainViewModel.MainWindow.Title = viewModel.Title;
+                InitializeComponent();
+                MainViewModel.MouseHover(BackButton);
+            }
         }
 
         private void Question_Loaded(object sender, RoutedEventArgs e)

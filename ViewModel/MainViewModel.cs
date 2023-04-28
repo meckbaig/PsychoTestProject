@@ -47,6 +47,14 @@ namespace PsychoTestProject.ViewModel
         public static void Back()
         {
             CurrentTest = null;
+            MainFrame.Content = null;
+            MainFrame.Navigate(new Welcome());
+            MainWindow.Title = "PsychoTest";
+        }
+        public static void Back(ref MultiTest multiTest)
+        {
+            CurrentTest = null;
+            multiTest = null;
             MainFrame.Navigate(new Welcome());
             MainWindow.Title = "PsychoTest";
         }
