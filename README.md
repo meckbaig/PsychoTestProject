@@ -10,7 +10,6 @@
 ✔ Professionalism test<br/>
 ● Orientation test<br/>
 ● Picture test<br/>
-● Picture test<br/>
 ● Admin app<br/>
 ● Tests descriptions<br/>
 ● Bug fixes...😨<br/>
