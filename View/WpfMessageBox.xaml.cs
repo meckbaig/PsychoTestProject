@@ -1,8 +1,11 @@
 ﻿using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,15 +21,27 @@ namespace PsychoTestProject.View
     /// <summary>
     /// Логика взаимодействия для WpfMessageBox.xaml
     /// </summary>
-    public partial class WpfMessageBox : Window
+    public partial class WpfMessageBox : Window, INotifyPropertyChanged
     {
+        private string messageText;
+        public string MessageText 
+        { 
+            get => messageText;
+            set
+            {
+                messageText = value;
+                OnPropertyChanged("MessageText");
+            }
+        }
+
         public enum MessageBoxType
         {
             ConfirmationWithYesNo = 0,
             ConfirmationWithYesNoCancel,
             Information,
             Error,
-            Warning
+            Warning,
+            Message
         }
 
         //public enum MessageBoxImage
@@ -39,62 +54,112 @@ namespace PsychoTestProject.View
         //}
         private WpfMessageBox()
         {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
             InitializeComponent();
             MainViewModel.AllButtonsHover(this.Content);
+            DataContext = this;
+        }
+        public WpfMessageBox(string message, string title, MessageBoxType type)
+        {
+            InitializeComponent();
+            MainViewModel.AllButtonsHover(this.Content);
+            DataContext = this;
+            ShowMessage(message, title, type);
         }
         static WpfMessageBox _messageBox;
-        static MessageBoxResult _result = MessageBoxResult.No;
+        static MessageBoxResult _result = MessageBoxResult.Cancel;
+
+        public void ChangeMessage(string message)
+        {
+            _messageBox.MessageText = message;
+        }
+
+        public void CloseMessage()
+        {
+            _messageBox.Close();
+            _messageBox = null;
+        }
+
+        private static void ShowMessage(string message, string title, MessageBoxType type)
+        {
+            _messageBox = new WpfMessageBox
+            { MessageText = message, MessageTitle = { Text = title } };
+            switch (type)
+            {
+                case MessageBoxType.Error: SetImageOfMessageBox(MessageBoxImage.Error); break;
+                case MessageBoxType.Warning: SetImageOfMessageBox(MessageBoxImage.Warning); break;
+                case MessageBoxType.Information: SetImageOfMessageBox(MessageBoxImage.Information); break;
+                default: SetImageOfMessageBox(MessageBoxImage.None); break;
+            };
+            _messageBox.btnCancel.Visibility = Visibility.Collapsed;
+            _messageBox.btnNo.Visibility = Visibility.Collapsed;
+            _messageBox.btnYes.Visibility = Visibility.Collapsed;
+            _messageBox.btnOk.Visibility = Visibility.Collapsed;
+            _messageBox.closeBtn.Visibility = Visibility.Collapsed;
+            _messageBox.Show();
+        }
+
         public static MessageBoxResult Show
-        (string caption, string msg, MessageBoxType type)
+        (string message, string title, MessageBoxType type)
         {
             switch (type)
             {
                 case MessageBoxType.ConfirmationWithYesNo:
-                    return Show(caption, msg, MessageBoxButton.YesNo,
+                    return Show(message, title, MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
                 case MessageBoxType.ConfirmationWithYesNoCancel:
-                    return Show(caption, msg, MessageBoxButton.YesNoCancel,
+                    return Show(message, title, MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Question);
                 case MessageBoxType.Information:
-                    return Show(caption, msg, MessageBoxButton.OK,
+                    return Show(message, title, MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 case MessageBoxType.Error:
-                    return Show(caption, msg, MessageBoxButton.OK,
+                    return Show(message, title, MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 case MessageBoxType.Warning:
-                    return Show(caption, msg, MessageBoxButton.OK,
+                    return Show(message, title, MessageBoxButton.OK,
                     MessageBoxImage.Warning);
                 default:
                     return MessageBoxResult.No;
             }
         }
-        public static MessageBoxResult Show(string msg, MessageBoxType type)
+        public static MessageBoxResult Show(string message, MessageBoxType type)
         {
-            return Show(string.Empty, msg, type);
+            switch (type)
+            {
+                case MessageBoxType.Error:
+                    return Show(message, "Ошибка!", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                case MessageBoxType.Warning:
+                    return Show(message, "Внимание!", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                default:
+                    return Show(message, string.Empty, type);
+            }
         }
-        public static MessageBoxResult Show(string msg)
+        public static MessageBoxResult Show(string message)
         {
-            return Show(string.Empty, msg,
+            return Show(string.Empty, message,
             MessageBoxButton.OK, MessageBoxImage.None);
         }
         public static MessageBoxResult Show
-        (string caption, string text)
+        (string title, string text)
         {
-            return Show(caption, text,
+            return Show(title, text,
             MessageBoxButton.OK, MessageBoxImage.None);
         }
         public static MessageBoxResult Show
-        (string caption, string text, MessageBoxButton button)
+        (string title, string text, MessageBoxButton button)
         {
-            return Show(caption, text, button,
+            return Show(title, text, button,
             MessageBoxImage.None);
         }
         public static MessageBoxResult Show
-        (string text, string caption, 
+        (string text, string title, 
         MessageBoxButton button, MessageBoxImage image)
         {
             _messageBox = new WpfMessageBox
-            { txtMsg = { Text = text }, MessageTitle = { Text = caption } };
+            { MessageText = text, MessageTitle = { Text = title } };
             SetVisibilityOfButtons(button);
             SetImageOfMessageBox(image);
             _messageBox.ShowDialog();
@@ -177,5 +242,12 @@ namespace PsychoTestProject.View
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e) => DragMove();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

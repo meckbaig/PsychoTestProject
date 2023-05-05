@@ -1,6 +1,7 @@
 ﻿using PsychoTestProject.Extensions;
 using PsychoTestProject.Model;
 using PsychoTestProject.View;
+using PsychoTestProject.View.TestKinds;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,7 +24,7 @@ namespace PsychoTestProject.ViewModel
         public List<TestClass> TestList { get; set; }
         public String TestTitle { get; set; }
         private TestClass test;
-
+        private TestType TestType { get; set; }
         public TestClass Test
         {
             get => test; 
@@ -65,15 +66,16 @@ namespace PsychoTestProject.ViewModel
             get => visibility; 
         }
 
-        public TestsViewModel(Frame frame)
+        public TestsViewModel(Frame frame, TestType testType)
         {
             MainViewModel.TestFrame = testFrame = frame;
+            TestType = testType;
             TestList = new List<TestClass>();
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests"), "*.xml"))
+            string testPath = "";
+            switch (TestType)
             {
-                TestList.Add(new TestClass(true) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
-            }
-            TestTitle = "Тесты содержат вопросы трёх типов:\n" +
+                case TestType.KnowlegeTest: testPath = "Tests"; 
+                TestTitle = "Тесты содержат вопросы трёх типов:\n" +
                         "с одиночным выбором, с множественным выбором " +
                         "и открытые вопросы со свободным ответом\n\n" +
                         "На открытые вопросы с перечислением требуется " +
@@ -84,6 +86,13 @@ namespace PsychoTestProject.ViewModel
                         "Оценка 4 - 76-85% правильных ответов\n" +
                         "Оценка 3 - 61-75% правильных ответов\n" +
                         "Оценка 2 - менее 60% правильных ответов";
+                    break;
+                case TestType.OrientationTest: testPath = "Tests\\Тест направленности личности"; break;
+            }
+            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, testPath), "*.xml"))
+            {
+                TestList.Add(new TestClass(true) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
+            }
             TextVisibility = Visibility.Visible;
             OnPropertyChanged("TextVisibility");
         }
@@ -110,7 +119,12 @@ namespace PsychoTestProject.ViewModel
                             WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
-                            testFrame.Navigate(new Test((TestClass)obj));
+                            switch (TestType)
+                            {
+                                case TestType.KnowlegeTest: testFrame.Navigate(new Test((TestClass)obj)); break;
+                                case TestType.OrientationTest: testFrame.Navigate(new MultiTest(TestType, (TestClass)obj)); break;
+                            }
+                            
                             Visibility = Visibility.Hidden;
                             MainViewModel.TestStarted = true;
                         }

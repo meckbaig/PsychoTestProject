@@ -2,6 +2,7 @@
 using PsychoTestProject.View;
 using PsychoTestProject.View.TestKinds;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PsychoTestProject.ViewModel
 {
@@ -119,6 +121,16 @@ namespace PsychoTestProject.ViewModel
                     MouseHover(button);
                 }
             }
+        }
+
+        public static BitmapImage GetBitmap(string path)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(path);
+            bitmap.EndInit();
+            return bitmap;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

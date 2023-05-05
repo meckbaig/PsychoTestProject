@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using Microsoft.Win32;
 using PsychoTestProject.Extensions;
 using PsychoTestProject.View;
 using System;
@@ -93,12 +94,35 @@ namespace PsychoTestProject.ViewModel
         public void SaveTest(object sender)
         {
             XmlDocumentClass xmlDocument = new XmlDocumentClass();
-
             if (MainViewModel.CurrentTest != null)
             {
+                MessageBoxResult dialogResult = WpfMessageBox.Show("Сохранить в директории по умолчанию? " +
+                    "Нажмите \"нет\", чтобы выбрать директорию сохранения.", "Внимание!", MessageBoxButton.YesNoCancel);
+                if (dialogResult == MessageBoxResult.Cancel)
+                    return;
+
                 editorPage.SaveQuestion();
+                string savePath;
+                if (MainViewModel.CurrentTest.Filename == null)
+                    savePath = Path.Combine(Environment.CurrentDirectory, "Tests", MainViewModel.CurrentTest.Name + ".xml");
+                else
+                    savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), MainViewModel.CurrentTest.Name + ".xml");
+
+
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    SaveFileDialog fileDialog = new SaveFileDialog(){ Title = "Сохранение файлов", FileName = MainViewModel.CurrentTest.Name+".xml" };
+                    if (fileDialog.ShowDialog() == true)
+                        savePath = fileDialog.FileName;
+                }
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
-                xmlDocument.Save();
+                xmlDocument.Save(savePath);
+                MainViewModel.CurrentTest.Filename = savePath;
+                if (editorPage.Image != null)
+                {
+                    savePath = Path.GetDirectoryName(savePath) + "\\" + Path.GetFileNameWithoutExtension(savePath) + editorPage.ImageExt;
+                    File.WriteAllBytes(savePath, editorPage.Image);
+                }
                 WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
@@ -110,13 +134,13 @@ namespace PsychoTestProject.ViewModel
             {
                 xmlDocument = new XmlDocumentClass(Test);
                 xmlDocument.Save();
+                if (editorPage.Image != null)
+                    File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                 WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }
 
         }
-
-
 
         public void DeleteTest(object sender)
         {
@@ -126,12 +150,36 @@ namespace PsychoTestProject.ViewModel
                 {
                     EditFrame.Content = null;
                     File.Delete(Test.Filename);
+                    DeletePicture(Test.Filename);
                     UpdateTestList();
 
                 }
             }
+            else if (MainViewModel.CurrentTest != null)
+            {
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{MainViewModel.CurrentTest.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    EditFrame.Content = null;
+                    File.Delete(MainViewModel.CurrentTest.Filename);
+                    DeletePicture(MainViewModel.CurrentTest.Filename);
+                    UpdateTestList();
+                }
+            }
             else
                 WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void DeletePicture(string fileName)
+        {
+            for (int i = 0; i < Enum.GetNames(typeof(ImageExtension)).Length; i++)
+            {
+                string path = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + $".{(ImageExtension)i}");
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    break;
+                }
+            }
         }
 
         public void GoToLectionsEditor (object sender)
@@ -151,12 +199,21 @@ namespace PsychoTestProject.ViewModel
                     try
                     {
                         MainViewModel.CurrentTest = (obj as TestClass);
-                        if (obj == null)
-                            WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
-                        else if (MainViewModel.CurrentTest?.Questions?[0] == null)
+
+                        if (obj != null && MainViewModel.CurrentTest?.Questions?[0] == null)
                             WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
+                            if (obj == null)
+                            {
+                                OpenFileDialog fileDialog = new OpenFileDialog() { Title = "Выберите файл", Multiselect = false };
+
+                                if (fileDialog.ShowDialog() == true)
+                                {
+                                    MainViewModel.CurrentTest = new TestClass(false) { Name = Path.GetFileNameWithoutExtension(fileDialog.FileName), Filename = fileDialog.FileName };
+                                }
+                                else return;
+                            }
                             editorPage = new EditorPage();
                             EditFrame.Navigate(editorPage);
                         }

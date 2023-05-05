@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Xceed.Wpf.Toolkit;
 
 namespace PsychoTestProject.View
 {
@@ -31,6 +32,10 @@ namespace PsychoTestProject.View
         private string testTitle;
         private int answersTarget;
         private Image backgroundImage;
+        public byte[] Image { get; 
+            set; }
+        public string ImageExt { get; 
+            set; }
 
         public Thickness DeleteButtonThickness { get; set; }
         public List<AnswerClass> AnswerList
@@ -171,16 +176,19 @@ namespace PsychoTestProject.View
                 switch (WpfMessageBox.Show("Вопрос был изменён. Сохранить?", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
                 {
                     case MessageBoxResult.Yes:
-                        SaveQuestion(); AddQuestion(); break;
+                        SaveQuestion(); 
+                        AddQuestion(); 
+                        break;
                     case MessageBoxResult.No:
-                        AddQuestion(); break;
+                        AddQuestion(); 
+                        break;
                     default: break;
                 }
             else
                 AddQuestion();
         }
 
-        private void AddAnswerButton_Click(object sender, RoutedEventArgs e)
+        private void AddAnswerButton_Click(object sender, RoutedEventArgs e) 
         {
             this.Question = ReadQuestion();
             AnswerClass newAnswer = new AnswerClass();
@@ -215,10 +223,14 @@ namespace PsychoTestProject.View
             openFileDialog.Filter = openFileDialog.Filter.Remove(openFileDialog.Filter.Length - 1);
             if (openFileDialog.ShowDialog() == true)
             {
-                string savepath = Environment.CurrentDirectory + "\\Tests\\" + MainViewModel.CurrentTest.Name + $"{Path.GetExtension(openFileDialog.FileName)}";
-                File.WriteAllBytes(savepath, File.ReadAllBytes(openFileDialog.FileName));
+                //string savepath = Environment.CurrentDirectory + "\\Tests\\" + MainViewModel.CurrentTest.Name + $"{Path.GetExtension(openFileDialog.FileName)}";
+                //File.WriteAllBytes(savepath, File.ReadAllBytes(openFileDialog.FileName));
+                Image = File.ReadAllBytes(openFileDialog.FileName);
+                ImageExt = Path.GetExtension(openFileDialog.FileName);
+
+
                 BackgroundImage = new Image();
-                BackgroundImage.Source = new BitmapImage(new Uri(openFileDialog.FileName));
+                BackgroundImage.Source = MainViewModel.GetBitmap(openFileDialog.FileName);
                 BackgroundImage.Visibility = Visibility.Visible;
             }
         }
@@ -234,16 +246,18 @@ namespace PsychoTestProject.View
                     path = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + $".{(ImageExtension)i}");
                     if (File.Exists(path))
                     {
-                        BackgroundImage.Source = new BitmapImage(new Uri(path));
+                        Image = File.ReadAllBytes(path);
+                        ImageExt = Path.GetExtension(path);
+                        BackgroundImage.Source = MainViewModel.GetBitmap(path);
                         BackgroundImage.Visibility = Visibility.Visible;
                         break;
                     }
                     else
-                        BackgroundImage.Visibility = Visibility.Hidden;
+                        BackgroundImage.Visibility = Visibility.Collapsed;
                 }
             }
             else
-                BackgroundImage.Visibility = Visibility.Hidden;
+                BackgroundImage.Visibility = Visibility.Collapsed;
         }
 
         private int CorrectAnsvers()
@@ -311,17 +325,21 @@ namespace PsychoTestProject.View
                     newAnswer.Id = answerCount++;
                     newAnswer.Text = answerString;
                     newAnswer.IsCorrect = true;
+                    newAnswer.Value = ((AnswerButtons.Children[newAnswer.Id - 1] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
                     newQuestion.Answers.Add(newAnswer);
                 }
             }
             else
             {
                 int childrenCount = 0;
+                newQuestion.YesNo = (bool)YesNoCheckBox.IsChecked;
+
                 foreach (TextBox answer in ShowedAnswers.Children)
                 {
                     AnswerClass newAnswer = new AnswerClass();
                     newAnswer.Id = answerCount++;
                     newAnswer.Text = answer.Text;
+                    newAnswer.Value = ((AnswerButtons.Children[newAnswer.Id - 1] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
                     switch (newQuestion.Type)
                     {
                         case QuestionType.Single:
@@ -343,6 +361,11 @@ namespace PsychoTestProject.View
 
         public void SaveQuestion()
         {
+            string picPath = Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + ".jpg";
+            byte[] pic;
+            if (File.Exists(picPath))
+                pic = File.ReadAllBytes(picPath);
+
             MainViewModel.CurrentTest.Name = TestTitleTB.Text;
             if ((int)TakeUpDown.Value>0)
                 MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
@@ -385,6 +408,7 @@ namespace PsychoTestProject.View
             ShowedAnswers.Children.Clear();
             AnswerButtons.Children.Clear();
             TestSettingsStackPanel.Children.Remove(IsExactCheckBox);
+            TestSettingsStackPanel.Children.Remove(YesNoCheckBox);
 
             AnswerList = this.Question.Answers;
             QuestionValueUpDown.Value = Question.Value;
@@ -392,7 +416,8 @@ namespace PsychoTestProject.View
 
             if (Question.Type == QuestionType.String)
             {
-                IsExactCheckBox = EditorControls.IsExactCheckBox(Question);
+                IsExactCheckBox = EditorControls.AddCheckBox("IsExactCheckBox", "Точный ответ", Question.IsExact);
+                IsExactCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
                 TestSettingsStackPanel.Children.Add(IsExactCheckBox);
 
                 if (Question.Answers.Count > 0)
@@ -419,6 +444,9 @@ namespace PsychoTestProject.View
             }
             else
             {
+                YesNoCheckBox = EditorControls.AddCheckBox("YesNoCheckBox", "Выбор \"Да/Нет\"", Question.YesNo);
+                YesNoCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
+                TestSettingsStackPanel.Children.Add(YesNoCheckBox);
                 int answerCount = 1;
                 foreach (var answer in question.Answers)
                 {
@@ -438,6 +466,7 @@ namespace PsychoTestProject.View
             {
                 MainViewModel.AllButtonsHover(stack);
             }
+            
         }
 
         private void MovementButtonsAvailability()
@@ -502,6 +531,16 @@ namespace PsychoTestProject.View
             ChangeMargin();
         }
 
+        private void RaiseSizeChange()
+        {
+            SizeChangedInfo sifo = new SizeChangedInfo(PageGrid, new Size(Double.NaN, Double.NaN), true, true);
+            SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(
+                new object[] { (PageGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
+            ea.RoutedEvent = Panel.SizeChangedEvent;
+            PageGrid.RaiseEvent(ea);
+        }
+
         private void ChangeMargin()
         {
             ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanelScroll.ActualHeight);
@@ -521,6 +560,5 @@ namespace PsychoTestProject.View
             }
         }
         #endregion
-
     }
 }

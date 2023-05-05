@@ -142,7 +142,8 @@
                                    Margin="5,0,0,0" TextWrapping="Wrap"/>
                             <xctk:IntegerUpDown Name="TagretUpDown" Minimum="1" Width="60" Height="23" Margin="5,0,5,0" Value="{Binding AnswersTarget}"/>
                         </StackPanel>
-                        <CheckBox x:Name="IsExactCheckBox" Visibility="Hidden" Margin="5,3,5,5"/>
+                        <CheckBox x:Name="IsExactCheckBox" Visibility="Collapsed" Margin="5,3,5,5"/>
+                        <CheckBox x:Name="YesNoCheckBox" Visibility="Collapsed" Margin="5,3,5,5"/>
                     </StackPanel>
                     <StackPanel x:Name="AddImageStackPanel" Background="#FFD6E8E8" Margin="1,0,1,0" Orientation="Horizontal">
                         <StackPanel Background="#FFD6E8E8">
@@ -169,7 +170,7 @@
             </ScrollViewer>
         </DockPanel>
 
-        <ScrollViewer x:Name="ContentViewer" Margin="0,32,0,66">
+        <ScrollViewer x:Name="ContentViewer" Margin="0,32,0,66" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20,5,0,5">
                 <TextBox x:Name="QuestionTitle" TextWrapping="Wrap" FontSize="24" Margin="5,2,5,2" MinWidth="100" HorizontalAlignment="Left"/>
                 <StackPanel Orientation="Horizontal">

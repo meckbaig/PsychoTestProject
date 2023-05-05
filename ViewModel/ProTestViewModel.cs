@@ -60,7 +60,8 @@ namespace PsychoTestProject.ViewModel
                 StackPanel stackPanel = new StackPanel();
                 thisGrid.SizeChanged += (s, e) =>
                 {
-                    stackPanel.Margin = new Thickness(thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20, thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20);
+                    stackPanel.Margin = new Thickness(thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20, 
+                                                      thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20);
                     stackPanel.Width = thisGrid.ActualWidth * 0.8;
                 };
                 stackPanel.Children.Add(PredispositionProcessing(thisGrid));
@@ -106,9 +107,8 @@ namespace PsychoTestProject.ViewModel
         private StackPanel StylesProcessing()
         {
             StackPanel stackPanel = new StackPanel() { Margin = new Thickness(10) };
-            string style;
             int index = Styles.IndexOf(Styles.Max());
-            style = ExecuteStyleIndex(index);
+            string style = ExecuteStyleIndex(index);
             string levelText = $"   Доминирующий стиль взаимодействия с обучаемыми: {style}";
             for (int i = 0; i<3; i++)
             {

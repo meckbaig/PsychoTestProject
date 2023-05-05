@@ -4,12 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xceed.Wpf.AvalonDock.Converters;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using static PsychoTestProject.View.WpfMessageBox;
 
 namespace PsychoTestProject.View
 {
@@ -28,6 +33,7 @@ namespace PsychoTestProject.View
         public string QuestionCount { get; set; }
         public string QuestionText { get => QuestionClass?.Text; }
         private bool startTimer { get; set; }
+        private bool yesNo { get; set; }
 
         public Question()
         {
@@ -41,20 +47,28 @@ namespace PsychoTestProject.View
             qTimer.Tick += Timer_Tick;
         }
 
-        public void Initialize(bool startTimer = true, bool showBackButton = false)
+        public void Initialize(bool showBackButton = false, bool startTimer = true, bool yesNo = false)
         {
+            this.yesNo = yesNo;
             this.startTimer = startTimer;
-            PrintAnswers(QuestionClass);
+            if (!yesNo) 
+                PrintAnswers(QuestionClass);
+            else
+                PrintAnswersYesNo(QuestionClass);
             if (startTimer)
                 Timer(QuestionClass);
             if (!showBackButton)
                 ButtonsStackPanel.Children.RemoveAt(0);
         }
-        public void Initialize(QuestionClass question, bool startTimer = true)
+        public void Initialize(QuestionClass question, bool startTimer = true, bool yesNo = false)
         {
+            this.yesNo = yesNo;
             this.startTimer = startTimer;
             QuestionClass = question;
-            PrintAnswers(QuestionClass);
+            if (!yesNo)
+                PrintAnswers(QuestionClass);
+            else
+                PrintAnswersYesNo(QuestionClass);
             if (startTimer)
                 Timer(QuestionClass);
         }
@@ -117,6 +131,12 @@ namespace PsychoTestProject.View
 
         public void PrintAnswers(QuestionClass question)
         {
+            if (question.YesNo)
+            {
+                PrintAnswersYesNo(question);
+                return;
+            }
+
             QuestionCount = (MainViewModel.CurrentQuestionNumber) + " из " + MainViewModel.CurrentTest.Questions.Count;
             OnPropertyChanged("QuestionCount");
             ShowedAnswers.Children.Clear();
@@ -139,6 +159,7 @@ namespace PsychoTestProject.View
                         break;
                     default:
                         var textBox = new TextBox();
+                        textBox.TextWrapping = TextWrapping.Wrap;
                         item = textBox;
                         break;
                 }
@@ -153,8 +174,82 @@ namespace PsychoTestProject.View
             }
         }
 
+        public void PrintAnswersYesNo(QuestionClass question)
+        {
+            QuestionCount = (MainViewModel.CurrentQuestionNumber) + " из " + MainViewModel.CurrentTest.Questions.Count;
+            OnPropertyChanged("QuestionCount");
+            ShowedAnswers.Children.Clear();
+            foreach (var answer in question.Answers)
+            {
+                StackPanel stackPanel = new StackPanel();
+                StackPanel answersStackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
+                switch (question.Type)
+                {
+                    case QuestionType.Single:
+                        answersStackPanel.Children.Add(rb("Да", answer));
+                        answersStackPanel.Children.Add(rb("Нет", answer));
+                        break;
+                    case QuestionType.Multiple:
+                        if (!MainViewModel.CurrentTest.Error)
+                        {
+                            MainViewModel.CurrentTest.Error = true;
+                            WpfMessageBox.Show("Внимание!", "Данный тип теста на данный момент не поддерживается.", MessageBoxType.Error);
+                        }
+                        ExtNextButton_Click?.Invoke(this, new RoutedEventArgs());
+                        return;
+                    default:
+                        if (!MainViewModel.CurrentTest.Error)
+                        {
+                            MainViewModel.CurrentTest.Error = true;
+                            WpfMessageBox.Show("Внимание!", "Данный тип теста на данный момент не поддерживается.", MessageBoxType.Error);
+                        }
+                        ExtNextButton_Click?.Invoke(this, new RoutedEventArgs());
+                        return;
+                }
+                TextBlock textBlock = new TextBlock();
+                textBlock.Text = answer.Text;
+                textBlock.FontSize = 16;
+                textBlock.FontFamily = new System.Windows.Media.FontFamily("Microsoft YaHei UI");
+                textBlock.Margin = new Thickness(5, 3, 0, 3);
+                textBlock.TextWrapping = TextWrapping.Wrap;
+                stackPanel.Children.Add(textBlock);
+                stackPanel.Children.Add(answersStackPanel);
+                ShowedAnswers.Children.Add(stackPanel);
+
+                if (question.Type == QuestionType.String)
+                    break;
+            }
+        }
+
+        private RadioButton rb(string text, AnswerClass answer)
+        {
+            var radioButton = new RadioButton() 
+            {
+                VerticalContentAlignment = VerticalAlignment.Center,
+                GroupName = text,
+                Content = text,
+                FontSize = 13,
+                FontFamily = new FontFamily("Microsoft YaHei UI"),
+                Tag = answer,
+                Margin = new Thickness(0, 3, 5, 3)
+            };
+            radioButton.KeyDown += NextKeyDown;
+            radioButton.Checked += (s, e) =>
+            {
+                foreach(RadioButton rb in (radioButton.Parent as StackPanel).Children)
+                {
+                    if (rb.Content != text)
+                        rb.IsChecked = false;
+                }
+            };
+            
+            return radioButton;
+        }
+
         public double CheckAnswer()
         {
+            if (yesNo)
+                return CheckAnswerYesNo();
             double maxPoint = QuestionClass.AnswersTarget;
             double point = 0;
             var answ = ShowedAnswers.Children[0];
@@ -234,6 +329,55 @@ namespace PsychoTestProject.View
                 point *= QuestionClass.Value;
             }
             
+            return point;
+        }
+
+        public double CheckAnswerYesNo(bool positive = true)
+        {
+            int i = positive ? 0 : 1;
+            double maxPoint = QuestionClass.AnswersTarget;
+            double point = 0;
+            var answ = ((ShowedAnswers.Children[0] as StackPanel).Children[1] as StackPanel).Children[0];
+            int answersChecked = 0;
+
+            switch (answ)
+            {
+                case (RadioButton):
+                    foreach (StackPanel answerStack in ShowedAnswers.Children)
+                    {
+                        RadioButton radioButton = (RadioButton)(answerStack.Children[1] as StackPanel).Children[i];
+                        if (((AnswerClass)radioButton.Tag).IsCorrect && (radioButton.IsChecked ?? false))
+                            point = MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                        answersChecked++;
+                    }
+                    break;
+                case (CheckBox):
+                    if (!MainViewModel.CurrentTest.Error)
+                    {
+                        MainViewModel.CurrentTest.Error = true;
+                        WpfMessageBox.Show("Внимание!", "Данный тип теста на данный момент не поддерживается.", MessageBoxType.Error);
+                    }
+                    return 0;
+                case (TextBox):
+                    if (!MainViewModel.CurrentTest.Error)
+                    {
+                        MainViewModel.CurrentTest.Error = true;
+                        WpfMessageBox.Show("Внимание!", "Данный тип теста на данный момент не поддерживается.", MessageBoxType.Error);
+                    }
+                    return 0;
+
+            }
+            //if (point < 0)
+            //    point = 0;
+            if (maxPoint != 0)
+            {
+                if (point > maxPoint)
+                    point = maxPoint;
+                point /= maxPoint;
+                point *= QuestionClass.Value;
+            }
+
+
             return point;
         }
 

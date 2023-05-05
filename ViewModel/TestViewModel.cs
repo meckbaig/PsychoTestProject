@@ -15,7 +15,7 @@ namespace PsychoTestProject.ViewModel
 {
     public class TestViewModel : INotifyPropertyChanged
     {
-        public string Picture { get; set; } 
+        public BitmapImage Picture { get; set; } 
         public Thickness Margin { get; set; }
         public TestViewModel(TestClass test)
         {
@@ -32,7 +32,7 @@ namespace PsychoTestProject.ViewModel
                 path = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), Path.GetFileNameWithoutExtension(MainViewModel.CurrentTest.Filename) + $".{(ImageExtension)i}");
                 if (File.Exists(path))
                 {
-                    Picture = path;
+                    Picture = MainViewModel.GetBitmap(path);
                     break;
                 }
             }

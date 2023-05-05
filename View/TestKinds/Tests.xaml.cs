@@ -23,11 +23,18 @@ namespace PsychoTestProject.View
     /// </summary>
     public partial class Tests : Page
     {
-        public Tests()
+        public Tests(TestType testType = TestType.KnowlegeTest)
         {
             InitializeComponent();
-            DataContext = new TestsViewModel(TestFrame);
-            MainViewModel.MainWindow.Title = this.Title;
+            DataContext = new TestsViewModel(TestFrame, testType);
+            switch (testType)
+            {
+                case TestType.KnowlegeTest: 
+                    MainViewModel.MainWindow.Title = this.Title + " знаний"; break;
+                case TestType.OrientationTest: 
+                    MainViewModel.MainWindow.Title = this.Title + " направленности личности"; break;
+            }
+            
             MainViewModel.AllButtonsHover(this.Content);
         }
 
@@ -36,7 +43,8 @@ namespace PsychoTestProject.View
         {
             if (MainViewModel.TestStarted)
             {
-                if (WpfMessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (WpfMessageBox.Show("Вы точно хотите покинуть тест?", "Выход из теста", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     Exit();
                 }

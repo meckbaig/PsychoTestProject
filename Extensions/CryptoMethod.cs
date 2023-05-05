@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PsychoTestProject.View;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,17 @@ namespace PsychoTestProject.Extensions
 
         public static byte[] Decrypt(string data)
         {
-            return Decrypt(File.ReadAllBytes(data));
+            if (File.Exists(data))
+                return Decrypt(File.ReadAllBytes(data));
+            else
+            {
+                string file = Path.GetFileName(data);
+                if (file.Length > 40)
+                    file = file.Remove(40) + "...";
+                WpfMessageBox.Show($"Файл \"{file}\" в папке \"{Path.GetFileName(Path.GetDirectoryName(data))}\" отсутствует. " +
+                    $"Проверьте правильность введённых данных или обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+                return new byte[0];
+            }
         }
 
         public static byte[] Decrypt(byte[] data)

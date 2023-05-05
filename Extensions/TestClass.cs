@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace PsychoTestProject.Extensions
         public string Name { get; set; }
         private ObservableCollection<QuestionClass> questions;
         public ObservableCollection<QuestionClass> Questions { get => questions ?? (questions = ParseFile(Filename)); }
-        public string Filename { get; set; }
+        public string Filename { get; set; } 
         public bool UseTake { get; set; }
         public int Take { get; set; }
         public bool Error { get; set; } = false;
@@ -30,8 +31,10 @@ namespace PsychoTestProject.Extensions
         {
             try
             {
-                if (Filename != null && !Error)
+                if (Filename != null)
                 {
+                    if (Error)
+                        return null;
                     var questionList = new List<QuestionClass>();
                     XmlDocument doc = new XmlDocument();
                     doc.LoadXml(Encoding.UTF8.GetString(CryptoMethod.Decrypt(fileName)));
@@ -40,6 +43,7 @@ namespace PsychoTestProject.Extensions
                     var items = root.ChildNodes;
                     int questionId = 1;
                     Take = Int32.Parse(root.Attributes["Take"]?.Value ?? questionList.Count.ToString());
+                    Debug.Print($"Reading started...");
                     foreach (XmlElement item in items)
                     {
                         QuestionClass question = new QuestionClass();
@@ -54,6 +58,7 @@ namespace PsychoTestProject.Extensions
                                 throw new Exception();
                             question.IsExact = Convert.ToBoolean(item.Attributes["IsExact"].Value);
                         }
+                        question.YesNo = Convert.ToBoolean(item.Attributes["YesNo"]?.Value ?? "False");
                         int answerCount = 1;
                         foreach (XmlElement answ in item.ChildNodes)
                         {
@@ -61,13 +66,19 @@ namespace PsychoTestProject.Extensions
                             answer.Id = answerCount++;
                             answer.Text = answ.Attributes["Text"].Value;
                             answer.IsCorrect = Convert.ToBoolean(answ.Attributes["IsCorrect"].Value);
-                            answer.Value = Convert.ToInt32(answ.Attributes["Value"]?.Value ?? "1");
+                            if (answer.IsCorrect)
+                                answer.Value = Convert.ToInt32(answ.Attributes["Value"]?.Value ?? "1");
+                            else
+                                answer.Value = 0;
                             question.Answers.Add(answer);
+                            Debug.Print($"   answer {answerCount - 1} done");
                         }
                         questionList.Add(question);
+                        Debug.Print($"question {questionId - 1} done");
                     }
                     if (UseTake)
                         questionList = Supporting.Shuffle(questionList).Take(Take).ToList();
+                    Debug.Print($"\"{Name}\" - done!");
                     return new ObservableCollection<QuestionClass>(questionList);
                 }
                 else { return new ObservableCollection<QuestionClass>(); }

@@ -21,7 +21,9 @@ namespace PsychoTestProject.ViewModel
     {
         public string Title { get; set; }
         public int[] AnswersArray { get; set; }
+        public int[] NegativeAnswersArray { get; set; }
         public Thickness Margin { get; set; }
+        public Visibility BackButtonVisibility { get; set; } = Visibility.Visible;
 
 
         public QuestionClass CurrentQuestion

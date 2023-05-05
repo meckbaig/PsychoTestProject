@@ -29,17 +29,25 @@ namespace PsychoTestProject.View.TestKinds
     {
         MultiTestViewModel viewModel;
 
-        public MultiTest(int testId)
+        public MultiTest(TestType testType, TestClass test = null)
         {
-            switch (testId)
+            switch (testType)
             {
-                case 0: viewModel = new AizenkTestViewModel(); break;
-                case 1: viewModel = new LeongardTestViewModel(); break;
-                case 2: viewModel = new ProTestViewModel(); break;
+                case TestType.AizenkTest:      
+                    viewModel = new AizenkTestViewModel(); break;
+                case TestType.LeongardTest:    
+                    viewModel = new LeongardTestViewModel(); break;
+                case TestType.ProTest:         
+                    viewModel = new ProTestViewModel(); break;
+                case TestType.OrientationTest: 
+                    viewModel = new OrientationTestViewModel(test);
+                    viewModel.BackButtonVisibility = Visibility.Hidden; break;
             }
             if (MainViewModel.CurrentTest?.Questions?.Count > 0)
             {
                 viewModel.AnswersArray = new int[MainViewModel.CurrentTest.Questions.Count];
+                if (MainViewModel.CurrentTest.Questions[0].YesNo)
+                    viewModel.NegativeAnswersArray = new int[MainViewModel.CurrentTest.Questions.Count];
                 DataContext = viewModel;
                 MainViewModel.MainWindow.Title = viewModel.Title;
                 InitializeComponent();
@@ -49,18 +57,20 @@ namespace PsychoTestProject.View.TestKinds
 
         private void Question_Loaded(object sender, RoutedEventArgs e)
         {
-            Question.Initialize(false, true);
+            Question.Initialize(true, false, MainViewModel.CurrentTest.Questions[0].YesNo);
         }
 
         private void NextQuestion(object sender, EventArgs e)
         {
             //viewModel.PrintResults(ThisGrid, Scroll);
             viewModel.AnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswer();
+            if (viewModel.NegativeAnswersArray?.Count() > 0)
+                viewModel.NegativeAnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswerYesNo(false);
             var nextQuestion = viewModel.NextQuestion();
 
             if (nextQuestion != null)
             {
-                Question.Initialize(nextQuestion, false);
+                Question.Initialize(nextQuestion, false, nextQuestion.YesNo);
             }
             else
             {

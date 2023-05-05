@@ -79,6 +79,7 @@ namespace PsychoTestProject.View.TestKinds
             MainViewModel.MouseHover(btn);
         }
 
+        
         private ObservableCollection<QuestionPreview> Load(TestClass test, int[] answers)
         {
             ObservableCollection<QuestionPreview> questionPreviews = new ObservableCollection<QuestionPreview>();
@@ -92,7 +93,7 @@ namespace PsychoTestProject.View.TestKinds
                 {
                     Question = question,
                     AnswerId = question.Id - 1,
-                    AnswerText = question.Answers.First(a => a.Value == value && a.IsCorrect == isCorrect).Text
+                    AnswerText = question.Answers.First(a => (a.Value == value || a.Value==0) && a.IsCorrect == isCorrect).Text
                 };
                 questionPreviews.Add(questionPreview);
             }

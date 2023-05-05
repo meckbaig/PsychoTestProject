@@ -21,6 +21,7 @@ namespace PsychoTestProject.View
     /// </summary>
     public partial class TestEditor : Page
     {
+        int previousSelected = -2;
         public TestEditor()
         {
             InitializeComponent();
@@ -41,6 +42,17 @@ namespace PsychoTestProject.View
             //}
             //else
             //    MainViewModel.Back();
+        }
+
+        private void ListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ListBox.SelectedIndex == previousSelected)
+            {
+                ListBox.SelectedItem = null;
+                previousSelected = -2;
+            }
+            else
+                previousSelected = ListBox.SelectedIndex;
         }
     }
 }

@@ -28,6 +28,9 @@ using Ionic.Zlib;
 using System.Xml;
 using System.Windows.Shell;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
+using System.Windows.Threading;
+using ScottPlot.Ticks.DateTimeTickUnits;
 
 namespace PsychoTestProject
 {
@@ -82,14 +85,31 @@ namespace PsychoTestProject
         {
             if (Path.GetExtension(fileName) == ".psychoExp")
             {
-                DecodeExtract(fileName);
-                WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox mBox = new WpfMessageBox("", "Импорт файлов...", WpfMessageBox.MessageBoxType.Information);
+                Task task = new Task(() =>
+                {
+                    DecodeExtract(mBox, fileName);
+                });
+                task.Start();
+
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromMilliseconds(100);
+                timer.Tick += (s, e) =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        mBox.CloseMessage();
+                        WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                        timer.Stop();
+                    }
+                };
+                timer.Start();
             }
             else
                 WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private static void DecodeExtract(string fileName)
+        private static void DecodeExtract(WpfMessageBox mBox, string fileName)
         {
             string tmpPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
             if (Path.GetExtension(fileName) == ".psychoExp")
@@ -97,15 +117,19 @@ namespace PsychoTestProject
             else
                 Directory.CreateDirectory(tmpPath);
             string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
+
+            mBox.ChangeMessage($"Импортирую {Path.GetFileName(fileName)}");
             File.WriteAllBytes(zipPath, CryptoMethod.Decrypt(fileName));
+
             ExtractFiles(zipPath, tmpPath);
             File.Delete(zipPath);
+
 
             foreach (string file in Directory.GetFiles(tmpPath))
             {
                 if (Path.GetExtension(file) == ".tmp")
                 {
-                    DecodeExtract(file);
+                    DecodeExtract(mBox, file);
                     File.Delete(file);
                 }
             }
@@ -137,15 +161,32 @@ namespace PsychoTestProject
                 string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
                 Directory.CreateDirectory(tmpPath);
 
-                File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(Path.Combine(Environment.CurrentDirectory, "Lections")));
-                File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(Path.Combine(Environment.CurrentDirectory, "Tests")));
-                File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(tmpPath));
-                Directory.Delete(tmpPath, true);
-                WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox mBox = new WpfMessageBox("", "Экспорт файлов...", WpfMessageBox.MessageBoxType.Information);
+                Task task = new Task(() =>
+                {
+                    File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Lections")));
+                    File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Tests")));
+                    File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(mBox, tmpPath));
+                    Directory.Delete(tmpPath, true);
+                });
+                task.Start();
+
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromMilliseconds(100);
+                timer.Tick += (s, e) =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        mBox.CloseMessage();
+                        WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                        timer.Stop();
+                    }
+                };
+                timer.Start();
             }
         }
 
-        public static void AppendFilesToZip(string filePath, string zipPath)
+        public async static void AppendFilesToZip(string filePath, string zipPath)
         {
             using (ZipFile zip = ZipFile.Read(zipPath))
             {
@@ -156,7 +197,8 @@ namespace PsychoTestProject
                 zip.Save();
             }
         }
-        public static byte[] CreateCryptedZip(string folderPath, bool skipFolders=false)
+
+        public static byte[] CreateCryptedZip(WpfMessageBox mBox, string folderPath, bool skipFolders=false)
         {
             string zipPath = folderPath+"_tmp.zip";
             using (var zipFile = new ZipFile())
@@ -166,6 +208,7 @@ namespace PsychoTestProject
             }
             foreach (string file in Directory.GetFiles(folderPath))
             {
+                mBox.ChangeMessage($"Экспортирую {Path.GetFileName(file)}");
                 AppendFilesToZip(file, zipPath);
             }
             if (!skipFolders)
@@ -175,7 +218,7 @@ namespace PsychoTestProject
                     if (Directory.GetFiles(subFolder).Length > 0 || Directory.GetDirectories(subFolder).Length > 0)
                     {
                         string tmpSubFolderPath = subFolder+".tmp";
-                        File.WriteAllBytes(tmpSubFolderPath, CreateCryptedZip(subFolder));
+                        File.WriteAllBytes(tmpSubFolderPath, CreateCryptedZip(mBox, subFolder));
                         AppendFilesToZip(tmpSubFolderPath, zipPath);
                         File.Delete(tmpSubFolderPath);
                     }
@@ -276,23 +319,28 @@ namespace PsychoTestProject
 
         private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(0);
+            MultiTest multiTest = new MultiTest(TestType.AizenkTest);
             if (!MainViewModel.CurrentTest.Error)
                 MainViewModel.MainFrame.Navigate(multiTest);
         }
 
         private void LeongardTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(1);
+            MultiTest multiTest = new MultiTest(TestType.LeongardTest);
             if (!MainViewModel.CurrentTest.Error)
                 MainViewModel.MainFrame.Navigate(multiTest);
         }
 
         private void ProTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(2);
+            MultiTest multiTest = new MultiTest(TestType.ProTest);
             if (!MainViewModel.CurrentTest.Error)
                 MainViewModel.MainFrame.Navigate(multiTest);
+        }
+
+        private void OrientationTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new Tests(TestType.OrientationTest));
         }
     }
 }

@@ -66,15 +66,9 @@ namespace PsychoTestProject.View.TestKinds
 
         private void CreatePicture(int imageNumber, bool createMouseDown = true)
         {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.UriSource = new Uri(dictionary.NumberSources[imageNumber]);
-            bitmap.EndInit();
-
             Image newImage = new Image();
             //newImage.Source = image;
-            newImage.Source = bitmap;
+            newImage.Source = MainViewModel.GetBitmap(dictionary.NumberSources[imageNumber]);
             newImage.Name = $"img{imageNumber}";
             ImageSizeChange(newImage);
             newImage.Stretch = Stretch.Fill;
@@ -111,7 +105,6 @@ namespace PsychoTestProject.View.TestKinds
                         PreviousNumber--;
                         Image_MouseDown(sender, e);
                     }
-
                 }
                 else 
                 {

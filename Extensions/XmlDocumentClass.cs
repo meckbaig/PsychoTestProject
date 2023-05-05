@@ -34,11 +34,12 @@ namespace PsychoTestProject.Extensions
             XmlDoc.AppendChild(Array);
         }
 
-        public void Save()
+        public void Save(string savePath = null)
         {
-            string path = Environment.CurrentDirectory + "\\Tests\\" + CurrentTest.Name + ".xml";
-            XmlDoc.Save(path);
-            File.WriteAllBytes(path, CryptoMethod.Encrypt(path));
+            if (savePath == null)
+                savePath = Environment.CurrentDirectory + "\\Tests\\" + CurrentTest.Name + ".xml";
+            XmlDoc.Save(savePath);
+            File.WriteAllBytes(savePath, CryptoMethod.Encrypt(savePath));
         }
 
         public XmlElement AddQuestions(XmlElement array)
@@ -79,6 +80,8 @@ namespace PsychoTestProject.Extensions
             questionElement.Attributes.Append(AddAttribute("AnswersTarget", question.AnswersTarget.ToString()));
             if (question.Type == QuestionType.String)
                 questionElement.Attributes.Append(AddAttribute("IsExact", question.IsExact.ToString()));
+            else
+                questionElement.Attributes.Append(AddAttribute("YesNo", question.YesNo.ToString()));
             questionElement = AddAnswers(questionElement, question);
 
             return questionElement;

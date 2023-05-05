@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Test">
 
-    <Grid x:Name="QuestionGrid" Background="White" SizeChanged="Grid_SizeChanged">
+    <Grid x:Name="QuestionGrid" Background="Azure" SizeChanged="Grid_SizeChanged">
         <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding ElementName=testPage, Path=DataContext.Picture}" Stretch="UniformToFill"/>
         <ScrollViewer Focusable="False">
             <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" 
