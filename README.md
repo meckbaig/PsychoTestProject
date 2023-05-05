@@ -12,7 +12,8 @@
 ✔ Perseverance test<br/>
 ✔ Custom message boxes<br/>
 ✔ Professionalism test<br/>
-● Personality orientation test<br/>
+✔ Personality orientation test<br/>
+✔ Dynamic Import/Export files display<br/>
 ● Picture test<br/>
 ● Admin app<br/>
 ● Tests descriptions<br/>
