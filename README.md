@@ -1,8 +1,8 @@
 ### How to use:
 1. Build both PsychoTestControlPanel and PsychoTest projects
-2. Open PsychoTestControlPanel and choose folder with release of PsychoTestProject.exe
+2. Run PsychoTestControlPanel and choose folder with release of PsychoTestProject
 3. Set a password
-4. Open PsychoTestProject.exe and import last version of file with ".psychoExp" extension
+4. Run PsychoTestProject and import last version of file with ".psychoExp" extension from folder "Resources"
 
 ### Roadmap:
 ✔ Regular tests<br/>
