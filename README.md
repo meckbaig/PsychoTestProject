@@ -1,5 +1,10 @@
-## Roadmap
+### How to use:
+1. Build both PsychoTestControlPanel and PsychoTest projects
+2. Open PsychoTestControlPanel and choose folder with release of PsychoTestProject.exe
+3. Set a password
+4. Open PsychoTestProject.exe and import last version of file with ".psychoExp" extension
 
+### Roadmap:
 ✔ Regular tests<br/>
 ✔ HTML lection<br/>
 ✔ Editor for regular tests<br/>
