@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychoTestProject", "Psycho
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\Setup\Setup.vdproj", "{B7F0096C-58A6-4066-A313-BF58E7F16DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychoTestControlPanel", "..\PsychoTestControlPanel\PsychoTestControlPanel.csproj", "{44C55FDD-017D-4BC8-99AD-191E22B242D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychoTestControlPanel", "PsychoTestControlPanel\PsychoTestControlPanel.csproj", "{44C55FDD-017D-4BC8-99AD-191E22B242D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,26 @@
+﻿<Page x:Class="PsychoTestControlPanel.ChoosePath"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PsychoTestControlPanel"
+      mc:Ignorable="d" 
+      d:DesignHeight="200" d:DesignWidth="550"
+      Title="ChoosePath">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" TextAlignment="Center"
+             Text="Укажите путь к папке программы" Margin="5" FontSize="23"/>
+            <TextBox x:Name="PathTB" Margin="5" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="40" Width="130" Content="Назад" Margin="5" 
+                 Background="#FFFF8F6C" Click="BackButton_Click" FontSize="16" Visibility="{Binding ShowBackButton}"/>
+                <Button Height="40" Width="130" Content="Выбрать папку" Margin="5" 
+                 Click="PathButton_Click" FontSize="16"/>
+                <Button Height="40" Width="130" Content="Применить" Margin="5" 
+                 Background="#FF6CFFB6" Click="ApplyButton_Click" FontSize="16"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
