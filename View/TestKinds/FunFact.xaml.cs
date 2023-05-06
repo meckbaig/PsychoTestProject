@@ -1,4 +1,5 @@
 ﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace PsychoTestProject.View.TestKinds
     /// </summary>
     public partial class FunFact : Page, INotifyPropertyChanged
     {
-        public string Picture { get; set; }
+        public BitmapImage Picture { get; set; }
         public string PeopleNameText { get; set; }
         public string PeopleDiscripitonText { get; set; }
         public double TitleFont { get => ActualWidth / 18.5; }
@@ -43,7 +44,7 @@ namespace PsychoTestProject.View.TestKinds
             string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{type}");
             var sdf = Supporting.Shuffle(Directory.GetDirectories(typeFolder).ToList());
             string peoplePath = sdf[0];
-            Picture = Directory.GetFiles(peoplePath, "*.jpg")[0];
+            Picture = MainViewModel.GetBitmap(Directory.GetFiles(peoplePath, "*.jpg")[0]);
 
             string information = Directory.GetFiles(peoplePath, "*.xml")[0];
             XmlDocument xml = new XmlDocument();

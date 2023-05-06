@@ -41,11 +41,18 @@ namespace PsychoTestProject.View
 
         public static bool Show()
         {
-            _dialog = new EnterPasswordDialog();
-            _dialog.ShowDialog();
-            bool result = _result;
-            _result = false;
-            return result;
+            try
+            {
+                _dialog = new EnterPasswordDialog();
+                _dialog.ShowDialog();
+                bool result = _result;
+                _result = false;
+                return result;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         private void Continue()
         {

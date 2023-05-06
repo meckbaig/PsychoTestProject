@@ -16,6 +16,7 @@ namespace PsychoTestProject.Extensions
 {
     internal class CryptoMethod
     {
+        static bool error = false;
         public static byte[] Encrypt(string data)
         {
             return Encrypt(File.ReadAllBytes(data));
@@ -63,68 +64,96 @@ namespace PsychoTestProject.Extensions
 
         public static void Export()
         {
-            SaveFileDialog fileDialog = new SaveFileDialog()
+            try
             {
-                Title = "Сохранение файлов",
-                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
-                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
-            };
-            if (fileDialog.ShowDialog() == true)
-            {
-                string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
-                Directory.CreateDirectory(tmpPath);
-
-                WpfMessageBox mBox = new WpfMessageBox("", "Экспорт файлов...", WpfMessageBox.MessageBoxType.Information);
-                Task task = new Task(() =>
+                SaveFileDialog fileDialog = new SaveFileDialog()
                 {
-                    File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Lections")));
-                    File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Tests")));
-                    File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(mBox, tmpPath));
-                    Directory.Delete(tmpPath, true);
-                });
-                task.Start();
-
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(100);
-                timer.Tick += (s, e) =>
-                {
-                    if (task.IsCompleted)
-                    {
-                        mBox.CloseMessage();
-                        WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
-                        timer.Stop();
-                    }
+                    Title = "Сохранение файлов",
+                    FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
+                    Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
                 };
-                timer.Start();
+                if (fileDialog.ShowDialog() == true)
+                {
+                    error = false;
+                    string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
+                    Directory.CreateDirectory(tmpPath);
+
+                    WpfMessageBox mBox = new WpfMessageBox("", "Экспорт файлов...", WpfMessageBox.MessageBoxType.Information);
+                    Task task = new Task(() =>
+                    {
+                        File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Lections")));
+                        File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Tests")));
+                        File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(mBox, tmpPath));
+                        Directory.Delete(tmpPath, true);
+                    });
+                    task.Start();
+
+                    DispatcherTimer timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(100);
+                    timer.Tick += (s, e) =>
+                    {
+                        if (task.IsCompleted)
+                        {
+                            mBox.CloseMessage();
+                            if (!error)
+                                WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                            else
+                            {
+                                WpfMessageBox.Show("Импорт прерван", WpfMessageBox.MessageBoxType.Error);
+                                Directory.Delete(fileDialog.FileName);
+                            }
+                            timer.Stop();
+                        }
+                    };
+                    timer.Start();
+                }
+            }
+            catch (Exception)
+            {
+                error = true;
             }
         }
 
         public static void Import(string fileName)
         {
-            if (Path.GetExtension(fileName) == ".psychoExp")
+            try
             {
-                WpfMessageBox mBox = new WpfMessageBox("", "Импорт файлов...", WpfMessageBox.MessageBoxType.Information);
-                Task task = new Task(() =>
+                if (Path.GetExtension(fileName) == ".psychoExp")
                 {
-                    DecodeExtract(mBox, fileName);
-                });
-                task.Start();
-
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(100);
-                timer.Tick += (s, e) =>
-                {
-                    if (task.IsCompleted)
+                    error = false;
+                    WpfMessageBox mBox = new WpfMessageBox("", "Импорт файлов...", WpfMessageBox.MessageBoxType.Information);
+                    Task task = new Task(() =>
                     {
-                        mBox.CloseMessage();
-                        WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
-                        timer.Stop();
-                    }
-                };
-                timer.Start();
+                        DecodeExtract(mBox, fileName);
+                    });
+                    task.Start();
+
+                    DispatcherTimer timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(100);
+                    timer.Tick += (s, e) =>
+                    {
+                        if (task.IsCompleted)
+                        {
+                            mBox.CloseMessage();
+                            if (!error)
+                                WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                            else
+                            {
+                                WpfMessageBox.Show("Импорт прерван.", WpfMessageBox.MessageBoxType.Error); 
+                            }
+                            timer.Stop();
+                        }
+                    };
+                    timer.Start();
+                }
+                else
+                    WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            else
-                WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            catch (Exception)
+            {
+                error = true;
+            }
+
         }
 
         private static void DecodeExtract(WpfMessageBox mBox, string fileName)
@@ -155,14 +184,24 @@ namespace PsychoTestProject.Extensions
 
         private static void ExtractFiles(string zipPath, string outFolder)
         {
-            using (var zip = ZipFile.Read(zipPath))
+            if (error)
+                return;
+            try
             {
-                zip.AlternateEncodingUsage = ZipOption.Always;
-                zip.AlternateEncoding = Encoding.UTF8;
-                foreach (ZipEntry e in zip)
+                using (var zip = ZipFile.Read(zipPath))
                 {
-                    e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
+                    zip.AlternateEncodingUsage = ZipOption.Always;
+                    zip.AlternateEncoding = Encoding.UTF8;
+                    foreach (ZipEntry e in zip)
+                    {
+                        e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+                error = true;
             }
         }
 

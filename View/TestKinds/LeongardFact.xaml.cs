@@ -1,4 +1,5 @@
 ﻿using PsychoTestProject.Extensions;
+using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +26,7 @@ namespace PsychoTestProject.View.TestKinds
     public partial class LeongardFact : Page, INotifyPropertyChanged
     {
         public int ID { get; set; }
-        public string Picture { get; set; }
+        public BitmapImage Picture { get; set; }
         public string TitleText { get; set; }
         public string DiscripitonText { get; set; }
         public double TitleFont { get => (ActualWidth>0) ? ActualWidth / 18.5 : 27; }
@@ -44,7 +45,7 @@ namespace PsychoTestProject.View.TestKinds
             try
             {
                 string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест «Акцентуации характера К. Леонгард»\\{type}");
-                Picture = Directory.GetFiles(typeFolder, "*.jpg")[0];
+                Picture = MainViewModel.GetBitmap(Directory.GetFiles(typeFolder, "*.jpg")[0]);
 
                 string file = Directory.GetFiles(typeFolder, "*.txt")[0];
                 TitleText = Path.GetFileNameWithoutExtension(file);
