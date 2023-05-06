@@ -39,7 +39,7 @@
                 BorderBrush="{x:Null}" Click="LectionsButton_Click" Margin="0,50,0,0" VerticalAlignment="Top"/>
 
         <Button x:Name="LeongardTestButton" Style="{StaticResource TestButtonStyle}" Click="LeongardTestButton_Click">
-            <TextBlock  Text="Тест акцентуации характера К. Леонгард" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock  Text="Тест акцентуации характера Леонгард" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button x:Name="PeoplePictureTestButton" Style="{StaticResource TestButtonStyle}">
             <TextBlock  Text="Тест по картинкам" TextWrapping="Wrap" TextAlignment="Center"/>

@@ -43,13 +43,16 @@ namespace PsychoTestProject.View
         {
             _dialog = new EnterPasswordDialog();
             _dialog.ShowDialog();
-            return _result;
+            bool result = _result;
+            _result = false;
+            return result;
         }
         private void Continue()
         {
             if (Password.Password == _password)
             {
                 _result = true;
+                _dialog = null;
                 Close();
             }
             else
@@ -60,6 +63,7 @@ namespace PsychoTestProject.View
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            _dialog = null;
             Close();
         }
 

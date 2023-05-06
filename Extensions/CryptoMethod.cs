@@ -61,18 +61,6 @@ namespace PsychoTestProject.Extensions
         }
 
 
-        public async static void AppendFilesToZip(string filePath, string zipPath)
-        {
-            using (ZipFile zip = ZipFile.Read(zipPath))
-            {
-                zip.AlternateEncodingUsage = ZipOption.Always;
-                zip.AlternateEncoding = Encoding.UTF8;
-                zip.CompressionLevel = CompressionLevel.Default;
-                zip.AddFile(filePath, ""); ;
-                zip.Save();
-            }
-        }
-
         public static void Export()
         {
             SaveFileDialog fileDialog = new SaveFileDialog()
@@ -207,6 +195,18 @@ namespace PsychoTestProject.Extensions
             byte[] result = Encrypt(zipPath);
             File.Delete(zipPath);
             return result;
+        }
+
+        private async static void AppendFilesToZip(string filePath, string zipPath)
+        {
+            using (ZipFile zip = ZipFile.Read(zipPath))
+            {
+                zip.AlternateEncodingUsage = ZipOption.Always;
+                zip.AlternateEncoding = Encoding.UTF8;
+                zip.CompressionLevel = CompressionLevel.Default;
+                zip.AddFile(filePath, ""); ;
+                zip.Save();
+            }
         }
     }
 }
