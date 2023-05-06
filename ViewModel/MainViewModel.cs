@@ -36,7 +36,7 @@ namespace PsychoTestProject.ViewModel
 
         public static PerseveranceTest PerseveranceTest { get; set; }
 
-        public static MainWindow MainWindow;
+        public static MainWindow MainWindow { get; set; }
 
         public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
         public static Frame? MainFrame { get; set; }
@@ -50,13 +50,6 @@ namespace PsychoTestProject.ViewModel
         {
             CurrentTest = null;
             MainFrame.Content = null;
-            MainFrame.Navigate(new Welcome());
-            MainWindow.Title = "PsychoTest";
-        }
-        public static void Back(ref MultiTest multiTest)
-        {
-            CurrentTest = null;
-            multiTest = null;
             MainFrame.Navigate(new Welcome());
             MainWindow.Title = "PsychoTest";
         }

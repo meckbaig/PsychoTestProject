@@ -139,7 +139,7 @@ namespace PsychoTestProject.View
         }
         public static MessageBoxResult Show(string message)
         {
-            return Show(string.Empty, message,
+            return Show(message, string.Empty, 
             MessageBoxButton.OK, MessageBoxImage.None);
         }
         public static MessageBoxResult Show

@@ -265,7 +265,8 @@ namespace PsychoTestProject
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new TestEditor());
+            if (EnterPasswordDialog.Show())
+                MainViewModel.MainFrame.Navigate(new TestEditor());
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)

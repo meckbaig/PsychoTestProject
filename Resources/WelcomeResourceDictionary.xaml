@@ -55,7 +55,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"  CornerRadius="8">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="8">
                         <Grid>
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
