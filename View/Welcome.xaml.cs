@@ -1,36 +1,21 @@
-﻿using PsychoTestProject.View;
+﻿using Ionic.Zip;
+using Ionic.Zlib;
+using Microsoft.Win32;
+using PsychoTestProject.Extensions;
+using PsychoTestProject.View;
+using PsychoTestProject.View.TestKinds;
 using PsychoTestProject.ViewModel;
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Media.Animation;
-using System.Drawing.Printing;
-using PsychoTestProject.Extensions;
-using System.Threading;
-using PsychoTestProject.View.TestKinds;
-using Microsoft.Win32;
-using Microsoft.VisualBasic.FileIO;
-using Ionic.Zip;
-using Ionic.Zlib;
-using System.Xml;
-using System.Windows.Shell;
-using System.Drawing.Drawing2D;
-using System.Diagnostics;
 using System.Windows.Threading;
-using ScottPlot.Ticks.DateTimeTickUnits;
 
 namespace PsychoTestProject
 {
@@ -54,7 +39,7 @@ namespace PsychoTestProject
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
-                Import(args[1]);
+                CryptoMethod.Import(args[1]);
             }
             MainViewModel.AllButtonsHover(this.Content);
             OpenedToAnimate = ShowOrHide = true;
@@ -81,154 +66,6 @@ namespace PsychoTestProject
             }
         }
 
-        private static void Import(string fileName)
-        {
-            if (Path.GetExtension(fileName) == ".psychoExp")
-            {
-                WpfMessageBox mBox = new WpfMessageBox("", "Импорт файлов...", WpfMessageBox.MessageBoxType.Information);
-                Task task = new Task(() =>
-                {
-                    DecodeExtract(mBox, fileName);
-                });
-                task.Start();
-
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(100);
-                timer.Tick += (s, e) =>
-                {
-                    if (task.IsCompleted)
-                    {
-                        mBox.CloseMessage();
-                        WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
-                        timer.Stop();
-                    }
-                };
-                timer.Start();
-            }
-            else
-                WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private static void DecodeExtract(WpfMessageBox mBox, string fileName)
-        {
-            string tmpPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
-            if (Path.GetExtension(fileName) == ".psychoExp")
-                tmpPath = Environment.CurrentDirectory;
-            else
-                Directory.CreateDirectory(tmpPath);
-            string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
-
-            mBox.ChangeMessage($"Импортирую {Path.GetFileName(fileName)}");
-            File.WriteAllBytes(zipPath, CryptoMethod.Decrypt(fileName));
-
-            ExtractFiles(zipPath, tmpPath);
-            File.Delete(zipPath);
-
-
-            foreach (string file in Directory.GetFiles(tmpPath))
-            {
-                if (Path.GetExtension(file) == ".tmp")
-                {
-                    DecodeExtract(mBox, file);
-                    File.Delete(file);
-                }
-            }
-        }
-
-        public static void ExtractFiles(string zipPath, string outFolder)
-        {
-            using (var zip = ZipFile.Read(zipPath))
-            {
-                zip.AlternateEncodingUsage = ZipOption.Always;
-                zip.AlternateEncoding = Encoding.UTF8;
-                foreach (ZipEntry e in zip)
-                {
-                    e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
-                }
-            }
-        }
-
-        private static void Export()
-        {
-            SaveFileDialog fileDialog = new SaveFileDialog()
-            {
-                Title = "Сохранение файлов",
-                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
-                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
-            };
-            if (fileDialog.ShowDialog() == true)
-            {
-                string tmpPath = Path.Combine(Environment.CurrentDirectory, "tmp");
-                Directory.CreateDirectory(tmpPath);
-
-                WpfMessageBox mBox = new WpfMessageBox("", "Экспорт файлов...", WpfMessageBox.MessageBoxType.Information);
-                Task task = new Task(() =>
-                {
-                    File.WriteAllBytes(tmpPath + "\\Lections.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Lections")));
-                    File.WriteAllBytes(tmpPath + "\\Tests.tmp", CreateCryptedZip(mBox, Path.Combine(Environment.CurrentDirectory, "Tests")));
-                    File.WriteAllBytes(fileDialog.FileName, CreateCryptedZip(mBox, tmpPath));
-                    Directory.Delete(tmpPath, true);
-                });
-                task.Start();
-
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(100);
-                timer.Tick += (s, e) =>
-                {
-                    if (task.IsCompleted)
-                    {
-                        mBox.CloseMessage();
-                        WpfMessageBox.Show("Успешно экспортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
-                        timer.Stop();
-                    }
-                };
-                timer.Start();
-            }
-        }
-
-        public async static void AppendFilesToZip(string filePath, string zipPath)
-        {
-            using (ZipFile zip = ZipFile.Read(zipPath))
-            {
-                zip.AlternateEncodingUsage = ZipOption.Always;
-                zip.AlternateEncoding = Encoding.UTF8;
-                zip.CompressionLevel = CompressionLevel.Default;
-                zip.AddFile(filePath, ""); ;
-                zip.Save();
-            }
-        }
-
-        public static byte[] CreateCryptedZip(WpfMessageBox mBox, string folderPath, bool skipFolders=false)
-        {
-            string zipPath = folderPath+"_tmp.zip";
-            using (var zipFile = new ZipFile())
-            {
-                zipFile.CompressionLevel = CompressionLevel.Default;
-                zipFile.Save(zipPath);
-            }
-            foreach (string file in Directory.GetFiles(folderPath))
-            {
-                mBox.ChangeMessage($"Экспортирую {Path.GetFileName(file)}");
-                AppendFilesToZip(file, zipPath);
-            }
-            if (!skipFolders)
-            {
-                foreach (string subFolder in Directory.GetDirectories(folderPath))
-                {
-                    if (Directory.GetFiles(subFolder).Length > 0 || Directory.GetDirectories(subFolder).Length > 0)
-                    {
-                        string tmpSubFolderPath = subFolder+".tmp";
-                        File.WriteAllBytes(tmpSubFolderPath, CreateCryptedZip(mBox, subFolder));
-                        AppendFilesToZip(tmpSubFolderPath, zipPath);
-                        File.Delete(tmpSubFolderPath);
-                    }
-                }
-            }
-            byte[] result = CryptoMethod.Encrypt(zipPath);
-            File.Delete(zipPath);
-            return result;
-        }
-
         public static void CreateAnimation(Button b, int duration, double x, double y, double reverseX = 0, double reverseY = 0)
         {
             ThicknessAnimation animation = new ThicknessAnimation();
@@ -248,7 +85,7 @@ namespace PsychoTestProject
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                Import(files[0]);
+                CryptoMethod.Import(files[0]);
             }
         }
 
@@ -271,35 +108,53 @@ namespace PsychoTestProject
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog()
+
+            if (EnterPasswordDialog.Show())
             {
-                Title = "Выберите файл",
-                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
-                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
-            };
-            if (fileDialog.ShowDialog() == true)
-            {
-                Import(fileDialog.FileName);
+                OpenFileDialog fileDialog = new OpenFileDialog()
+                {
+                    Title = "Выберите файл",
+                    FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
+                    Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
+                };
+                if (fileDialog.ShowDialog() == true)
+                {
+                    CryptoMethod.Import(fileDialog.FileName);
+                }
             }
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (EnterPasswordDialog.Show())
             {
-                Export();
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                try
+                {
+                    CryptoMethod.Export();
+                }
+                catch (Exception ex)
+                {
+                    WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private void LectionsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Environment.OSVersion.Version.Major < 10)
-                WpfMessageBox.Show("Внимание!", "Текущая версия операционной системы не совместима с данным модулем программы.", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-                MainViewModel.MainFrame.Navigate(new Lections(false));
+            try
+            {
+                if (Environment.OSVersion.Version.Major < 10)
+                    WpfMessageBox.Show("Внимание!", "Текущая версия операционной системы не совместима с данным модулем программы.", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MainViewModel.MainFrame.Navigate(new Lections(false));
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы лекций отсутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void TestsButton_Click(object sender, RoutedEventArgs e)
@@ -309,39 +164,105 @@ namespace PsychoTestProject
 
         private void OpenTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new Tests());
+            try
+            {
+                MainViewModel.MainFrame.Navigate(new Tests());
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void PerseveranceTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.PerseveranceTest = new PerseveranceTest();
-            MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
+            try
+            {
+                MainViewModel.PerseveranceTest = new PerseveranceTest();
+                MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(TestType.AizenkTest);
-            if (!MainViewModel.CurrentTest.Error)
-                MainViewModel.MainFrame.Navigate(multiTest);
+            try
+            {
+                MultiTest multiTest = new MultiTest(TestType.AizenkTest);
+                if (!MainViewModel.CurrentTest.Error)
+                    MainViewModel.MainFrame.Navigate(multiTest);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void LeongardTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(TestType.LeongardTest);
-            if (!MainViewModel.CurrentTest.Error)
-                MainViewModel.MainFrame.Navigate(multiTest);
+            try
+            {
+                MultiTest multiTest = new MultiTest(TestType.LeongardTest);
+                if (!MainViewModel.CurrentTest.Error)
+                    MainViewModel.MainFrame.Navigate(multiTest);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void ProTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiTest multiTest = new MultiTest(TestType.ProTest);
-            if (!MainViewModel.CurrentTest.Error)
-                MainViewModel.MainFrame.Navigate(multiTest);
+            try
+            {
+                MultiTest multiTest = new MultiTest(TestType.ProTest);
+                if (!MainViewModel.CurrentTest.Error)
+                    MainViewModel.MainFrame.Navigate(multiTest);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void OrientationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.MainFrame.Navigate(new Tests(TestType.OrientationTest));
+            try
+            {
+                MainViewModel.MainFrame.Navigate(new Tests(TestType.OrientationTest));
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
     }
 }

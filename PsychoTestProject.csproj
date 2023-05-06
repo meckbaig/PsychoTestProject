@@ -13,6 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PsychoTestControlPanel\**" />
+    <EmbeddedResource Remove="PsychoTestControlPanel\**" />
+    <None Remove="PsychoTestControlPanel\**" />
+    <Page Remove="PsychoTestControlPanel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\align-center.png" />
     <None Remove="Resources\align-justify.png" />
     <None Remove="Resources\align-left.png" />

@@ -11,7 +11,7 @@
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Margin" Value="8"/> 
             <Setter Property="TextAlignment" Value="Center"/>
         </Style>
         <Style TargetType="Button">

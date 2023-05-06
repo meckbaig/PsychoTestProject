@@ -380,7 +380,7 @@ namespace PsychoTestProject.ViewModel
                 types.Add("Сангвиник");
             foreach (string t in types)
             {
-                text.Text += File.ReadAllText(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{t}"), "*.txt")[0])+"\n\n";
+                text.Text += Encoding.UTF8.GetString(CryptoMethod.Decrypt(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{t}"), "*.txt")[0]))+"\n\n";
             }
             return types;
         }
