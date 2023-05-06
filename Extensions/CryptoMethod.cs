@@ -149,7 +149,7 @@ namespace PsychoTestProject.Extensions
             string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
 
             mBox.ChangeMessage($"Импортирую {Path.GetFileName(fileName)}");
-            File.WriteAllBytes(zipPath, CryptoMethod.Decrypt(fileName));
+            File.WriteAllBytes(zipPath, Decrypt(fileName));
 
             ExtractFiles(zipPath, tmpPath);
             File.Delete(zipPath);
@@ -204,7 +204,7 @@ namespace PsychoTestProject.Extensions
                     }
                 }
             }
-            byte[] result = CryptoMethod.Encrypt(zipPath);
+            byte[] result = Encrypt(zipPath);
             File.Delete(zipPath);
             return result;
         }

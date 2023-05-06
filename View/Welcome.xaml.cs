@@ -82,11 +82,12 @@ namespace PsychoTestProject
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                CryptoMethod.Import(files[0]);
-            }
+            if (EnterPasswordDialog.Show())
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    CryptoMethod.Import(files[0]);
+                }
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
