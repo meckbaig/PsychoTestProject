@@ -34,7 +34,7 @@ namespace PsychoTestControlPanel
             DataContext = this;
             if (showBackButton)
                 ShowBackButton = Visibility.Visible;
-            MainViewModel.AllButtonsHover(this.Content);
+            CoolLook.AllButtonsHover(this.Content);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

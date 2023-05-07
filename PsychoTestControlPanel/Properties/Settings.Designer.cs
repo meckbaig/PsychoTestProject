@@ -34,5 +34,53 @@ namespace PsychoTestControlPanel.Properties {
                 this["PsychoTestPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OnlyTxtEncoding {
+            get {
+                return ((bool)(this["OnlyTxtEncoding"]));
+            }
+            set {
+                this["OnlyTxtEncoding"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool XmlFoolProtection {
+            get {
+                return ((bool)(this["XmlFoolProtection"]));
+            }
+            set {
+                this["XmlFoolProtection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool XmlAutoDirection {
+            get {
+                return ((bool)(this["XmlAutoDirection"]));
+            }
+            set {
+                this["XmlAutoDirection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OnlyXmlEncoding {
+            get {
+                return ((bool)(this["OnlyXmlEncoding"]));
+            }
+            set {
+                this["OnlyXmlEncoding"] = value;
+            }
+        }
     }
 }

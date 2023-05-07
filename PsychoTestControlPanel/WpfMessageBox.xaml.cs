@@ -45,13 +45,13 @@ namespace PsychoTestControlPanel
         {
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             InitializeComponent();
-            MainViewModel.AllButtonsHover(this.Content);
+            CoolLook.AllButtonsHover(this.Content);
             DataContext = this;
         }
         public WpfMessageBox(string message, string title, MessageBoxType type)
         {
             InitializeComponent();
-            MainViewModel.AllButtonsHover(this.Content);
+            CoolLook.AllButtonsHover(this.Content);
             DataContext = this;
             ShowMessage(message, title, type);
         }

@@ -40,7 +40,7 @@
             <Button Click="ChangePasswordButton_Click">
                 <TextBlock Text="Изменить пароль администратора"/>
             </Button>
-            <Button>
+            <Button Click="PolibiemButton_Click">
                 <TextBlock Text="Шифрование файлов"/>
             </Button>
         </StackPanel>

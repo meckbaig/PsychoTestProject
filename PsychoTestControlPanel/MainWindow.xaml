@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PsychoTestControlPanel"
         mc:Ignorable="d" Background="White"
-        Title="Панель управления" Height="200" Width="520" MinWidth="460" MinHeight="200" MaxHeight="300" MaxWidth="700" 
+        Title="Панель управления" Height="250" Width="520" ResizeMode="NoResize"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Frame x:Name="MainFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>

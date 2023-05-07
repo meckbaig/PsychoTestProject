@@ -24,7 +24,7 @@ namespace PsychoTestControlPanel
         public ChangePassword()
         {
             InitializeComponent();
-            MainViewModel.AllButtonsHover(Content);
+            CoolLook.AllButtonsHover(Content);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

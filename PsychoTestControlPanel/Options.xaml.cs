@@ -23,7 +23,7 @@ namespace PsychoTestControlPanel
         public Options()
         {
             InitializeComponent();
-            MainViewModel.AllButtonsHover(this.Content);
+            CoolLook.AllButtonsHover(this.Content);
         }
 
         private void ChangePathButton_Click(object sender, RoutedEventArgs e)
@@ -34,6 +34,11 @@ namespace PsychoTestControlPanel
         private void ChangePasswordButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.MainFrame.Navigate(new ChangePassword());
+        }
+
+        private void PolibiemButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.MainFrame.Navigate(new MainPage());
         }
     }
 }
