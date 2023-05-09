@@ -22,6 +22,8 @@ using System.Windows.Navigation;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using System.Text.Json.Nodes;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace PsychoTestProject
 {
@@ -46,14 +48,36 @@ namespace PsychoTestProject
 
         private async void InitializeBrowser()
         {
-            var env = await CoreWebView2Environment.CreateAsync(null, MainViewModel.UserDataFolder);
-            await Web.EnsureCoreWebView2Async(env);
-            Thread.Sleep(50);
-            DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
-            Thread.Sleep(50);
-            if (Admin)
-                Web.ExecuteScriptAsync("document.designMode = \"on\"");
-            MainViewModel.AllButtonsHover(this.Content);
+            try
+            {
+                var env = await CoreWebView2Environment.CreateAsync(null, MainViewModel.UserDataFolder);
+                await Web.EnsureCoreWebView2Async(env);
+                Thread.Sleep(50);
+                DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
+                Thread.Sleep(50);
+                if (Admin)
+                    Web.ExecuteScriptAsync("document.designMode = \"on\"");
+                MainViewModel.AllButtonsHover(this.Content);
+
+            }
+            catch (WebView2RuntimeNotFoundException)
+            {
+                switch (RuntimeInformation.OSArchitecture)
+                {
+                    case Architecture.X86:
+                        Process.Start(new ProcessStartInfo("https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/0b8bc328-68ba-4cef-bcbc-5814ebe9e775/Microsoft.WebView2.FixedVersionRuntime.113.0.1774.35.x86.cab") { UseShellExecute = true} );
+                        break;
+                    case Architecture.X64:
+                        Process.Start(new ProcessStartInfo("https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/aa9b4217-8ead-42f3-837d-9d42bab92d80/Microsoft.WebView2.FixedVersionRuntime.113.0.1774.35.x64.cab") { UseShellExecute = true} );
+                        break;
+                }
+                WpfMessageBox.Show("Для работы с данным модулем программы требуется установить программную среду Microsoft Edge WebView2.", WpfMessageBox.MessageBoxType.Error);
+                MainViewModel.Back();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
 
         }
 
