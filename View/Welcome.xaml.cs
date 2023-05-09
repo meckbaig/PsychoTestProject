@@ -141,7 +141,6 @@ namespace PsychoTestProject
             try
             {
                 Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections"), "*.html");
-                var env = CoreWebView2Environment.CreateAsync(null, MainViewModel.UserDataFolder);
                 if (Environment.OSVersion.Version.Major < 10)
                     WpfMessageBox.Show("Внимание!", "Текущая версия операционной системы не совместима с данным модулем программы.", MessageBoxButton.OK, MessageBoxImage.Error);
                 else
@@ -150,19 +149,6 @@ namespace PsychoTestProject
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
             {
                 WpfMessageBox.Show("Файлы лекций отсутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (WebView2RuntimeNotFoundException)
-            {
-                switch (RuntimeInformation.OSArchitecture)
-                {
-                    case Architecture.X86:
-                        System.Diagnostics.Process.Start("https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/0b8bc328-68ba-4cef-bcbc-5814ebe9e775/Microsoft.WebView2.FixedVersionRuntime.113.0.1774.35.x86.cab");
-                        break;
-                    case Architecture.X64:
-                        System.Diagnostics.Process.Start("https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/aa9b4217-8ead-42f3-837d-9d42bab92d80/Microsoft.WebView2.FixedVersionRuntime.113.0.1774.35.x64.cab");
-                        break;
-                }
-                WpfMessageBox.Show("Для работы с данным модулем программы требуется установить программную среду Microsoft Edge WebView2.", WpfMessageBox.MessageBoxType.Error);
             }
             catch (Exception ex)
             {
