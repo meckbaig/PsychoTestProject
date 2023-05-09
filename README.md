@@ -20,7 +20,7 @@
 ✔ Personality orientation test<br/>
 ✔ Dynamic Import/Export files display<br/>
 ✔ Admin password for editing (requires setting in admin app)<br/>
+✔ Admin app \<In progress\> <br/>
+✔ Tests descriptions<br/>
 ● Picture test<br/>
-▶ Admin app \<In progress\> <br/>
-● Tests descriptions<br/>
 ● Bug fixes...😨<br/>
