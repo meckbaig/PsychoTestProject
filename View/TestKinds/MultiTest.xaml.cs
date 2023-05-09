@@ -49,7 +49,6 @@ namespace PsychoTestProject.View.TestKinds
                 if (MainViewModel.CurrentTest.Questions[0].YesNo)
                     viewModel.NegativeAnswersArray = new int[MainViewModel.CurrentTest.Questions.Count];
                 DataContext = viewModel;
-                MainViewModel.MainWindow.Title = viewModel.Title;
                 InitializeComponent();
                 MainViewModel.MouseHover(BackButton);
             }

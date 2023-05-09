@@ -47,7 +47,7 @@ namespace PsychoTestProject.View.TestKinds
                 string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест «Акцентуации характера К. Леонгард»\\{type}");
                 Picture = MainViewModel.GetBitmap(Directory.GetFiles(typeFolder, "*.jpg")[0]);
 
-                string file = Directory.GetFiles(typeFolder, "*.txt")[0];
+                string file = Directory.GetFiles(typeFolder, "*.text")[0];
                 TitleText = Path.GetFileNameWithoutExtension(file);
                 DiscripitonText = Encoding.UTF8.GetString(CryptoMethod.Decrypt(file));
             }

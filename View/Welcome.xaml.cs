@@ -35,6 +35,7 @@ namespace PsychoTestProject
         AnimationClass animationClass { get; set; }
         public Welcome()
         {
+            MainViewModel.MainWindow.Title = "PsychoTest";
             InitializeComponent();
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
@@ -92,7 +93,6 @@ namespace PsychoTestProject
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel.PerseveranceTest = null;
             WpfMessageBox.Show($"Продукт предназначен для упрощения процесса обучения и тестирования по дисциплине «Основы психологии личности».\n" +
                             $"Пользователи: студенты и преподаватель дисциплины\n" +
                             $"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\n" +
@@ -143,6 +143,7 @@ namespace PsychoTestProject
         {
             try
             {
+                Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Lections"), "*.html");
                 if (Environment.OSVersion.Version.Major < 10)
                     WpfMessageBox.Show("Внимание!", "Текущая версия операционной системы не совместима с данным модулем программы.", MessageBoxButton.OK, MessageBoxImage.Error);
                 else
@@ -165,105 +166,32 @@ namespace PsychoTestProject
 
         private void OpenTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MainViewModel.MainFrame.Navigate(new Tests());
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.KnowlegeTest));
         }
 
         private void PerseveranceTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MainViewModel.PerseveranceTest = new PerseveranceTest();
-                MainViewModel.MainFrame.Navigate(MainViewModel.PerseveranceTest);
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.PerseveranceTest));
         }
 
         private void AizenkTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MultiTest multiTest = new MultiTest(TestType.AizenkTest);
-                if (!MainViewModel.CurrentTest.Error)
-                    MainViewModel.MainFrame.Navigate(multiTest);
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.AizenkTest));
         }
 
         private void LeongardTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MultiTest multiTest = new MultiTest(TestType.LeongardTest);
-                if (!MainViewModel.CurrentTest.Error)
-                    MainViewModel.MainFrame.Navigate(multiTest);
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.LeongardTest));
         }
 
         private void ProTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MultiTest multiTest = new MultiTest(TestType.ProTest);
-                if (!MainViewModel.CurrentTest.Error)
-                    MainViewModel.MainFrame.Navigate(multiTest);
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.ProTest));
         }
 
         private void OrientationTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MainViewModel.MainFrame.Navigate(new Tests(TestType.OrientationTest));
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
-            {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", WpfMessageBox.MessageBoxType.Error);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
-            }
+            MainViewModel.MainFrame.Navigate(new Transition(TestType.OrientationTest));
         }
     }
 }

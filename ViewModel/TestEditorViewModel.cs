@@ -63,7 +63,7 @@ namespace PsychoTestProject.ViewModel
         private ObservableCollection<TestClass> GetTestList()
         {
             ObservableCollection<TestClass> testList = new ObservableCollection<TestClass>();
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests"), "*.xml"))
+            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний"), "*.xml"))
             {
                 testList.Add(new TestClass(false) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
             }
@@ -104,7 +104,7 @@ namespace PsychoTestProject.ViewModel
                 editorPage.SaveQuestion();
                 string savePath;
                 if (MainViewModel.CurrentTest.Filename == null)
-                    savePath = Path.Combine(Environment.CurrentDirectory, "Tests", MainViewModel.CurrentTest.Name + ".xml");
+                    savePath = Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний", MainViewModel.CurrentTest.Name + ".xml");
                 else
                     savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), MainViewModel.CurrentTest.Name + ".xml");
 
@@ -135,7 +135,7 @@ namespace PsychoTestProject.ViewModel
                 xmlDocument = new XmlDocumentClass(Test);
                 xmlDocument.Save();
                 if (editorPage.Image != null)
-                    File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
+                    File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                 WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
             }

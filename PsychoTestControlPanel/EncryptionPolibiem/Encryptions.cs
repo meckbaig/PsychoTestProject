@@ -131,9 +131,9 @@ namespace PsychoTestControlPanel
                     result = false;
             }
 
-            if (Properties.Settings.Default.OnlyTxtEncoding == true)
+            if (Properties.Settings.Default.OnlyTextEncoding == true)
             {
-                if (Path.GetExtension(filePath) == ".txt")
+                if (Path.GetExtension(filePath) == ".text")
                     return true;
                 else
                     result = false;

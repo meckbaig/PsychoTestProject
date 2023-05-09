@@ -149,17 +149,16 @@ namespace PsychoTestProject.View
                 {
                     case QuestionType.Single:
                         var radioButton = new RadioButton();
-                        radioButton.Content = answer.Text;
+                        radioButton.Content = new TextBlock() { Text = answer.Text, TextWrapping = TextWrapping.Wrap};
                         item = radioButton;
                         break;
                     case QuestionType.Multiple:
                         var checkBox = new CheckBox();
                         item = checkBox;
-                        checkBox.Content = answer.Text;
+                        checkBox.Content = new TextBlock() { Text = answer.Text, TextWrapping = TextWrapping.Wrap };
                         break;
                     default:
-                        var textBox = new TextBox();
-                        textBox.TextWrapping = TextWrapping.Wrap;
+                        var textBox = new TextBox() { TextWrapping = TextWrapping.Wrap };
                         item = textBox;
                         break;
                 }

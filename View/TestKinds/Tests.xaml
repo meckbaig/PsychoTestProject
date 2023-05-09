@@ -31,7 +31,7 @@
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ListBox" Background="Azure" ItemsSource="{Binding TestList}" BorderThickness="0"
+        <ListBox x:Name="TestsListBox"  Background="Azure" ItemsSource="{Binding TestList}" BorderThickness="0" Loaded="ListBox_Loaded"
             HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,25" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>

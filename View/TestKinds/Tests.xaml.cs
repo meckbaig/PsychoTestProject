@@ -26,15 +26,7 @@ namespace PsychoTestProject.View
         public Tests(TestType testType = TestType.KnowlegeTest)
         {
             InitializeComponent();
-            DataContext = new TestsViewModel(TestFrame, testType);
-            switch (testType)
-            {
-                case TestType.KnowlegeTest: 
-                    MainViewModel.MainWindow.Title = this.Title + " знаний"; break;
-                case TestType.OrientationTest: 
-                    MainViewModel.MainWindow.Title = this.Title + " направленности личности"; break;
-            }
-            
+            DataContext = new TestsViewModel(TestFrame, testType);            
             MainViewModel.AllButtonsHover(this.Content);
         }
 
@@ -58,6 +50,11 @@ namespace PsychoTestProject.View
             MainViewModel.Back();
             Question.qTimer?.Stop();
             MainViewModel.TestStarted = false;
+        }
+
+        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            TestsListBox.SelectedIndex= 0;
         }
     }
 }

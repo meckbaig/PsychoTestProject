@@ -14,9 +14,13 @@
 
   <ItemGroup>
     <Compile Remove="PsychoTestControlPanel\**" />
+    <Compile Remove="View\TestKinds\ProTest\**" />
     <EmbeddedResource Remove="PsychoTestControlPanel\**" />
+    <EmbeddedResource Remove="View\TestKinds\ProTest\**" />
     <None Remove="PsychoTestControlPanel\**" />
+    <None Remove="View\TestKinds\ProTest\**" />
     <Page Remove="PsychoTestControlPanel\**" />
+    <Page Remove="View\TestKinds\ProTest\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -112,10 +116,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="View\TestKinds\ProTest\" />
   </ItemGroup>
 
 </Project>

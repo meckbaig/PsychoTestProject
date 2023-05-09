@@ -14,7 +14,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/WelcomeResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
         </ResourceDictionary>
     </Page.Resources>

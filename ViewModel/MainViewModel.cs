@@ -34,8 +34,6 @@ namespace PsychoTestProject.ViewModel
             }
         }
 
-        public static PerseveranceTest PerseveranceTest { get; set; }
-
         public static MainWindow MainWindow { get; set; }
 
         public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
@@ -51,7 +49,6 @@ namespace PsychoTestProject.ViewModel
             CurrentTest = null;
             MainFrame.Content = null;
             MainFrame.Navigate(new Welcome());
-            MainWindow.Title = "PsychoTest";
         }
 
         public static List<T> GetVisualChilds<T>(DependencyObject parent) where T : DependencyObject

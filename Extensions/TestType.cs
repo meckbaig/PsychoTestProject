@@ -12,6 +12,7 @@ namespace PsychoTestProject.Extensions
         AizenkTest,
         LeongardTest,
         ProTest,
-        OrientationTest
+        OrientationTest,
+        PerseveranceTest
     }
 }

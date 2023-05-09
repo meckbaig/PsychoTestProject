@@ -74,20 +74,8 @@ namespace PsychoTestProject.ViewModel
             string testPath = "";
             switch (TestType)
             {
-                case TestType.KnowlegeTest: testPath = "Tests"; 
-                TestTitle = "Тесты содержат вопросы трёх типов:\n" +
-                        "с одиночным выбором, с множественным выбором " +
-                        "и открытые вопросы со свободным ответом\n\n" +
-                        "На открытые вопросы с перечислением требуется " +
-                        "давать ответы с пробелом через запятую, например:\n" +
-                        "Ответ1, Ответ2, Ответ3\n\n" +
-                        "Критерии оценивания:\n" +
-                        "Оценка 5 - 86-100% правильных ответов\n" +
-                        "Оценка 4 - 76-85% правильных ответов\n" +
-                        "Оценка 3 - 61-75% правильных ответов\n" +
-                        "Оценка 2 - менее 60% правильных ответов";
-                    break;
-                case TestType.OrientationTest: testPath = "Tests\\Тест направленности личности"; break;
+                case TestType.KnowlegeTest: testPath = "Tests\\Тестирование знаний"; break;
+                case TestType.OrientationTest: testPath = "Tests\\Тестирование направленности личности"; break;
             }
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, testPath), "*.xml"))
             {

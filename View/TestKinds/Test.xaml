@@ -11,7 +11,7 @@
 
     <Grid x:Name="QuestionGrid" Background="Azure" SizeChanged="Grid_SizeChanged">
         <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding ElementName=testPage, Path=DataContext.Picture}" Stretch="UniformToFill"/>
-        <ScrollViewer Focusable="False">
+        <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Auto">
             <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=testPage, Path=DataContext.CurrentQuestion}" 
          Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" TimeOut="NextQuestion" Margin="{Binding ElementName=testPage, Path=DataContext.Margin}"/>
         </ScrollViewer>

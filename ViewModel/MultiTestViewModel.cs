@@ -19,7 +19,6 @@ namespace PsychoTestProject.ViewModel
 {
     abstract class MultiTestViewModel : INotifyPropertyChanged
     {
-        public string Title { get; set; }
         public int[] AnswersArray { get; set; }
         public int[] NegativeAnswersArray { get; set; }
         public Thickness Margin { get; set; }

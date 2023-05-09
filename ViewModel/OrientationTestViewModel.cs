@@ -15,7 +15,6 @@ namespace PsychoTestProject.ViewModel
 
         public OrientationTestViewModel(TestClass test) : base()
         {
-            Title = "Тест направленности личности";
             LoadTest(test);
         }
 
@@ -79,7 +78,7 @@ namespace PsychoTestProject.ViewModel
                     case 0: levelText += "баллов"; break;
                     default: levelText += "балла"; break;
                 }
-                levelText += $"\n{Encoding.UTF8.GetString(CryptoMethod.Decrypt(Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), "Определение направленности личности", $"{i}.txt")))}";
+                levelText += $"\n{Encoding.UTF8.GetString(CryptoMethod.Decrypt(Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), "Определение направленности личности", $"{i}.text")))}";
             }
             return levelText;
         }
@@ -174,7 +173,7 @@ namespace PsychoTestProject.ViewModel
             }
             levelText = $"У вас {levelText} уровень потребности в ощущениях";
            
-            levelText += $"\n{Encoding.UTF8.GetString(CryptoMethod.Decrypt(Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), "Диагностика потребности в поисках ощущений", $"{levelIndex}.txt")))}";
+            levelText += $"\n{Encoding.UTF8.GetString(CryptoMethod.Decrypt(Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), "Диагностика потребности в поисках ощущений", $"{levelIndex}.text")))}";
 
 
             return levelText;

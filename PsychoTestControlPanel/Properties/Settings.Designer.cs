@@ -38,12 +38,12 @@ namespace PsychoTestControlPanel.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool OnlyTxtEncoding {
+        public bool OnlyTextEncoding {
             get {
-                return ((bool)(this["OnlyTxtEncoding"]));
+                return ((bool)(this["OnlyTextEncoding"]));
             }
             set {
-                this["OnlyTxtEncoding"] = value;
+                this["OnlyTextEncoding"] = value;
             }
         }
         

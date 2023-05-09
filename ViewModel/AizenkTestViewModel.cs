@@ -35,8 +35,7 @@ namespace PsychoTestProject.ViewModel
 
         public AizenkTestViewModel() : base()
         {
-            Title = "Тест айзенка";
-            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{Title}"), "*.xml")[0];
+            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{MainViewModel.MainWindow.Title}"), "*.xml")[0];
             MainViewModel.CurrentTest = new TestClass(true) 
             { 
                 Name = Path.GetFileNameWithoutExtension(testPath), 
@@ -380,7 +379,7 @@ namespace PsychoTestProject.ViewModel
                 types.Add("Сангвиник");
             foreach (string t in types)
             {
-                text.Text += Encoding.UTF8.GetString(CryptoMethod.Decrypt(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{t}"), "*.txt")[0]))+"\n\n";
+                text.Text += Encoding.UTF8.GetString(CryptoMethod.Decrypt(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест айзенка\\{t}"), "*.text")[0]))+"\n\n";
             }
             return types;
         }

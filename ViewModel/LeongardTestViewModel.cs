@@ -66,8 +66,7 @@ namespace PsychoTestProject.ViewModel
 
         public LeongardTestViewModel()
         {
-            Title = "Тест «Акцентуации характера К. Леонгард»";
-            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{Title}"), "*.xml")[0];
+            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{MainViewModel.MainWindow.Title}"), "*.xml")[0];
             MainViewModel.CurrentTest = new TestClass(true)
             {
                 Name = Path.GetFileNameWithoutExtension(testPath),
@@ -126,7 +125,7 @@ namespace PsychoTestProject.ViewModel
             for (int i = 0; i < 4; i++)
             {
                 string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест «Акцентуации характера К. Леонгард»\\{res.IndexOf(res.Max())}");
-                string file = Directory.GetFiles(typeFolder, "*.txt")[0];
+                string file = Directory.GetFiles(typeFolder, "*.text")[0];
                 resultText.Text += Path.GetFileNameWithoutExtension(file).ToLower().Replace(" тип", ", ");
                 res[res.IndexOf(res.Max())] = 0;
             }

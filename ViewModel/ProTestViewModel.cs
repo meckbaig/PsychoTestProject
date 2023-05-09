@@ -28,13 +28,12 @@ namespace PsychoTestProject.ViewModel
 
         public ProTestViewModel() : base()
         {
-            Title = "Тест профессионализма";
             LoadTest();
         }
 
         private void LoadTest()
         {
-            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{Title}"), "*.xml")[TestNumber];
+            string testPath = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{MainViewModel.MainWindow.Title}"), "*.xml")[TestNumber];
             MainViewModel.CurrentTest = new TestClass(true)
             {
                 Name = Path.GetFileNameWithoutExtension(testPath),
@@ -142,7 +141,7 @@ namespace PsychoTestProject.ViewModel
                     default: level = "очень низкий"; levelId = 4; break;
                 };
                 levelText = $"   У Вас {level} уровень эмпатийности.\n";
-                levelText += Encoding.UTF8.GetString(CryptoMethod.Decrypt(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест профессионализма\\Empathy"), "*.txt")[levelId]));
+                levelText += Encoding.UTF8.GetString(CryptoMethod.Decrypt(Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{MainViewModel.MainWindow.Title}\\Empathy"), "*.text")[levelId]));
             }
             else
                 levelText = "   Вы не были достаточно честны в своих ответах";
