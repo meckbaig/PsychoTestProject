@@ -247,88 +247,97 @@ namespace PsychoTestProject.View
 
         public double CheckAnswer()
         {
-            if (yesNo)
-                return CheckAnswerYesNo();
-            double maxPoint = QuestionClass.AnswersTarget;
-            double point = 0;
-            var answ = ShowedAnswers.Children[0];
-            int answersChecked = 0;
-            switch (answ)
+            try
             {
-                case (RadioButton):
-                    foreach (var answer in ShowedAnswers.Children)
-                    {
-                        RadioButton radioButton = (RadioButton)answer;
-                        if (((AnswerClass)radioButton.Tag).IsCorrect && (radioButton.IsChecked ?? false))
-                            point = MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
-                        answersChecked++;
-                    }
-                    break;
-                case (CheckBox):
-                    foreach (var answer in ShowedAnswers.Children)
-                    {
-                        CheckBox checkBox = (CheckBox)answer;
-                        if (((AnswerClass)checkBox.Tag).IsCorrect == true)
+                if (yesNo)
+                    return CheckAnswerYesNo();
+                double maxPoint = QuestionClass.AnswersTarget;
+                double point = 0;
+                var answ = ShowedAnswers.Children[0];
+
+                int answersChecked = 0;
+                switch (answ)
+                {
+                    case (RadioButton):
+                        foreach (var answer in ShowedAnswers.Children)
                         {
-                            if (checkBox.IsChecked ?? false)
-                                point+= MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                            RadioButton radioButton = (RadioButton)answer;
+                            if (((AnswerClass)radioButton.Tag).IsCorrect && (radioButton.IsChecked ?? false))
+                                point = MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                            answersChecked++;
                         }
-                        else if (checkBox.IsChecked ?? false)
-                            point -= MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
-                        answersChecked++;
-                    }
-                    break;
-                case (TextBox):
-                    TextBox textBox = (TextBox)answ;
-                    int correctAnswersCount = MainViewModel.CurrentQuestion.Answers.Count;
-                    string[] correctAnswers = new string[correctAnswersCount];
-                    for (int i = 0; i < correctAnswersCount; i++)
-                    {
-                        correctAnswers[i] = MainViewModel.CurrentQuestion.Answers[i].Text;
-                    }
-                    var answers = textBox.Text.ToLower().Split(", ");
-                    foreach (var correctAnswer in correctAnswers) // крутит все варианты ответов
-                    {
-                        foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
+                        break;
+                    case (CheckBox):
+                        foreach (var answer in ShowedAnswers.Children)
                         {
-                            if (QuestionClass.IsExact)
+                            CheckBox checkBox = (CheckBox)answer;
+                            if (((AnswerClass)checkBox.Tag).IsCorrect == true)
                             {
-                                foreach (var answer in answers) // крутит все ответы под текущий вариант
+                                if (checkBox.IsChecked ?? false)
+                                    point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                            }
+                            else if (checkBox.IsChecked ?? false)
+                                point -= MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                            answersChecked++;
+                        }
+                        break;
+                    case (TextBox):
+                        TextBox textBox = (TextBox)answ;
+                        int correctAnswersCount = MainViewModel.CurrentQuestion.Answers.Count;
+                        string[] correctAnswers = new string[correctAnswersCount];
+                        for (int i = 0; i < correctAnswersCount; i++)
+                        {
+                            correctAnswers[i] = MainViewModel.CurrentQuestion.Answers[i].Text;
+                        }
+                        var answers = textBox.Text.ToLower().Split(", ");
+                        foreach (var correctAnswer in correctAnswers) // крутит все варианты ответов
+                        {
+                            foreach (var variableAnswer in correctAnswer.Split("(/)")) // крутит все варианты одного ответа
+                            {
+                                if (QuestionClass.IsExact)
                                 {
-                                    if (variableAnswer.Equals(answer)) // сравнивает требуемые ответы с полученными
+                                    foreach (var answer in answers) // крутит все ответы под текущий вариант
                                     {
-                                        point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
-                                        answersChecked++;
-                                        goto Outer;
+                                        if (variableAnswer.Equals(answer)) // сравнивает требуемые ответы с полученными
+                                        {
+                                            point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                                            answersChecked++;
+                                            goto Outer;
+                                        }
                                     }
                                 }
+                                else if (!QuestionClass.IsExact && textBox.Text.ToLower().Contains(variableAnswer)) // ищет требуемые ответы в полученном
+                                {
+                                    point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
+                                    answersChecked++;
+                                    goto Outer;
+                                }
                             }
-                            else if (!QuestionClass.IsExact && textBox.Text.ToLower().Contains(variableAnswer)) // ищет требуемые ответы в полученном
-                            {
-                                point += MainViewModel.CurrentQuestion.Answers[answersChecked].Value;
-                                answersChecked++;
-                                goto Outer;
-                            }
+                            //point--;
+                            answersChecked++;
+                        Outer:;
                         }
-                        //point--;
-                        answersChecked++;
-                    Outer:;
-                    }
-                    if (answers.Length >= answersChecked)
-                        point -= (answers.Length - answersChecked);
-                    break;
+                        if (answers.Length >= answersChecked)
+                            point -= (answers.Length - answersChecked);
+                        break;
+                }
+                //if (point < 0)
+                //    point = 0;
+                if (maxPoint != 0)
+                {
+                    if (point > maxPoint)
+                        point = maxPoint;
+                    point /= maxPoint;
+                    point *= QuestionClass.Value;
+                }
+
+                return point;
             }
-            //if (point < 0)
-            //    point = 0;
-            if (maxPoint != 0)
+            catch (ArgumentOutOfRangeException)
             {
-                if (point > maxPoint)
-                    point = maxPoint;
-                point /= maxPoint;
-                point *= QuestionClass.Value;
+                WpfMessageBox.Show("Пустое значение вопроса. Проверьте целостность теста!", WpfMessageBox.MessageBoxType.Error);
+                return 0;
             }
-            
-            return point;
         }
 
         public double CheckAnswerYesNo(bool positive = true)

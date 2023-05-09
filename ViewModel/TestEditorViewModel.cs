@@ -114,6 +114,8 @@ namespace PsychoTestProject.ViewModel
                     SaveFileDialog fileDialog = new SaveFileDialog(){ Title = "Сохранение файлов", FileName = MainViewModel.CurrentTest.Name+".xml" };
                     if (fileDialog.ShowDialog() == true)
                         savePath = fileDialog.FileName;
+                    else
+                        return;
                 }
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
                 xmlDocument.Save(savePath);
@@ -134,7 +136,7 @@ namespace PsychoTestProject.ViewModel
             {
                 xmlDocument = new XmlDocumentClass(Test);
                 xmlDocument.Save();
-                if (editorPage.Image != null)
+                if (editorPage?.Image != null)
                     File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                 WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                 UpdateTestList();
