@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Xceed.Wpf.Toolkit;
@@ -201,6 +202,23 @@ namespace PsychoTestProject.View
         {
             AddImage();
         }
+
+        private void TestTitleTB_KeyUp(object sender, KeyEventArgs e)
+        {
+            int start = TestTitleTB.SelectionStart;
+            string error = "|/:*<>\\";
+
+            foreach (char c in error) 
+            {
+                if (TestTitleTB.Text.Contains(c))
+                {
+                    TestTitleTB.Text = TestTitleTB.Text.Replace(c, '\0');
+                    start--;
+                }
+            }
+            TestTitleTB.SelectionStart = start;
+        }
+
 
         private void AddImage()
         {

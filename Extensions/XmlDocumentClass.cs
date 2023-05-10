@@ -24,15 +24,23 @@ namespace PsychoTestProject.Extensions
 
         public XmlDocumentClass(TestClass currentTest)
         {
-            CurrentTest = currentTest;
-            XmlDoc = new XmlDocument();
-            Array = XmlDoc.CreateElement("Array");
-            XmlAttribute Take = XmlDoc.CreateAttribute("Take");
-            Take.Value = CurrentTest.Take.ToString();
-            Array.Attributes.Append(Take);
-            Array = AddQuestions(Array);
-            XmlDoc.AppendChild(Array);
+            try
+            {
+                CurrentTest = currentTest;
+                XmlDoc = new XmlDocument();
+                Array = XmlDoc.CreateElement("Array");
+                XmlAttribute Take = XmlDoc.CreateAttribute("Take");
+                Take.Value = CurrentTest.Take.ToString();
+                Array.Attributes.Append(Take);
+                Array = AddQuestions(Array);
+                XmlDoc.AppendChild(Array);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
+        
 
         public void Save(string savePath = null)
         {
