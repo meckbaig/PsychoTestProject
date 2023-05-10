@@ -16,6 +16,16 @@ namespace PsychoTestProject.ViewModel
             this.view = view;
         }
 
+        public void AddToGrid(Grid grid, UIElement element, int column)
+        {
+            if (column ==1)
+                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            else
+                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(0, GridUnitType.Auto) });
+            grid.Children.Add(element);
+            Grid.SetColumn(element, column);
+        }
+
         public CheckBox AddCheckBox(string name, string text, bool value)
         {
             CheckBox checkBox = new CheckBox();
@@ -27,12 +37,12 @@ namespace PsychoTestProject.ViewModel
             return checkBox;
         }
 
-        public StackPanel AnswerStackPanel(int answerCount)
+        public WrapPanel AnswerWrapPanel(int answerCount)
         {
-            StackPanel stackPanel = new StackPanel();
-            stackPanel.Name = "stackPanel" + (answerCount - 1);
-            stackPanel.Orientation = Orientation.Horizontal;
-            return stackPanel;
+            WrapPanel wrapPanel = new WrapPanel();
+            wrapPanel.Name = "stackPanel" + (answerCount - 1);
+            wrapPanel.Orientation = Orientation.Horizontal;
+            return wrapPanel;
         }
 
         public TextBlock TitleTextBlock(int answerCount)
@@ -84,7 +94,7 @@ namespace PsychoTestProject.ViewModel
                         {
                             if (rb.Focusable == false)
                             {
-                                IntegerUpDown updown = ((((rb.Parent as StackPanel).Parent as StackPanel).Children[2] as StackPanel).Children[answer.Id - 1] as StackPanel).Children[0] as IntegerUpDown;
+                                IntegerUpDown updown = ((rb.Parent as Grid).Children[2] as StackPanel).Children[0] as IntegerUpDown;
                                 if (updown.Value == 0)
                                     updown.Value = 1;
                                 rb.Focusable = true;
@@ -102,7 +112,7 @@ namespace PsychoTestProject.ViewModel
                     cb.IsChecked = answer.IsCorrect;
                     cb.Checked += (s, e) =>
                     {
-                        IntegerUpDown updown = ((((cb.Parent as StackPanel).Parent as StackPanel).Children[2] as StackPanel).Children[answer.Id - 1] as StackPanel).Children[0] as IntegerUpDown;
+                        IntegerUpDown updown = ((cb.Parent as Grid).Children[2] as StackPanel).Children[0] as IntegerUpDown;
                         if (updown.Value == 0)
                             updown.Value = 1;
                     };
@@ -112,15 +122,20 @@ namespace PsychoTestProject.ViewModel
                     item = new TextBox(); break;
             }
             view.DeleteButtonThickness = new Thickness(5, 4.35, 5, 2);
-            item.Margin = new Thickness(5, 3, 0, 3);
+            item.Margin = new Thickness(5, 5, 0, 0);
             item = Fonts(item, answer);
             return item;
         }
 
         public StackPanel AnsverControlButtons(AnswerClass answer, bool isString = false)
         {
-            StackPanel stackPanel = new StackPanel();
-            stackPanel.Orientation = Orientation.Horizontal;
+            StackPanel stackPanel = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, 2, 0, 2)
+            };
+
 
             AddValueAnswer(answer, stackPanel);
             if (isString)
@@ -131,13 +146,17 @@ namespace PsychoTestProject.ViewModel
 
         private void AddValueAnswer(AnswerClass answer, StackPanel stackPanel)
         {
-            IntegerUpDown integerUpDown = new IntegerUpDown();
-            integerUpDown.BorderThickness = new Thickness(0);
-            integerUpDown.BorderBrush = new SolidColorBrush(Color.FromArgb(0,0,0,0));
-            integerUpDown.Value = (int)answer.Value;
+            IntegerUpDown integerUpDown = new IntegerUpDown()
+            {
+                Height = 23,
+                BorderThickness = new Thickness(0),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
+                Value = (int)answer.Value,
+                VerticalAlignment = VerticalAlignment.Center
+            };
             integerUpDown.ValueChanged += (s, e) => 
             {
-                var element = ((((integerUpDown.Parent as StackPanel).Parent as StackPanel).Parent as StackPanel).Children[0] as StackPanel).Children[answer.Id-1];
+                var element = ((integerUpDown.Parent as StackPanel).Parent as Grid).Children[0];
                 switch (element)
                 {
                     case RadioButton: 
@@ -153,16 +172,20 @@ namespace PsychoTestProject.ViewModel
 
         private void AddVariableAnswer(AnswerClass answer, StackPanel stackPanel)
         {
-            Button addVariableAnswerButton = new Button();
-            addVariableAnswerButton.Height = addVariableAnswerButton.Width = 23;
-            addVariableAnswerButton.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            Button addVariableAnswerButton = new Button()
+            {
+                Width = 23,
+                Height = 23,
+                Background = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                Margin = new Thickness(5, 0, 0, 0),
+                Padding = new Thickness(5, 2, 5, 2),
+                BorderBrush = null,
+                VerticalAlignment = VerticalAlignment.Center,
+                Command = view.AddVariableAnswerCommand,
+                CommandParameter = answer
+            };
             addVariableAnswerButton.SetResourceReference(Button.TemplateProperty, "AddButtonTemplate");
-            addVariableAnswerButton.Margin = new Thickness(5, 0, 0, 0);
-            addVariableAnswerButton.Padding = new Thickness(5, 2, 5, 2);
-            addVariableAnswerButton.BorderBrush = null;
-            addVariableAnswerButton.Command = view.AddVariableAnswerCommand;
-            addVariableAnswerButton.CommandParameter = answer;
-            addVariableAnswerButton.Height = 25.05;
+
             Control varAnswerButton = addVariableAnswerButton;
             varAnswerButton = Fonts(varAnswerButton, null, 17);
             stackPanel.Children.Add(varAnswerButton);
@@ -170,16 +193,20 @@ namespace PsychoTestProject.ViewModel
 
         private void AddDeleteButton(AnswerClass answer, StackPanel stackPanel)
         {
-            Button deleteButton = new Button();
-            deleteButton.Content = "Удалить";
-            deleteButton.Background = new SolidColorBrush(Color.FromRgb(255, 143, 108));
-            deleteButton.Margin = view.DeleteButtonThickness;
-            deleteButton.Padding = new Thickness(5, 2, 5, 2);
-            deleteButton.BorderBrush = null;
-            deleteButton.Command = view.DeleteAnswerCommand;
-            deleteButton.CommandParameter = answer;
-            deleteButton.Height = 25.05;
-            deleteButton.Width = 70;
+            Button deleteButton = new Button()
+            {
+                Content = "Удалить",
+                Background = new SolidColorBrush(Color.FromRgb(255, 143, 108)),
+                Margin = view.DeleteButtonThickness,
+                Padding = new Thickness(5, 2, 5, 2),
+                BorderBrush = null,
+                VerticalAlignment = VerticalAlignment.Center,
+                Command = view.DeleteAnswerCommand,
+                CommandParameter = answer,
+                Height = 25.05,
+                Width = 70
+            };
+
             Control delButton = deleteButton;
             delButton = Fonts(delButton, null, 15);
             stackPanel.Children.Add(delButton);

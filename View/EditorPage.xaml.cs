@@ -25,6 +25,7 @@ namespace PsychoTestProject.View
     {
         EditorPageControls EditorControls;
         #region Variables
+        private bool autoSave = true;
         private List<AnswerClass> answerList;
         private ObservableCollection<QuestionClass> questionList;
         private AnswerClass answer;
@@ -66,20 +67,24 @@ namespace PsychoTestProject.View
                 OnPropertyChanged("Answer");
             }
         }
-        public QuestionClass Question
+        public QuestionClass CurrentQuestion
         {
             get => question;
             set
             {
-                for (int i = Question.Answers.Count - 1; i >= 0; i--)
+                int id = question.Id;
+                for (int i = CurrentQuestion.Answers.Count - 1; i >= 0; i--)
                 {
-                    if (string.IsNullOrEmpty(Question.Answers[i].Text))
-                        Question.Answers.RemoveAt(i);
+                    if (string.IsNullOrEmpty(CurrentQuestion.Answers[i].Text))
+                        CurrentQuestion.Answers.RemoveAt(i);
                 }
+
+                if (autoSave && question.Answers.Count != 0 && value != null && !EditorControls.Equal(question, value))
+                    SaveQuestion();
                 
-                if (value!=null)
+                if (value != null)
                     question = value;
-                OnPropertyChanged("Question");
+                OnPropertyChanged(nameof(CurrentQuestion));
                 RecalculateValues();
             }
         }
@@ -137,11 +142,10 @@ namespace PsychoTestProject.View
 
                 }
             }
-
             EditorControls = new EditorPageControls(this);
             QuestionList = MainViewModel.CurrentTest.Questions;
-            this.Question = QuestionList.ToList()[0];
-            QuestionTitle.Text = Question.Text;
+            this.CurrentQuestion = QuestionList.ToList()[0];
+            QuestionTitle.Text = CurrentQuestion.Text;
             LoadImage();
             TakeUpDown.Value = MainViewModel.CurrentTest.Take;
             DataContext = this;
@@ -156,44 +160,30 @@ namespace PsychoTestProject.View
 
         private void PrevQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            Question = QuestionList[Question.Id-2];
+            CurrentQuestion = QuestionList[CurrentQuestion.Id-2];
         }
         private void NextQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            Question = QuestionList[Question.Id];
+            CurrentQuestion = QuestionList[CurrentQuestion.Id];
         }
 
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveQuestion();
             for (int i = MainViewModel.CurrentTest.Questions.Count - 1; i >= 0; i--)
             {
                 if (MainViewModel.CurrentTest.Questions[i].Text == "")
                     MainViewModel.CurrentTest.Questions.RemoveAt(i);
             }
-            QuestionClass savedQuestion = Question;
-            QuestionClass editedQuestion = ReadQuestion();
-            if (!EditorControls.Equal(savedQuestion, editedQuestion))
-                switch (WpfMessageBox.Show("Вопрос был изменён. Сохранить?", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
-                {
-                    case MessageBoxResult.Yes:
-                        SaveQuestion(); 
-                        AddQuestion(); 
-                        break;
-                    case MessageBoxResult.No:
-                        AddQuestion(); 
-                        break;
-                    default: break;
-                }
-            else
-                AddQuestion();
+            AddQuestion();
         }
 
         private void AddAnswerButton_Click(object sender, RoutedEventArgs e) 
         {
-            this.Question = ReadQuestion();
+            this.CurrentQuestion = ReadQuestion();
             AnswerClass newAnswer = new AnswerClass();
-            newAnswer.Id = this.Question.Answers.Count + 1;
-            this.Question.Answers.Add(newAnswer);
+            newAnswer.Id = this.CurrentQuestion.Answers.Count + 1;
+            this.CurrentQuestion.Answers.Add(newAnswer);
             LoadQuestion();
         }
 
@@ -263,24 +253,24 @@ namespace PsychoTestProject.View
         private int CorrectAnsvers()
         {
             int correctAnswers = 0;
-            if (Question.Type == QuestionType.String)
-                foreach (StackPanel answerStackPanel in ShowedAnswers.Children)
+            if (CurrentQuestion.Type == QuestionType.String)
+                foreach (Grid answerGrid in AnswersControl.Items)
                 {
                     correctAnswers++;
                 }
             else
             {
                 int childrenCount = 0;
-                foreach (TextBox answer in ShowedAnswers.Children)
+                foreach (Grid answerGrid in AnswersControl.Items)
                 {
-                    switch (Question.Type)
+                    switch (CurrentQuestion.Type)
                     {
                         case QuestionType.Single:
-                            if ((bool)((RadioButton)ShowedFlags.Children[childrenCount]).IsChecked)
+                            if ((bool)((RadioButton)answerGrid.Children[0]).IsChecked)
                                 correctAnswers++;
                             break;
                         case QuestionType.Multiple:
-                            if ((bool)((CheckBox)ShowedFlags.Children[childrenCount]).IsChecked)
+                            if ((bool)((CheckBox)answerGrid.Children[0]).IsChecked)
                                 correctAnswers++;
                             break;
                         default:
@@ -295,23 +285,25 @@ namespace PsychoTestProject.View
         public QuestionClass ReadQuestion()
         {
             QuestionClass newQuestion = new QuestionClass();
-            newQuestion.Type = Question.Type;
+            newQuestion.Type = CurrentQuestion.Type;
             newQuestion.Value = (int)QuestionValueUpDown.Value;
-            if (AnswersTarget>0)
+            if (AnswersTarget > 0)
                 newQuestion.AnswersTarget = AnswersTarget;
             else
                 newQuestion.AnswersTarget = 1;
-            newQuestion.Id = Question.Id;
+            newQuestion.Id = CurrentQuestion.Id;
             newQuestion.Text = QuestionTitle.Text;
 
             int answerCount = 1;
             if (newQuestion.Type == QuestionType.String)
             {
                 newQuestion.IsExact = (bool)IsExactCheckBox.IsChecked;
-                foreach (StackPanel answerStackPanel in ShowedAnswers.Children)
+                foreach (Grid answerGrid in AnswersControl.Items)
                 {
+                    StackPanel answerButtons = answerGrid.Children[2] as StackPanel;
+                    WrapPanel answerWrapPanel = answerGrid.Children[1] as WrapPanel;
                     string answerString = "";
-                    foreach (TextBox answer in answerStackPanel.Children)
+                    foreach (TextBox answer in answerWrapPanel.Children)
                     {
                         if (!string.IsNullOrEmpty(answer.Text))
                         {
@@ -325,7 +317,7 @@ namespace PsychoTestProject.View
                     newAnswer.Id = answerCount++;
                     newAnswer.Text = answerString;
                     newAnswer.IsCorrect = true;
-                    newAnswer.Value = ((AnswerButtons.Children[newAnswer.Id - 1] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
+                    newAnswer.Value = ((answerGrid.Children[2] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
                     newQuestion.Answers.Add(newAnswer);
                 }
             }
@@ -334,19 +326,19 @@ namespace PsychoTestProject.View
                 int childrenCount = 0;
                 newQuestion.YesNo = (bool)YesNoCheckBox.IsChecked;
 
-                foreach (TextBox answer in ShowedAnswers.Children)
+                foreach (Grid answerGrid in AnswersControl.Items)
                 {
                     AnswerClass newAnswer = new AnswerClass();
                     newAnswer.Id = answerCount++;
-                    newAnswer.Text = answer.Text;
-                    newAnswer.Value = ((AnswerButtons.Children[newAnswer.Id - 1] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
+                    newAnswer.Text = (answerGrid.Children[1] as TextBox).Text;
+                    newAnswer.Value = ((answerGrid.Children[2] as StackPanel).Children[0] as IntegerUpDown).Value ?? 0;
                     switch (newQuestion.Type)
                     {
                         case QuestionType.Single:
-                            newAnswer.IsCorrect = (bool)((RadioButton)ShowedFlags.Children[childrenCount]).IsChecked;
+                            newAnswer.IsCorrect = (bool)((RadioButton)answerGrid.Children[0]).IsChecked;
                             break;
                         case QuestionType.Multiple:
-                            newAnswer.IsCorrect = (bool)((CheckBox)ShowedFlags.Children[childrenCount]).IsChecked;
+                            newAnswer.IsCorrect = (bool)((CheckBox)answerGrid.Children[0]).IsChecked;
                             break;
                         default:
                             break;
@@ -365,14 +357,16 @@ namespace PsychoTestProject.View
             byte[] pic;
             if (File.Exists(picPath))
                 pic = File.ReadAllBytes(picPath);
-
             MainViewModel.CurrentTest.Name = TestTitleTB.Text;
             if ((int)TakeUpDown.Value>0)
                 MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
             else
                 MainViewModel.CurrentTest.Take = MainViewModel.CurrentTest.Questions.Count;
             QuestionClass newQuestion = ReadQuestion();
-            this.Question = MainViewModel.CurrentTest.Questions[newQuestion.Id - 1] = newQuestion;
+            autoSave = false;
+            CurrentQuestion = newQuestion;
+            MainViewModel.CurrentTest.Questions[newQuestion.Id - 1] = newQuestion;
+            autoSave = true;
         }
 
         private void AddQuestion()
@@ -382,100 +376,118 @@ namespace PsychoTestProject.View
             newQuestion.Id = MainViewModel.CurrentTest.Questions.Count + 1;
             MainViewModel.CurrentTest.Questions.Add(newQuestion);
             QuestionList = MainViewModel.CurrentTest.Questions;
-            this.Question = QuestionList.ToList()[QuestionList.Count - 1];
-            LoadQuestion();
+            autoSave = false;
+            CurrentQuestion = QuestionList.ToList()[QuestionList.Count - 1];
+            autoSave = true;
         }
 
         private void DeleteQuestion()
         {
-            int deletedQuestionId = Question.Id;
-            QuestionList.Remove(Question);
+            int deletedQuestionId = CurrentQuestion.Id;
+            QuestionList.Remove(CurrentQuestion);
             List<QuestionClass> newQuestionList = QuestionList.ToList();
             for (int i = deletedQuestionId - 1; i < newQuestionList.Count; i++)
             {
                 newQuestionList[i].Id--;
             }
             QuestionList = new ObservableCollection<QuestionClass>(newQuestionList);
+            autoSave = false;
             if (deletedQuestionId > 1)
-                Question = QuestionList[deletedQuestionId - 2];
+                CurrentQuestion = QuestionList[deletedQuestionId - 2];
             else
-                Question = QuestionList[0];
+                CurrentQuestion = QuestionList[0];
+            autoSave = true;
         }
 
         private void LoadQuestion()
         {
-            ShowedFlags.Children.Clear();
-            ShowedAnswers.Children.Clear();
-            AnswerButtons.Children.Clear();
+            AnswersControl.Items.Clear();
+            //AnswersStack.Children.Clear();
+            //ShownFlags.Children.Clear();
+            //ShownAnswers.Children.Clear();
+            //AnswerButtons.Children.Clear();
             TestSettingsStackPanel.Children.Remove(IsExactCheckBox);
             TestSettingsStackPanel.Children.Remove(YesNoCheckBox);
 
-            AnswerList = this.Question.Answers;
-            QuestionValueUpDown.Value = Question.Value;
+            AnswerList = this.CurrentQuestion.Answers;
+            QuestionValueUpDown.Value = CurrentQuestion.Value;
             MovementButtonsAvailability();
 
-            if (Question.Type == QuestionType.String)
+            if (CurrentQuestion.Type == QuestionType.String)
             {
-                IsExactCheckBox = EditorControls.AddCheckBox("IsExactCheckBox", "Точный ответ", Question.IsExact);
+                IsExactCheckBox = EditorControls.AddCheckBox("IsExactCheckBox", "Точный ответ", CurrentQuestion.IsExact);
                 IsExactCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
                 TestSettingsStackPanel.Children.Add(IsExactCheckBox);
 
-                if (Question.Answers.Count > 0)
+                if (CurrentQuestion.Answers.Count > 0)
                 {
-                    int answerCount = 1;
-                    foreach (var answer in Question.Answers) // строки с ответами
-                    {
-                        TextBlock textBlock = EditorControls.TitleTextBlock(answerCount);
-                        ShowedFlags.Children.Add(textBlock);
 
-                        var variableAnswer = answer.Text.Split("(/)"); // строка с вариациями одного ответа
-                        var stackPanel = EditorControls.AnswerStackPanel(answerCount);
-                        ShowedAnswers.Children.Add(stackPanel);
+                    int answerCount = 1;
+                    foreach (var answer in CurrentQuestion.Answers) // строки с ответами
+                    {
+                        Grid answerGrid = new Grid();
+
+                        TextBlock titileTextBlock = EditorControls.TitleTextBlock(answerCount);
+
+                        string[] variableAnswer = answer.Text.Split("(/)"); // строка с вариациями одного ответа
+                        var wrapPanel = EditorControls.AnswerWrapPanel(answerCount);
                         foreach (string word in variableAnswer) // вариации одного ответа
                         {
-                            stackPanel.Children.Add(EditorControls.VariableAnswer(answerCount, word));
+                            wrapPanel.Children.Add(EditorControls.VariableAnswer(answerCount, word));
                         }
+
                         DeleteButtonThickness = new Thickness(5, 2.35, 5, 2);
 
-                        AnswerButtons.Children.Add(EditorControls.AnsverControlButtons(answer, true));
+                        StackPanel answerControlButtons = EditorControls.AnsverControlButtons(answer, true);
+
+                        EditorControls.AddToGrid(answerGrid, titileTextBlock, 0);
+                        EditorControls.AddToGrid(answerGrid, wrapPanel, 1);
+                        EditorControls.AddToGrid(answerGrid, answerControlButtons, 2);
+
+                        AnswersControl.Items.Add(answerGrid);
                         answerCount++;
                     }
                 }
             }
             else
             {
-                YesNoCheckBox = EditorControls.AddCheckBox("YesNoCheckBox", "Выбор \"Да/Нет\"", Question.YesNo);
+                YesNoCheckBox = EditorControls.AddCheckBox("YesNoCheckBox", "Выбор \"Да/Нет\"", CurrentQuestion.YesNo);
                 YesNoCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
                 TestSettingsStackPanel.Children.Add(YesNoCheckBox);
                 int answerCount = 1;
                 foreach (var answer in question.Answers)
                 {
+                    Grid answerGrid = new Grid();
+                    StackPanel answerButtons = new StackPanel() { Margin = new Thickness(5, 2, 5, 2) };
+
                     Control optionsAnswer = EditorControls.OptionsAnswer(question.Type, answer);
                     Control answerText = EditorControls.OptionsAnswerTextBox(answerCount, answer);
                     StackPanel answerControlButtons = EditorControls.AnsverControlButtons(answer);
 
-                    ShowedFlags.Children.Add(optionsAnswer);
-                    ShowedAnswers.Children.Add(answerText);
-                    AnswerButtons.Children.Add(answerControlButtons);
+                    EditorControls.AddToGrid(answerGrid, optionsAnswer, 0);
+                    EditorControls.AddToGrid(answerGrid, answerText, 1);
+                    EditorControls.AddToGrid(answerGrid, answerControlButtons, 2);
+
+                    AnswersControl.Items.Add(answerGrid);
                     answerCount++;
                 }
             }
-            AnswersTarget = Question.AnswersTarget;
+            AnswersTarget = CurrentQuestion.AnswersTarget;
 
-            foreach (StackPanel stack in MainViewModel.GetVisualChilds<StackPanel>(ContentViewer.Content as StackPanel))
+            foreach (Grid grid in AnswersControl.Items)
             {
-                MainViewModel.AllButtonsHover(stack);
+                MainViewModel.AllButtonsHover(grid);
             }
             
         }
 
         private void MovementButtonsAvailability()
         {
-            if (Question.Id == 1)
+            if (CurrentQuestion.Id == 1)
                 PrevQuestionButton.IsEnabled = false;
             else 
                 PrevQuestionButton.IsEnabled = true;
-            if (Question.Id == QuestionList.Count)
+            if (CurrentQuestion.Id == QuestionList.Count)
                 NextQuestionButton.IsEnabled = false;
             else 
                 NextQuestionButton.IsEnabled = true;
@@ -483,7 +495,7 @@ namespace PsychoTestProject.View
 
         public void RecalculateValues()
         {
-            QuestionTitle.Text = Question.Text;
+            QuestionTitle.Text = CurrentQuestion.Text;
             LoadQuestion();
         }
 
@@ -497,7 +509,7 @@ namespace PsychoTestProject.View
                      (deleteAnswerCommand = new Command(obj =>
                      {
                          SaveQuestion();
-                         Question.Answers.Remove(Question.Answers.First(a => a.Id == (obj as AnswerClass).Id));
+                         CurrentQuestion.Answers.Remove(CurrentQuestion.Answers.First(a => a.Id == (obj as AnswerClass).Id));
                          LoadQuestion();
                      }));
             }
@@ -512,7 +524,7 @@ namespace PsychoTestProject.View
                      (addVariableAnswerCommand = new Command(obj =>
                      {
                          SaveQuestion();
-                         obj = Question.Answers.FirstOrDefault(a => a.Id == (obj as AnswerClass).Id);
+                         obj = CurrentQuestion.Answers.FirstOrDefault(a => a.Id == (obj as AnswerClass).Id);
                          (obj as AnswerClass).Text += "(/)";
                          LoadQuestion();
                      }));
@@ -544,20 +556,6 @@ namespace PsychoTestProject.View
         private void ChangeMargin()
         {
             ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanelScroll.ActualHeight);
-            StackPanel sp = new StackPanel();
-            foreach (var elem in ShowedAnswers.Children)
-            {
-                if (elem.GetType() == sp.GetType())
-                {
-                    (elem as StackPanel).MaxWidth = ContentViewer.ActualWidth - 260;
-                    foreach (TextBox item in (elem as StackPanel).Children)
-                    {
-                         item.MaxWidth = ((elem as StackPanel).MaxWidth-(elem as StackPanel).Children.Count*10)/(elem as StackPanel).Children.Count;
-                    }
-                }
-                else
-                    (elem as Control).MaxWidth = ContentViewer.ActualWidth - 200;
-            }
         }
         #endregion
     }

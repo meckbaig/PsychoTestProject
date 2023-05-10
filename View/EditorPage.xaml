@@ -100,7 +100,7 @@
                     <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">
                         <TextBlock FontFamily="Microsoft YaHei UI" FontSize="14" Text="Номер вопроса" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
                         <ComboBox x:Name="QuestionsComboBox" Width="50" Margin="5,5,5,5" BorderBrush="#FFF8F8F8" SelectedIndex="1"
-                            ItemsSource="{Binding QuestionList, Mode=TwoWay}" SelectedItem="{Binding Question}">
+                            ItemsSource="{Binding QuestionList, Mode=TwoWay}" SelectedItem="{Binding CurrentQuestion}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Path=Id}" TextWrapping="Wrap"/>
@@ -173,14 +173,11 @@
         <ScrollViewer x:Name="ContentViewer" Margin="0,32,0,66" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20,5,0,5">
                 <TextBox x:Name="QuestionTitle" TextWrapping="Wrap" FontSize="24" Margin="5,2,5,2" MinWidth="100" HorizontalAlignment="Left"/>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel x:Name="ShowedFlags" Margin="5,2,5,2">
-                    </StackPanel>
-                    <StackPanel x:Name="ShowedAnswers" Margin="5,2,5,2">
-                    </StackPanel>
-                    <StackPanel x:Name="AnswerButtons" Margin="5,2,5,2">
-                    </StackPanel>
-                </StackPanel>
+                <ItemsControl x:Name="AnswersControl" HorizontalAlignment="Left"/>
+
+
+                <!--<StackPanel x:Name="AnswersStack">
+                </StackPanel>-->
             </StackPanel>
         </ScrollViewer>
         <Image Name="add_white" Source="/Resources/add_white.png" Visibility="Hidden" Width="23"/>

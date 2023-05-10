@@ -84,9 +84,9 @@
             <ItemsControl ItemsSource="{Binding Questions}" BorderBrush="Transparent" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid >
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Border BorderBrush="Gray" BorderThickness="1" Padding="2">
