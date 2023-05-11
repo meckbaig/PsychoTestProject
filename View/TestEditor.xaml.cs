@@ -54,5 +54,11 @@ namespace PsychoTestProject.View
             else
                 previousSelected = ListBox.SelectedIndex;
         }
+
+        private void ListBox_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            ListBox.SelectedItem = null;
+            previousSelected = -2;
+        }
     }
 }

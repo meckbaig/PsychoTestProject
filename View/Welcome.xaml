@@ -40,8 +40,8 @@
         <Button x:Name="LeongardTestButton" Style="{StaticResource TestButtonStyle}" Click="LeongardTestButton_Click">
             <TextBlock  Text="Тест акцентуации характера Леонгард" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button x:Name="PeoplePictureTestButton" Style="{StaticResource TestButtonStyle}">
-            <TextBlock  Text="Тест по картинкам" TextWrapping="Wrap" TextAlignment="Center"/>
+        <Button x:Name="KnowlegeTestButton" Style="{StaticResource TestButtonStyle}" Click="KnowlegeTestButton_Click">
+            <TextBlock  Text="Тестирование знаний" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button x:Name="AizenkTestButton" Style="{StaticResource TestButtonStyle}" Click="AizenkTestButton_Click">
             <TextBlock  Text="Тест Айзенка" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -54,9 +54,6 @@
         </Button>
         <Button x:Name="OrientationTestButton" Style="{StaticResource TestButtonStyle}" Click="OrientationTestButton_Click">
             <TextBlock  Text="Тест направленности личности" TextWrapping="Wrap" TextAlignment="Center"/>
-        </Button>
-        <Button x:Name="OpenTestsButton" Style="{StaticResource TestButtonStyle}" Click="OpenTestButton_Click">
-            <TextBlock  Text="Тестирование знаний" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
 
         <Button x:Name="TestsButton" Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" Height="51" 

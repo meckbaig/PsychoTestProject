@@ -22,5 +22,5 @@
 ✔ Admin password for editing (requires setting in admin app)<br/>
 ✔ Admin app <br/>
 ✔ Tests descriptions<br/>
-● Picture test<br/>
+⨉ Picture test<br/>
 ● Bug fixes...😨<br/>

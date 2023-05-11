@@ -54,7 +54,7 @@ namespace PsychoTestProject
             {
                 OpenedToAnimate = false;
                 animationClass = new AnimationClass(this.Content, animationOpened, duration);
-                TestsButton.Visibility = animationOpened ? Visibility.Hidden : Visibility.Visible;
+                TestsButton.Content = animationOpened ? "Скрыть тесты" : "Приступить к тестам";
                 new Thread(() =>
                 {
                     Thread.Sleep(duration);
@@ -158,10 +158,10 @@ namespace PsychoTestProject
 
         private void TestsButton_Click(object sender, RoutedEventArgs e)
         {
-            TestButtonsAnimation(true, 240);
+            TestButtonsAnimation(ShowOrHide, 240);
         }
 
-        private void OpenTestButton_Click(object sender, RoutedEventArgs e)
+        private void KnowlegeTestButton_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel.MainFrame.Navigate(new Transition(TestType.KnowlegeTest));
         }
