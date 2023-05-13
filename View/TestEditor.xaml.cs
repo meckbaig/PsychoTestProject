@@ -21,13 +21,30 @@ namespace PsychoTestProject.View
     /// </summary>
     public partial class TestEditor : Page
     {
-        int previousSelected = -2;
+        public int PreviousSelected = -2;
         public TestEditor()
         {
             InitializeComponent();
             MainViewModel.MainWindow.Title = this.Title;
-            DataContext = new TestEditorViewModel(EditFrame);
+            TestEditorViewModel context = new TestEditorViewModel(EditFrame);
+            DataContext = context;
+            context.PropertyChanged += Context_PropertyChanged; 
             MainViewModel.AllButtonsHover(this.Content);
+        }
+
+        private void Context_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TestList")
+            {
+                ListBox.SelectedItem = null;
+                PreviousSelected = -2;
+            }
+        }
+
+        private void TestList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ListBox.SelectedItem = null;
+            PreviousSelected = -2;
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -46,19 +63,13 @@ namespace PsychoTestProject.View
 
         private void ListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (ListBox.SelectedIndex == previousSelected)
+            if (ListBox.SelectedIndex == PreviousSelected)
             {
                 ListBox.SelectedItem = null;
-                previousSelected = -2;
+                PreviousSelected = -2;
             }
             else
-                previousSelected = ListBox.SelectedIndex;
-        }
-
-        private void ListBox_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-            ListBox.SelectedItem = null;
-            previousSelected = -2;
+                PreviousSelected = ListBox.SelectedIndex;
         }
     }
 }

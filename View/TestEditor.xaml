@@ -65,7 +65,7 @@
         </StackPanel>
         <Frame x:Name="EditFrame" Grid.Column="1" Grid.RowSpan="2" BorderBrush="#FFDDDDDD" BorderThickness="1"/>
         <ListBox x:Name="ListBox" Background="Azure"  Grid.Row="2" ItemsSource="{Binding TestList}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-         HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,25" MouseLeftButtonUp="ListBox_MouseLeftButtonUp" SourceUpdated="ListBox_SourceUpdated">
+         HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,35" MouseLeftButtonUp="ListBox_MouseLeftButtonUp">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" MaxWidth="140"/>
@@ -74,6 +74,6 @@
         </ListBox>
         <Button Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" 
             BorderBrush="{x:Null}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="140" 
-            Height="25" Click="Back_Click" Margin="0,394,0,0" Grid.Row="2"/>
+            Height="35" Click="Back_Click" Grid.Row="2"/>
     </Grid>
 </Page>

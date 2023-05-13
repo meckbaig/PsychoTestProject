@@ -113,6 +113,20 @@ namespace PsychoTestProject.ViewModel
             }
         }
 
+        public static string ProperFileName(string fileName)
+        {
+            string error = "|/:*<>\\";
+
+            foreach (char c in error)
+            {
+                if (fileName.Contains(c))
+                {
+                    fileName = fileName.Replace(c, '\0');
+                }
+            }
+            return fileName;
+        }
+
         public static BitmapImage GetBitmap(string path)
         {
             BitmapImage bitmap = new BitmapImage();

@@ -206,17 +206,9 @@ namespace PsychoTestProject.View
         private void TestTitleTB_KeyUp(object sender, KeyEventArgs e)
         {
             int start = TestTitleTB.SelectionStart;
-            string error = "|/:*<>\\";
-
-            foreach (char c in error) 
-            {
-                if (TestTitleTB.Text.Contains(c))
-                {
-                    TestTitleTB.Text = TestTitleTB.Text.Replace(c, '\0');
-                    start--;
-                }
-            }
-            TestTitleTB.SelectionStart = start;
+            int len = TestTitleTB.Text.Length;
+            TestTitleTB.Text = MainViewModel.ProperFileName(TestTitleTB.Text);
+            TestTitleTB.SelectionStart = start-(len- TestTitleTB.Text.Length);
         }
 
 
@@ -375,7 +367,7 @@ namespace PsychoTestProject.View
             byte[] pic;
             if (File.Exists(picPath))
                 pic = File.ReadAllBytes(picPath);
-            MainViewModel.CurrentTest.Name = TestTitleTB.Text;
+            MainViewModel.CurrentTest.Name = MainViewModel.ProperFileName(TestTitleTB.Text);
             if ((int)TakeUpDown.Value>0)
                 MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
             else

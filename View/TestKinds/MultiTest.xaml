@@ -30,7 +30,7 @@
          Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" ExtBackButton_Click="PreviousQuestion" Margin="{Binding ElementName=multiTestPage, Path=DataContext.Margin}"/>
         </ScrollViewer>
         <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" Visibility="{Binding BackButtonVisibility}"
-            BorderBrush="{x:Null}" Width="140" Height="25" Click="BackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            BorderBrush="{x:Null}" Width="140" Height="35" Click="BackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         
     </Grid>
 </Page>

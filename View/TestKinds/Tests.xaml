@@ -32,7 +32,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="TestsListBox"  Background="Azure" ItemsSource="{Binding TestList}" BorderThickness="0" Loaded="ListBox_Loaded"
-            HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,25" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            HorizontalContentAlignment="Stretch" SelectedItem="{Binding Test}" Margin="0,0,0,35" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" MaxWidth="140"/>
@@ -48,6 +48,6 @@
             Path=DataContext.OpenTestCommand}" Height="30" Width="112" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6"
             BorderBrush="{x:Null}" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" HorizontalAlignment="Left" 
-            VerticalAlignment="Bottom" Width="140" Height="25" Click="Back_Click" Background="#FFFF8F6C"/>
+            VerticalAlignment="Bottom" Width="140" Height="35" Click="Back_Click" Background="#FFFF8F6C"/>
     </Grid>
 </Page>

@@ -42,12 +42,21 @@ namespace PsychoTestProject.Extensions
         }
         
 
-        public void Save(string savePath = null)
+        public bool Save(string savePath = null)
         {
-            if (savePath == null)
-                savePath = Environment.CurrentDirectory + "\\Tests\\" + CurrentTest.Name + ".xml";
-            XmlDoc.Save(savePath);
-            File.WriteAllBytes(savePath, CryptoMethod.Encrypt(savePath));
+            try
+            {
+                if (savePath == null)
+                    savePath = Environment.CurrentDirectory + "\\Tests\\" + CurrentTest.Name + ".xml";
+                XmlDoc.Save(savePath);
+                File.WriteAllBytes(savePath, CryptoMethod.Encrypt(savePath));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+                return false;
+            }
         }
 
         public XmlElement AddQuestions(XmlElement array)

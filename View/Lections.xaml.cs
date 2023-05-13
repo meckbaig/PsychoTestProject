@@ -20,7 +20,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Xml.Linq;
-using Newtonsoft.Json;
 using System.Text.Json.Nodes;
 using System.Runtime.InteropServices;
 using System.Diagnostics;

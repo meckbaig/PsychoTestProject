@@ -86,7 +86,7 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Border BorderBrush="Gray" BorderThickness="1" Padding="2">

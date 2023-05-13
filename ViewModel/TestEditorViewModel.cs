@@ -23,6 +23,7 @@ namespace PsychoTestProject.ViewModel
         Frame EditFrame;
         EditorPage editorPage;
         public ObservableCollection<TestClass> TestList { get; set; }
+
         public static List<Image> ImageList { get; set; }
         private TestClass test;
 
@@ -51,7 +52,7 @@ namespace PsychoTestProject.ViewModel
             CreateNewTestBTCommand = new Command(o => CreateNewTest("CreateNewTestBT"));
             SaveTestBTCommand = new Command(o => SaveTest("SaveTestBTCommand"));
             DeleteTestBTCommand = new Command(o => DeleteTest("DeleteTestBTCommand"));
-            GoToLectionsEditorCommand = new Command(o => GoToLectionsEditor("GoToLectionsEditorCommand"))
+            GoToLectionsEditorCommand = new Command(o => GoToLectionsEditor("GoToLectionsEditorCommand"));
 ;        }
 
         private void UpdateTestList()
@@ -118,15 +119,18 @@ namespace PsychoTestProject.ViewModel
                         return;
                 }
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
-                xmlDocument.Save(savePath);
-                MainViewModel.CurrentTest.Filename = savePath;
-                if (editorPage.Image != null)
+
+                if (xmlDocument.Save(savePath))
                 {
-                    savePath = Path.GetDirectoryName(savePath) + "\\" + Path.GetFileNameWithoutExtension(savePath) + editorPage.ImageExt;
-                    File.WriteAllBytes(savePath, editorPage.Image);
+                    MainViewModel.CurrentTest.Filename = savePath;
+                    if (editorPage.Image != null)
+                    {
+                        savePath = Path.GetDirectoryName(savePath) + "\\" + Path.GetFileNameWithoutExtension(savePath) + editorPage.ImageExt;
+                        File.WriteAllBytes(savePath, editorPage.Image);
+                    }
+                    WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                    UpdateTestList();
                 }
-                WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
-                UpdateTestList();
             }
             else if (Test == null)
                 WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -135,11 +139,13 @@ namespace PsychoTestProject.ViewModel
             else
             {
                 xmlDocument = new XmlDocumentClass(Test);
-                xmlDocument.Save();
-                if (editorPage?.Image != null)
-                    File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
-                WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
-                UpdateTestList();
+                if (xmlDocument.Save())
+                {
+                    if (editorPage?.Image != null)
+                        File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
+                    WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                    UpdateTestList();
+                }
             }
 
         }

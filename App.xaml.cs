@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Xceed.Wpf.Toolkit;
 
 namespace PsychoTestProject
 {
@@ -22,5 +23,13 @@ namespace PsychoTestProject
         }
 
         public static MainWindow MainWindow { get; private set; }
+
+        private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (string.IsNullOrWhiteSpace(e.NewValue?.ToString()))
+            {
+                ((IntegerUpDown)e.Source).Value = (int)e.OldValue;
+            }
+        }
     }
 }

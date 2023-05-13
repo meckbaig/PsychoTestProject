@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using PsychoTestProject.Extensions;
+﻿using PsychoTestProject.Extensions;
 using PsychoTestProject.ViewModel;
 using System;
 using System.Collections.Generic;
