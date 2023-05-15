@@ -103,21 +103,35 @@ namespace PsychoTestProject.ViewModel
                     return;
 
                 editorPage.SaveQuestion();
-                string savePath;
-                if (MainViewModel.CurrentTest.Filename == null)
-                    savePath = Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний", MainViewModel.CurrentTest.Name + ".xml");
-                else
-                    savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), MainViewModel.CurrentTest.Name + ".xml");
-
+                string savePath = "";
 
                 if (dialogResult == MessageBoxResult.No)
                 {
-                    SaveFileDialog fileDialog = new SaveFileDialog(){ Title = "Сохранение файлов", FileName = MainViewModel.CurrentTest.Name+".xml" };
+                    SaveFileDialog fileDialog = new SaveFileDialog()
+                    { 
+                        Title = "Сохранение файлов", 
+                        FileName = MainViewModel.CurrentTest.Name,
+                        Filter = "Файл тестирования|*.xml"
+                    };
                     if (fileDialog.ShowDialog() == true)
                         savePath = fileDialog.FileName;
                     else
                         return;
                 }
+
+                if (savePath == string.Empty)
+                {
+                    MainViewModel.CurrentTest.Name = MainViewModel.FileNameNotNull(MainViewModel.CurrentTest.Name, 
+                        "Новый тест.xml", Environment.CurrentDirectory + $"\\Tests\\Тестирование знаний");
+
+                    if (MainViewModel.CurrentTest.Filename == null)
+                        savePath = Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний", 
+                            MainViewModel.CurrentTest.Name + ".xml");
+                    else
+                        savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), 
+                            MainViewModel.CurrentTest.Name + ".xml");
+                }
+
                 xmlDocument = new XmlDocumentClass(MainViewModel.CurrentTest);
 
                 if (xmlDocument.Save(savePath))
@@ -135,14 +149,16 @@ namespace PsychoTestProject.ViewModel
             else if (Test == null)
                 WpfMessageBox.Show("Выберите файл", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
             else if (Test?.Questions?[0] == null)
-                WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             else
             {
                 xmlDocument = new XmlDocumentClass(Test);
                 if (xmlDocument.Save())
                 {
                     if (editorPage?.Image != null)
-                        File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
+                        File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + 
+                            MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                     WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                     UpdateTestList();
                 }
@@ -154,7 +170,8 @@ namespace PsychoTestProject.ViewModel
         {
             if (Test != null)
             {
-                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     EditFrame.Content = null;
                     File.Delete(Test.Filename);
@@ -165,7 +182,8 @@ namespace PsychoTestProject.ViewModel
             }
             else if (MainViewModel.CurrentTest != null)
             {
-                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{MainViewModel.CurrentTest.Name}\"?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{MainViewModel.CurrentTest.Name}\"?", "Внимание!", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     EditFrame.Content = null;
                     File.Delete(MainViewModel.CurrentTest.Filename);
@@ -209,7 +227,8 @@ namespace PsychoTestProject.ViewModel
                         MainViewModel.CurrentTest = (obj as TestClass);
 
                         if (obj != null && MainViewModel.CurrentTest?.Questions?[0] == null)
-                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", 
+                                MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
                             if (obj == null)
@@ -218,7 +237,11 @@ namespace PsychoTestProject.ViewModel
 
                                 if (fileDialog.ShowDialog() == true)
                                 {
-                                    MainViewModel.CurrentTest = new TestClass(false) { Name = Path.GetFileNameWithoutExtension(fileDialog.FileName), Filename = fileDialog.FileName };
+                                    MainViewModel.CurrentTest = new TestClass(false) 
+                                    { 
+                                        Name = Path.GetFileNameWithoutExtension(fileDialog.FileName), 
+                                        Filename = fileDialog.FileName 
+                                    };
                                 }
                                 else return;
                             }

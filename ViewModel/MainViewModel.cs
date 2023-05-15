@@ -9,10 +9,12 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -42,7 +44,11 @@ namespace PsychoTestProject.ViewModel
         public static bool TestStarted { get; set; }
         public static TestClass CurrentTest { get; set; }
         public static int CurrentQuestionNumber { get; set; }
-        public static QuestionClass CurrentQuestion { get => CurrentTest.Questions[CurrentQuestionNumber-1]; set => CurrentTest.Questions[CurrentQuestionNumber-1] = value; }
+        public static QuestionClass CurrentQuestion 
+        { 
+            get => CurrentTest.Questions[CurrentQuestionNumber-1]; 
+            set => CurrentTest.Questions[CurrentQuestionNumber-1] = value; 
+        }
 
         public static void Back()
         {
@@ -50,7 +56,6 @@ namespace PsychoTestProject.ViewModel
             MainFrame.Content = null;
             MainFrame.Navigate(new Welcome());
         }
-
         public static List<T> GetVisualChilds<T>(DependencyObject parent) where T : DependencyObject
         {
             List<T> childs = new List<T>();
@@ -115,7 +120,7 @@ namespace PsychoTestProject.ViewModel
 
         public static string ProperFileName(string fileName)
         {
-            string error = "|/:*<>\\";
+            string error = "\\|/:*<>";
 
             foreach (char c in error)
             {
@@ -123,6 +128,28 @@ namespace PsychoTestProject.ViewModel
                 {
                     fileName = fileName.Replace(c, '\0');
                 }
+            }
+            return fileName;
+        }
+
+        public static string FileNameNotNull(string fileName, string replaceString, string savePath)
+        {
+            if (fileName != string.Empty) 
+                return fileName;
+
+            List<string> list = new List<string>();
+            string replaceName = Path.GetFileNameWithoutExtension(replaceString);
+            string ext = Path.GetExtension(replaceString);
+            foreach (string s in Directory.GetFiles(savePath, $"*{ext}"))
+            {
+                list.Add(Path.GetFileNameWithoutExtension(s));
+            }
+            fileName = replaceName;
+            for (int i = 1; i < list.Count; i++)
+            {
+                if (list.FirstOrDefault(tl => tl == fileName) != null)
+                    fileName = $"{replaceName} {i}";
+                else break;
             }
             return fileName;
         }

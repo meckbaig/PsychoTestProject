@@ -118,5 +118,10 @@ namespace PsychoTestProject.View.TestKinds
             Hidden = !Hidden;
             OnPropertyChanged("SHButtonText");
         }
+
+        private void btn_Loaded(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).MinWidth = (sender as Button).ActualWidth;
+        }
     }
 }

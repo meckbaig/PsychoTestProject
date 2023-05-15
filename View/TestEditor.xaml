@@ -42,25 +42,25 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="26" Height="28" 
-                CommandParameter="{Binding ElementName=testEditorPage, Path=DataContext.Test}" 
+                CommandParameter="{Binding ElementName=testEditorPage, Path=DataContext.Test}" ToolTip="Редактировать"
                 Command="{Binding ElementName=testEditorPage, Path=DataContext.OpenTestCommand}" Margin="1,0,1,0"
                 Template="{DynamicResource EditButtonTemplate}" Background="#FF6CFFB6"/>
             
             <Button Name="CreateNewTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding CreateNewTestBTCommand}" Template="{DynamicResource AddButtonTemplate}"
+                Command="{Binding CreateNewTestBTCommand}" Template="{DynamicResource AddButtonTemplate}" ToolTip="Добавить"
                 Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FF6CFFB6"/>
 
             <Button Name="SaveTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding SaveTestBTCommand}" Template="{DynamicResource SaveButtonTemplate}"
+                Command="{Binding SaveTestBTCommand}" Template="{DynamicResource SaveButtonTemplate}" ToolTip="Сохранить"
                 Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FF6CFFB6"/>
 
             <Button Name="DeleteTestBT" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
-                Command="{Binding DeleteTestBTCommand}" Template="{DynamicResource DeleteButtonTemplate}"
+                Command="{Binding DeleteTestBTCommand}" Template="{DynamicResource DeleteButtonTemplate}" ToolTip="Удалить"
                 Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="#FFFF8F6C"/>
 
             <Button Name="EditLections" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="26"
                 Command="{Binding GoToLectionsEditorCommand}" Template="{DynamicResource EditLectionsButtonTemplate}"
-                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="White"/>
+                Height="28" VerticalContentAlignment="Center" Margin="1,0,1,0" Background="White" ToolTip="Перейти к лекциям"/>
 
         </StackPanel>
         <Frame x:Name="EditFrame" Grid.Column="1" Grid.RowSpan="2" BorderBrush="#FFDDDDDD" BorderThickness="1"/>

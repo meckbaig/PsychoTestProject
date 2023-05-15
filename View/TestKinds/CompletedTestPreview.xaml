@@ -77,7 +77,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="btn" HorizontalContentAlignment="Left" Click="ShowHideButton_Click" Width="135" HorizontalAlignment="Left">
+        <Button x:Name="btn" HorizontalContentAlignment="Left" Click="ShowHideButton_Click" HorizontalAlignment="Left" Loaded="btn_Loaded">
             <TextBlock Margin="15,0,15,0" Text="{Binding SHButtonText}" TextAlignment="Left" FontSize="20"/>
         </Button>
         <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Row="12">

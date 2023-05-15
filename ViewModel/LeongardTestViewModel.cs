@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit.PropertyGrid.Converters;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace PsychoTestProject.ViewModel
@@ -127,9 +128,19 @@ namespace PsychoTestProject.ViewModel
                 string typeFolder = Path.Combine(Environment.CurrentDirectory, $"Tests\\Тест «Акцентуации характера К. Леонгард»\\{res.IndexOf(res.Max())}");
                 string file = Directory.GetFiles(typeFolder, "*.text")[0];
                 resultText.Text += Path.GetFileNameWithoutExtension(file).ToLower().Replace(" тип", ", ");
-                res[res.IndexOf(res.Max())] = 0;
+                res[res.IndexOf(res.Max())] = -25;
             }
             resultText.Text = resultText.Text.Remove(resultText.Text.Length - 2) + " типы.";
+
+            int zeroRes = 0;
+            foreach (int r in results[0])
+            {
+                if (r == 0)
+                    zeroRes++;
+            }
+            if (zeroRes > Labels.Length-4)
+                resultText.Text = "Невозможно определить выраженные типы.";
+
 
             stackPanel.Children.Add(plot);
             thisGrid.Children.Add(LeongardFrame);
@@ -137,8 +148,7 @@ namespace PsychoTestProject.ViewModel
             scroll.Content = stackPanel;
 
 
-
-            SizeChangedInfo sifo = new SizeChangedInfo(thisGrid, new System.Windows.Size(Double.NaN, Double.NaN), true, true);
+           SizeChangedInfo sifo = new SizeChangedInfo(thisGrid, new System.Windows.Size(Double.NaN, Double.NaN), true, true);
             SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(
                 new object[] { (thisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;

@@ -97,7 +97,9 @@ namespace PsychoTestProject
             string outerHTML = await GetHtmlBody();
 
             string fullHtml = html + outerHTML;
-            File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{LectionTitleTB.Text}.html", fullHtml);
+            string fileName = MainViewModel.ProperFileName(LectionTitleTB.Text);
+            fileName = MainViewModel.FileNameNotNull(fileName, "Лекция.html", Environment.CurrentDirectory + $"\\Lections");
+            File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{fileName}.html", fullHtml);
             (DataContext as LectionsViewModel).UpdateLectionList();
         }
 
@@ -230,6 +232,14 @@ namespace PsychoTestProject
         private async void JustifyBT_Click(object sender, RoutedEventArgs e)
         {
             await Web.ExecuteScriptAsync("document.execCommand('justifyFull', false, null);");
+        }
+
+        private void LectionTitleTB_KeyUp(object sender, KeyEventArgs e)
+        {
+            int start = LectionTitleTB.SelectionStart;
+            int len = LectionTitleTB.Text.Length;
+            LectionTitleTB.Text = MainViewModel.ProperFileName(LectionTitleTB.Text);
+            LectionTitleTB.SelectionStart = start - (len - LectionTitleTB.Text.Length);
         }
     }
 }

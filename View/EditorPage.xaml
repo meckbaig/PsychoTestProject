@@ -94,7 +94,7 @@
                             <TextBlock x:Name="Multiple">Несколько вар.</TextBlock>
                         </ComboBox>
                         <Button Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" Template="{DynamicResource AddButtonTemplate}" Background="White"
-                        Width="23" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Click="AddQuestionButton_Click">
+                        Width="23" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Click="AddQuestionButton_Click" ToolTip="Добавить вопрос">
                         </Button>
                     </StackPanel>
                     <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">
@@ -107,9 +107,9 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button x:Name="PrevQuestionButton" Content="&lt;" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" 
+                        <Button x:Name="PrevQuestionButton" Content="&lt;" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Предыдущий вопрос"
                                 Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,1,0" Width="18" Click="PrevQuestionButton_Click"/>
-                        <Button x:Name="NextQuestionButton" Content=">" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" 
+                        <Button x:Name="NextQuestionButton" Content=">" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Следующий вопрос"
                                 Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="1,0,5,0" Width="18" Click="NextQuestionButton_Click"/>
                     </StackPanel>
                     <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">

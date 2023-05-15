@@ -31,13 +31,16 @@ namespace PsychoTestProject.View
             {
                 if (WpfMessageBox.Show("Копия программы уже открыта!", "Внимание!", 
                     MessageBoxButton.OK, MessageBoxImage.Error) == MessageBoxResult.OK)
-                    this.Close();
+                    Close();
                 else
-                    this.Close();
+                    Close();
             }
             InitializeComponent();
             DataContext = new MainViewModel(MainFrame, this);
             MainFrame.Navigate(new Welcome());
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) 
+            => e.Cancel = WpfMessageBox.Show("Вы точно хотите закрыть программу?", WpfMessageBox.MessageBoxType.ConfirmationWithYesNo) != MessageBoxResult.Yes;
     }
 }

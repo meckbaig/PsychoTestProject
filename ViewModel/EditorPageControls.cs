@@ -152,7 +152,8 @@ namespace PsychoTestProject.ViewModel
                 BorderThickness = new Thickness(0),
                 BorderBrush = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
                 Value = (int)answer.Value,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                ToolTip = "Баллов за ответ"
             };
             integerUpDown.ValueChanged += (s, e) => 
             {
@@ -182,7 +183,8 @@ namespace PsychoTestProject.ViewModel
                 BorderBrush = null,
                 VerticalAlignment = VerticalAlignment.Center,
                 Command = view.AddVariableAnswerCommand,
-                CommandParameter = answer
+                CommandParameter = answer,
+                ToolTip = "Добавить вариант ответа"
             };
             addVariableAnswerButton.SetResourceReference(Button.TemplateProperty, "AddButtonTemplate");
 
