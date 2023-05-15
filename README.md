@@ -20,7 +20,10 @@
 ✔ Personality orientation test<br/>
 ✔ Dynamic Import/Export files display<br/>
 ✔ Admin password for editing (requires setting in admin app)<br/>
+✔ Editor for all tests<br/>
+✔ Editor for lections<br/>
 ✔ Admin app <br/>
 ✔ Tests descriptions<br/>
 ❌ Picture test<br/>
+✔ ToolTips<br/>
 ● Bug fixes...😨<br/>
