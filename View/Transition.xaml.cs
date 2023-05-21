@@ -82,7 +82,7 @@ namespace PsychoTestProject.View
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException || ex is IndexOutOfRangeException)
             {
-                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.", 
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.",
                     WpfMessageBox.MessageBoxType.Error);
                 MainViewModel.Back();
             }

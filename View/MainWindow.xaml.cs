@@ -1,21 +1,7 @@
 ﻿using PsychoTestProject.ViewModel;
-using PsychoTestProject.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
 using System.Diagnostics;
-using System.Windows.Navigation;
+using System.Linq;
+using System.Windows;
 
 namespace PsychoTestProject.View
 {
@@ -26,10 +12,10 @@ namespace PsychoTestProject.View
     {
         public MainWindow()
         {
-            if (Process.GetProcesses().Where(p => p.ProcessName == 
-            System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count()>1)
+            if (Process.GetProcesses().Where(p => p.ProcessName ==
+            System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count() > 1)
             {
-                if (WpfMessageBox.Show("Копия программы уже открыта!", "Внимание!", 
+                if (WpfMessageBox.Show("Копия программы уже открыта!", "Внимание!",
                     MessageBoxButton.OK, MessageBoxImage.Error) == MessageBoxResult.OK)
                     Close();
                 else
@@ -41,6 +27,13 @@ namespace PsychoTestProject.View
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) 
-            => e.Cancel = WpfMessageBox.Show("Вы точно хотите закрыть программу?", WpfMessageBox.MessageBoxType.ConfirmationWithYesNo) != MessageBoxResult.Yes;
+        {
+            if (WpfMessageBox.Show("Вы точно хотите закрыть программу?", WpfMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.Yes)
+            {
+                Process.GetCurrentProcess().Kill();
+            }
+            else
+                e.Cancel = true;
+        }
     }
 }

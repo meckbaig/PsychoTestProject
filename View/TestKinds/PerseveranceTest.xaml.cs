@@ -1,27 +1,13 @@
 ﻿using PsychoTestProject.Extensions;
 using PsychoTestProject.ViewModel;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PsychoTestProject.View.TestKinds
 {
@@ -39,10 +25,10 @@ namespace PsychoTestProject.View.TestKinds
 
         public int PreviousNumber
         {
-            get => previousNumber+1;
+            get => previousNumber + 1;
             set
             {
-                previousNumber = value-1;
+                previousNumber = value - 1;
                 OnPropertyChanged("PreviousNumber");
             }
         }
@@ -60,14 +46,13 @@ namespace PsychoTestProject.View.TestKinds
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            time+=0.01;
+            time += 0.01;
         }
 
 
         private void CreatePicture(int imageNumber, bool createMouseDown = true)
         {
             Image newImage = new Image();
-            //newImage.Source = image;
             newImage.Source = MainViewModel.GetBitmap(dictionary.NumberSources[imageNumber]);
             newImage.Name = $"img{imageNumber}";
             ImageSizeChange(newImage);
@@ -106,7 +91,7 @@ namespace PsychoTestProject.View.TestKinds
                         Image_MouseDown(sender, e);
                     }
                 }
-                else 
+                else
                 {
                     if ((ThisGrid.Background as SolidColorBrush).Color.G >= 75 && (ThisGrid.Background as SolidColorBrush).Color.G <= 255)
                     {
@@ -126,7 +111,7 @@ namespace PsychoTestProject.View.TestKinds
                 if (PreviousNumber == dictionary.NumberImages.Count)
                 {
                     timer.Stop();
-                    WpfMessageBox.Show(Math.Round(time, 2).ToString()+" секунд на решение");
+                    WpfMessageBox.Show(Math.Round(time, 2).ToString() + " секунд на решение");
 
                 }
             }
@@ -164,10 +149,10 @@ namespace PsychoTestProject.View.TestKinds
                         break;
                     }
                 }
-                text += Math.Round(image.ActualWidth / (double)800, 6) + ";";
-                text += Math.Round(image.ActualHeight / (double)450, 6) + ";";
-                text += Math.Round(image.Margin.Left / (double)800, 6) + ";";
-                text += Math.Round(image.Margin.Top / (double)450, 6) + ");\n";
+                text += Math.Round(image.ActualWidth / ActualWidth, 6) + ";";
+                text += Math.Round(image.ActualHeight / ActualHeight, 6) + ";";
+                text += Math.Round(image.Margin.Left / ActualWidth, 6) + ";";
+                text += Math.Round(image.Margin.Top / ActualHeight, 6) + ");\n";
             }
             text = text.Remove(text.Length - 2);
             text += "\n}";
@@ -175,12 +160,11 @@ namespace PsychoTestProject.View.TestKinds
             text = text.Replace(',', '.');
             text = text.Replace(';', ',');
 
-            File.WriteAllText("E:\\User\\Downloads\\sdf.txt", text);
+            File.WriteAllText("E:\\User\\Downloads\\1.txt", text);
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //ParceVisualToTxt();
             try
             {
                 foreach (Image image in MainViewModel.GetVisualChilds<Image>(this.Content as DependencyObject))

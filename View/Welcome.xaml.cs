@@ -80,12 +80,11 @@ namespace PsychoTestProject
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
-            if (EnterPasswordDialog.Show())
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    CryptoMethod.Import(files[0]);
-                }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                CryptoMethod.Import(files[0]);
+            }
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
@@ -106,36 +105,30 @@ namespace PsychoTestProject
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-
-            if (EnterPasswordDialog.Show())
+            OpenFileDialog fileDialog = new OpenFileDialog()
             {
-                OpenFileDialog fileDialog = new OpenFileDialog()
-                {
-                    Title = "Выберите файл",
-                    FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
-                    Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
-                };
-                if (fileDialog.ShowDialog() == true)
-                {
-                    CryptoMethod.Import(fileDialog.FileName);
-                }
+                Title = "Выберите файл",
+                FileName = $"Export_{Assembly.GetExecutingAssembly().GetName().Version}",
+                Filter = "Экспортированные данные программы (*.psychoExp)|*.psychoExp|Все файлы (*.*)|*.*"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                CryptoMethod.Import(fileDialog.FileName);
             }
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-            if (EnterPasswordDialog.Show())
+            try
             {
-                try
-                {
-                    CryptoMethod.Export();
-                }
-                catch (Exception ex)
-                {
-                    WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                CryptoMethod.Export();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        
         private void LectionsButton_Click(object sender, RoutedEventArgs e)
         {
             try

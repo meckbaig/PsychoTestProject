@@ -79,8 +79,8 @@
         </Border>
         <Border Background="White" BorderBrush="Black" BorderThickness="0" CornerRadius="15,15,15,15" Margin="10,10,10,10">
             <StackPanel Margin="20,20,20,20">
-                <TextBlock TextWrapping="Wrap" Text="{Binding QuestionTime}" Foreground="{Binding TimerColor}" FontFamily="Microsoft YaHei UI" FontSize="15"/>
-                <TextBlock TextWrapping="Wrap" Text="{Binding QuestionText}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="20" Margin="0,5,0,5"/>
+                <TextBlock x:Name="TimerLabel" TextWrapping="Wrap" Text="{Binding QuestionTime}" Foreground="{Binding TimerColor}" FontFamily="Microsoft YaHei UI" FontSize="15"/>
+                <TextBlock TextWrapping="Wrap" Text="{Binding QuestionText}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="20" Margin="0,5,0,10"/>
                 <StackPanel x:Name="ShowedAnswers">
                 </StackPanel>
                 <TextBlock TextWrapping="Wrap" Text="{Binding QuestionCount}" Foreground="#FF007FFE" FontFamily="Microsoft YaHei UI" FontSize="13" Margin="0,5,0,5"/>

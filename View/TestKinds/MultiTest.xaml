@@ -25,7 +25,7 @@
         </Style>
     </Page.Resources>
     <Grid x:Name="ThisGrid" SizeChanged="Grid_SizeChanged">
-        <ScrollViewer x:Name="Scroll" Focusable="False">
+        <ScrollViewer x:Name="Scroll" Focusable="False" VerticalScrollBarVisibility="Auto">
             <local:Question x:Name="Question" VerticalAlignment="Center"  HorizontalAlignment="Center" QuestionClass="{Binding ElementName=multiTestPage, Path=DataContext.CurrentQuestion}" 
          Loaded="Question_Loaded" ExtNextButton_Click="NextQuestion" ExtBackButton_Click="PreviousQuestion" Margin="{Binding ElementName=multiTestPage, Path=DataContext.Margin}"/>
         </ScrollViewer>

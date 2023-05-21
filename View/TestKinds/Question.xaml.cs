@@ -57,10 +57,12 @@ namespace PsychoTestProject.View
                 PrintAnswersYesNo(QuestionClass);
             if (startTimer)
                 Timer(QuestionClass);
+            else TimerLabel.Visibility = Visibility.Collapsed;
             if (!showBackButton)
                 ButtonsStackPanel.Children.RemoveAt(0);
+            else BackButton.IsEnabled = false;
         }
-        public void Initialize(QuestionClass question, bool startTimer = true, bool yesNo = false)
+        public void Initialize(QuestionClass question, bool startTimer = true, bool yesNo = false, bool enableBackButton = true)
         {
             this.yesNo = yesNo;
             this.startTimer = startTimer;
@@ -71,6 +73,9 @@ namespace PsychoTestProject.View
                 PrintAnswersYesNo(QuestionClass);
             if (startTimer)
                 Timer(QuestionClass);
+            else TimerLabel.Visibility = Visibility.Collapsed;
+            if (ButtonsStackPanel.Children.Count>1)
+                BackButton.IsEnabled = enableBackButton;
         }
         public QuestionClass QuestionClass
         {
@@ -125,7 +130,8 @@ namespace PsychoTestProject.View
             }
             MaxQuestionTime = questionTime;
             QuestionTime = $"Осталось: {questionTime}с.";
-            OnPropertyChanged("QuestionTime");
+            OnPropertyChanged("QuestionTime"); 
+            TimerLabel.Visibility = Visibility.Visible;
             qTimer.Start();
         }
 
@@ -144,7 +150,7 @@ namespace PsychoTestProject.View
             {
                 Control item;
                 FontFamily fontFamily = new FontFamily("Microsoft YaHei UI");
-                Thickness margin = new Thickness(0, 3, 0, 3);
+                Thickness margin = new Thickness(0, 2, 0, 5);
                 switch (question.Type)
                 {
                     case QuestionType.Single:
@@ -209,7 +215,7 @@ namespace PsychoTestProject.View
                 textBlock.Text = answer.Text;
                 textBlock.FontSize = 16;
                 textBlock.FontFamily = new System.Windows.Media.FontFamily("Microsoft YaHei UI");
-                textBlock.Margin = new Thickness(5, 3, 0, 3);
+                textBlock.Margin = new Thickness(5, 4, 0, 4);
                 textBlock.TextWrapping = TextWrapping.Wrap;
                 stackPanel.Children.Add(textBlock);
                 stackPanel.Children.Add(answersStackPanel);
@@ -227,7 +233,7 @@ namespace PsychoTestProject.View
                 VerticalContentAlignment = VerticalAlignment.Center,
                 GroupName = text,
                 Content = text,
-                FontSize = 13,
+                FontSize = 14,
                 FontFamily = new FontFamily("Microsoft YaHei UI"),
                 Tag = answer,
                 Margin = new Thickness(0, 3, 5, 3)

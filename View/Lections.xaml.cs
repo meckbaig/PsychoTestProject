@@ -209,11 +209,6 @@ namespace PsychoTestProject
             return tag;
         }
 
-        private async void GetFontSize()
-        {
-            //FontSizeCB.SelectedItem = await Web.ExecuteScriptAsync("window.getComputedStyle(window.getSelection().anchorNode.parentElement).fontSize;");
-        }
-
         private async void LeftBT_Click(object sender, RoutedEventArgs e)
         {
             await Web.ExecuteScriptAsync("document.execCommand('justifyLeft', false, null);");

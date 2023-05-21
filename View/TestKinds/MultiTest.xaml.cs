@@ -69,7 +69,7 @@ namespace PsychoTestProject.View.TestKinds
 
             if (nextQuestion != null)
             {
-                Question.Initialize(nextQuestion, false, nextQuestion.YesNo);
+                Question.Initialize(nextQuestion, startTimer: false, yesNo: nextQuestion.YesNo);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace PsychoTestProject.View.TestKinds
             var previousQuestion = viewModel.PreviousQuestion();
             if (previousQuestion != null)
             {
-                Question.Initialize(previousQuestion, false);
+                Question.Initialize(previousQuestion, startTimer: false, enableBackButton: MainViewModel.CurrentQuestionNumber != 1);
             }
         }
 
@@ -98,7 +98,6 @@ namespace PsychoTestProject.View.TestKinds
             {
                 Exit();
             }
-
         }
 
         private void Exit()
