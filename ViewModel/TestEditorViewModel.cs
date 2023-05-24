@@ -49,10 +49,11 @@ namespace PsychoTestProject.ViewModel
         {
             EditFrame = frame;
             UpdateTestList();
-            CreateNewTestBTCommand = new Command(o => CreateNewTest("CreateNewTestBT"));
-            SaveTestBTCommand = new Command(o => SaveTest("SaveTestBTCommand"));
-            DeleteTestBTCommand = new Command(o => DeleteTest("DeleteTestBTCommand"));
-            GoToLectionsEditorCommand = new Command(o => GoToLectionsEditor("GoToLectionsEditorCommand"));
+            CreateNewTestBTCommand = new Command(o => CreateNewTest());
+            SaveTestBTCommand = new Command(o => SaveTest());
+            DeleteTestBTCommand = new Command(o => DeleteTest());
+            GoToLectionsEditorCommand = new Command(o => GoToLectionsEditor());
+            CreateNewTest();
 ;        }
 
         private void UpdateTestList()
@@ -76,7 +77,7 @@ namespace PsychoTestProject.ViewModel
         public ICommand DeleteTestBTCommand { get; set; }
         public ICommand GoToLectionsEditorCommand { get; set; }
 
-        public void CreateNewTest(object sender)
+        public void CreateNewTest()
         {
             MainViewModel.CurrentTest = new TestClass(false);
             ObservableCollection<TestClass> testList = GetTestList();
@@ -92,7 +93,7 @@ namespace PsychoTestProject.ViewModel
             EditFrame.Navigate(editorPage);
         }
 
-        public void SaveTest(object sender)
+        public void SaveTest()
         {
             XmlDocumentClass xmlDocument = new XmlDocumentClass();
             if (MainViewModel.CurrentTest != null)
@@ -166,7 +167,7 @@ namespace PsychoTestProject.ViewModel
 
         }
 
-        public void DeleteTest(object sender)
+        public void DeleteTest()
         {
             if (Test != null)
             {
@@ -208,7 +209,7 @@ namespace PsychoTestProject.ViewModel
             }
         }
 
-        public void GoToLectionsEditor (object sender)
+        public void GoToLectionsEditor ()
         {
             MainViewModel.CurrentTest = null;
             MainViewModel.MainFrame.Navigate(new Lections(true));

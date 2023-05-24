@@ -70,7 +70,7 @@ namespace PsychoTestProject.ViewModel
             string levelText = $"  Доминирующая направленность: {ExecuteOrientationResult(index)}";
             for (int i = 0; i < 3; i++)
             {
-                levelText += $"\n{ExecuteOrientationResult(i)}: {OrientationResult[i]} ";
+                levelText += $"\n\n{ExecuteOrientationResult(i)}: {OrientationResult[i]} ";
                 switch (OrientationResult[i] % 10)
                 {
                     case 1: levelText += "балл"; break;

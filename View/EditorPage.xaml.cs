@@ -8,13 +8,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Xceed.Wpf.Toolkit;
 
 namespace PsychoTestProject.View
@@ -34,10 +31,16 @@ namespace PsychoTestProject.View
         private string testTitle;
         private int answersTarget;
         private Image backgroundImage;
-        public byte[] Image { get; 
-            set; }
-        public string ImageExt { get; 
-            set; }
+        public byte[] Image
+        {
+            get;
+            set;
+        }
+        public string ImageExt
+        {
+            get;
+            set;
+        }
 
         public Thickness DeleteButtonThickness { get; set; }
         public List<AnswerClass> AnswerList
@@ -82,7 +85,7 @@ namespace PsychoTestProject.View
 
                 if (autoSave && question.Answers.Count != 0 && value != null && !EditorControls.Equal(question, value))
                     SaveQuestion();
-                
+
                 if (value != null)
                     question = value;
                 OnPropertyChanged(nameof(CurrentQuestion));
@@ -161,7 +164,7 @@ namespace PsychoTestProject.View
 
         private void PrevQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrentQuestion = QuestionList[CurrentQuestion.Id-2];
+            CurrentQuestion = QuestionList[CurrentQuestion.Id - 2];
         }
         private void NextQuestionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -170,45 +173,87 @@ namespace PsychoTestProject.View
 
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveQuestion();
-            for (int i = MainViewModel.CurrentTest.Questions.Count - 1; i >= 0; i--)
+            try
             {
-                if (MainViewModel.CurrentTest.Questions[i].Text == "")
-                    MainViewModel.CurrentTest.Questions.RemoveAt(i);
+                SaveQuestion();
+                for (int i = MainViewModel.CurrentTest.Questions.Count - 1; i >= 0; i--)
+                {
+                    if (MainViewModel.CurrentTest.Questions[i].Text == "")
+                        MainViewModel.CurrentTest.Questions.RemoveAt(i);
+                }
+                AddQuestion();
             }
-            AddQuestion();
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
-        private void AddAnswerButton_Click(object sender, RoutedEventArgs e) 
+        private void AddAnswerButton_Click(object sender, RoutedEventArgs e)
         {
-            this.CurrentQuestion = ReadQuestion();
-            AnswerClass newAnswer = new AnswerClass();
-            newAnswer.Id = this.CurrentQuestion.Answers.Count + 1;
-            this.CurrentQuestion.Answers.Add(newAnswer);
-            LoadQuestion();
+            try
+            {
+                this.CurrentQuestion = ReadQuestion();
+                AnswerClass newAnswer = new AnswerClass();
+                newAnswer.Id = this.CurrentQuestion.Answers.Count + 1;
+                this.CurrentQuestion.Answers.Add(newAnswer);
+                LoadQuestion();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void SaveQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveQuestion();
+            try
+            {
+                SaveQuestion();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void DeleteQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            DeleteQuestion();
+            try
+            {
+                DeleteQuestion();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
-            AddImage();
+            try
+            {
+                AddImage();
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void TestTitleTB_KeyUp(object sender, KeyEventArgs e)
         {
-            int start = TestTitleTB.SelectionStart;
-            int len = TestTitleTB.Text.Length;
-            TestTitleTB.Text = MainViewModel.ProperFileName(TestTitleTB.Text);
-            TestTitleTB.SelectionStart = start-(len- TestTitleTB.Text.Length);
+            try
+            {
+                int start = TestTitleTB.SelectionStart;
+                int len = TestTitleTB.Text.Length;
+                TestTitleTB.Text = MainViewModel.ProperFileName(TestTitleTB.Text);
+                TestTitleTB.SelectionStart = start - (len - TestTitleTB.Text.Length);
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
 
@@ -368,7 +413,7 @@ namespace PsychoTestProject.View
             if (File.Exists(picPath))
                 pic = File.ReadAllBytes(picPath);
             MainViewModel.CurrentTest.Name = MainViewModel.ProperFileName(TestTitleTB.Text);
-            if ((int)TakeUpDown.Value>0)
+            if ((int)TakeUpDown.Value > 0)
                 MainViewModel.CurrentTest.Take = (int)TakeUpDown.Value;
             else
                 MainViewModel.CurrentTest.Take = MainViewModel.CurrentTest.Questions.Count;
@@ -488,18 +533,18 @@ namespace PsychoTestProject.View
             {
                 MainViewModel.AllButtonsHover(grid);
             }
-            
+
         }
 
         private void MovementButtonsAvailability()
         {
             if (CurrentQuestion.Id == 1)
                 PrevQuestionButton.IsEnabled = false;
-            else 
+            else
                 PrevQuestionButton.IsEnabled = true;
             if (CurrentQuestion.Id == QuestionList.Count)
                 NextQuestionButton.IsEnabled = false;
-            else 
+            else
                 NextQuestionButton.IsEnabled = true;
         }
 
