@@ -38,5 +38,11 @@ namespace PsychoTestControlPanel
             File.WriteAllBytes(filePath, Algorythm.Encrypt(Encoding.UTF8.GetBytes(PasswordTB.Text)));
             MainViewModel.MainFrame.NavigationService.GoBack();
         }
+
+        private void PasswordTB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ApplyButton_Click(sender, e);
+        }
     }
 }

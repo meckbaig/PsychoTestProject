@@ -53,9 +53,10 @@ namespace PsychoTestProject.ViewModel
             return MainViewModel.CurrentTest.Questions[MainViewModel.CurrentQuestionNumber++];
         }
 
-        public void ChangeQuestionMargin(double width, double height)
+        public void ChangeQuestionMargin(double width, double height, Question question)
         {
-            Margin = new Thickness(width / 10, height / 15, width / 10, height / 15);
+            Margin = new Thickness(0, height / 15, 0, height / 15);
+            question.Width = (height< width * 0.8) ? height : width * 0.8;
             OnPropertyChanged("Margin");
         }
 

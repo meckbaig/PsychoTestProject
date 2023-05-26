@@ -1,21 +1,16 @@
 ﻿using PsychoTestProject.Extensions;
 using PsychoTestProject.View;
-using PsychoTestProject.View.TestKinds;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace PsychoTestProject.ViewModel
@@ -37,9 +32,9 @@ namespace PsychoTestProject.ViewModel
         }
 
         public static MainWindow MainWindow { get; set; }
+        public static Frame? MainFrame { get; set; }
 
         public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
-        public static Frame? MainFrame { get; set; }
         public static object TestFrame { get; set; }
         public static bool TestStarted { get; set; }
         public static TestClass CurrentTest { get; set; }
@@ -47,8 +42,48 @@ namespace PsychoTestProject.ViewModel
         public static QuestionClass CurrentQuestion 
         { 
             get => CurrentTest.Questions[CurrentQuestionNumber-1]; 
-            set => CurrentTest.Questions[CurrentQuestionNumber-1] = value; 
+            set => CurrentTest.Questions[CurrentQuestionNumber-1] = value;
         }
+
+        DpiScale dpi = VisualTreeHelper.GetDpi(new Control());
+
+        public double Scale
+        {
+            get
+            {
+                return Properties.Settings.Default.Scale;
+            }
+            set
+            {
+                double diff = value / Properties.Settings.Default.Scale;
+                if (value < 0.5)
+                {
+                    value = 0.5;
+                    diff = 1;
+                }
+                else if (MinHeightScale * diff > SystemParameters.FullPrimaryScreenHeight)
+                {
+                    value = Properties.Settings.Default.Scale;
+                    diff = 1;
+                }
+                
+                MainWindow.Width *= diff;
+                MainWindow.Height *= diff;
+                Properties.Settings.Default.Scale = value;
+                Properties.Settings.Default.Save();
+                OnPropertyChanged(nameof(Scale));
+                OnPropertyChanged(nameof(MinWidthScale));
+                OnPropertyChanged(nameof(MinHeightScale));
+                ShowScale();
+            }
+        }
+
+        public double ScalePercent { get => Math.Round(Scale * 100, 0); }
+        public double MinWidthScale { get => Scale * 780; }
+        public double MinHeightScale { get => Scale * 490; }
+        public double StartupX { get => (SystemParameters.FullPrimaryScreenWidth - 800) / 2; }
+        public double StartupY { get => (SystemParameters.FullPrimaryScreenHeight - 600) / 2; }
+
 
         public static void Back()
         {
@@ -56,6 +91,20 @@ namespace PsychoTestProject.ViewModel
             MainFrame.Content = null;
             MainFrame.Navigate(new Welcome());
         }
+
+        public void ShowScale()
+        {
+            OnPropertyChanged(nameof(ScalePercent));
+            ColorAnimation animation = new ColorAnimation();
+            animation.From = Color.FromArgb(0, 0, 0, 0);
+            animation.To = Color.FromArgb(100, 0, 0, 0);
+            animation.Duration = TimeSpan.FromMilliseconds(500);
+            animation.AutoReverse = true;
+            animation.DecelerationRatio = 1;
+            MainWindow.ScaleTB.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+        }
+
+
         public static List<T> GetVisualChilds<T>(DependencyObject parent) where T : DependencyObject
         {
             List<T> childs = new List<T>();

@@ -82,5 +82,11 @@ namespace PsychoTestControlPanel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
+        private void PathTB_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ApplyButton_Click(sender, e);
+        }
     }
 }

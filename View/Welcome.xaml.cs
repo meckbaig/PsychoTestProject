@@ -32,7 +32,7 @@ namespace PsychoTestProject
         AnimationClass animationClass { get; set; }
         public Welcome()
         {
-            MainViewModel.MainWindow.Title = "PsychoTest";
+            MainViewModel.MainWindow.Title = "Электонное пособие «Основы психологии личности»";
             InitializeComponent();
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
@@ -94,7 +94,7 @@ namespace PsychoTestProject
                             $"Версия программы: {Assembly.GetExecutingAssembly().GetName().Version}\n" +
                             $"Год разработки: 2023. Год конечного сопровождения: 2024.\n" +
                             $"По вопросам обращаться на почту: meckbaig@yandex.ru",
-                            "Информация о программе PsychoTest", MessageBoxButton.OK);
+                            "Информация о программе", MessageBoxButton.OK);
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)

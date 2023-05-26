@@ -33,6 +33,8 @@ namespace PsychoTestProject
     {
         public static string LectionSource;
         public static bool Admin;
+        double ZoomFactor = Properties.Settings.Default.Scale;
+
         public Lections(bool admin)
         {
             Admin = admin;
@@ -51,13 +53,16 @@ namespace PsychoTestProject
             {
                 var env = await CoreWebView2Environment.CreateAsync(null, MainViewModel.UserDataFolder);
                 await Web.EnsureCoreWebView2Async(env);
+                Web.NavigationStarting += (s, e) => ZoomFactor = Web.ZoomFactor;
+                Web.NavigationCompleted += (s, e) => Web.ZoomFactor = ZoomFactor;
                 Thread.Sleep(50);
                 DataContext = new LectionsViewModel(Web, TopStackPanelScroll);
+                Web.Loaded += (s,e) => Web.ZoomFactor = ZoomFactor;
                 Thread.Sleep(50);
                 if (Admin)
                     Web.ExecuteScriptAsync("document.designMode = \"on\"");
                 MainViewModel.AllButtonsHover(this.Content);
-
+                Web.ZoomFactor = ZoomFactor;
             }
             catch (WebView2RuntimeNotFoundException)
             {

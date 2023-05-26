@@ -44,6 +44,13 @@ namespace PsychoTestProject.View
             Message
         }
 
+        public double Scale { get => Properties.Settings.Default.Scale; }
+        public double MaxWidthScale { get => Scale * 500; }
+        public double MaxHeightScale { get => Scale * 500; }
+        public double MinWidthScale { get => Scale * 300; }
+        public double MinHeightScale { get => Scale * 160; }
+
+
         //public enum MessageBoxImage
         //{
         //    Warning = 0,

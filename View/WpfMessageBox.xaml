@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:PsychoTestProject.View"
         xmlns:l="clr-namespace:PsychoTestProject"
         mc:Ignorable="d"
-        Title="WpfMessageBox"  MinHeight="160" 
-        MinWidth="300" MaxHeight="750" MaxWidth="500" 
+        Title="WpfMessageBox"  MinHeight="{Binding MinHeightScale}" 
+        MinWidth="{Binding MinWidthScale}" MaxHeight="{Binding MaxHeightScale}" MaxWidth="{Binding MaxWidthScale}" 
         Background="Transparent" 
         SizeToContent="WidthAndHeight" 
         Owner="{x:Static l:App.MainWindow}"
@@ -54,7 +54,10 @@
 
     <Border Background="White" BorderBrush="LightSlateGray" 
     BorderThickness="0" CornerRadius="8">
-        <Grid >
+        <Grid>
+            <Grid.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding Scale}" ScaleY="{Binding Scale}"/>
+            </Grid.LayoutTransform>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -74,12 +77,11 @@
             <Image Name="img" Margin="10" Grid.Row="1" 
             Grid.Column="0" Width="50" 
             Height="50"  Stretch="Fill" />
-            <TextBlock Margin="10,5,10,5"   
-            VerticalAlignment="Center" 
-            TextWrapping="Wrap" Name="txtMsg" 
-            Grid.Row="1" Text="{Binding MessageText}"
-                    Grid.Column="1" FontSize="14" 
-                    LineHeight="20"  />
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="1" Grid.Row="1">
+                <TextBlock Margin="10,5,10,5" VerticalAlignment="Center" TextWrapping="Wrap" Name="txtMsg" 
+                 Text="{Binding MessageText}"  FontSize="14" LineHeight="20"/>
+            </ScrollViewer>
+            
             
             <Border Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Background="WhiteSmoke" CornerRadius="0,0,8,8">
                 <StackPanel Orientation="Horizontal"  

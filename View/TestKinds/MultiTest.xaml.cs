@@ -88,7 +88,7 @@ namespace PsychoTestProject.View.TestKinds
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            viewModel.ChangeMargin(Question.ActualWidth, Question.ActualHeight);
+            viewModel.ChangeMargin(Scroll.ActualWidth, Scroll.ActualHeight, Question);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PsychoTestProject.View
 {
@@ -34,6 +35,17 @@ namespace PsychoTestProject.View
             }
             else
                 e.Cancel = true;
+        }
+
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && MainFrame.Content is Welcome)
+            {
+                if (e.Delta > 0)
+                    (DataContext as MainViewModel).Scale += 0.1;
+                else
+                   (DataContext as MainViewModel).Scale -= 0.1;
+            }
         }
     }
 }

@@ -58,7 +58,15 @@ namespace PsychoTestProject.View
                 default: break;
             }
             MainViewModel.MainWindow.Title = Title;
-            Description = Encoding.UTF8.GetString(CryptoMethod.Decrypt(Path.Combine(Environment.CurrentDirectory, "Tests", Title, "Transition.text")));
+            string transPath = Path.Combine(Environment.CurrentDirectory, "Tests", Title, "Transition.text");
+            if (File.Exists(transPath))
+                Description = Encoding.UTF8.GetString(CryptoMethod.Decrypt(transPath));
+            else
+            {
+                WpfMessageBox.Show("Файлы данного теста отстутствуют или повреждены. Для импорта файлов обратитесь к администратору.");
+
+                this.Loaded += (s,e) => MainViewModel.MainFrame.GoBack();
+            }
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -113,5 +121,6 @@ namespace PsychoTestProject.View
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
     }
 }

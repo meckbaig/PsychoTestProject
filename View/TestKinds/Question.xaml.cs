@@ -155,20 +155,19 @@ namespace PsychoTestProject.View
                 {
                     case QuestionType.Single:
                         var radioButton = new RadioButton();
-                        radioButton.Content = new TextBlock() { Text = answer.Text, TextWrapping = TextWrapping.Wrap};
+                        radioButton.Content = new TextBlock() { Text = answer.Text, TextWrapping = TextWrapping.Wrap, FontSize = 15 };
                         item = radioButton;
                         break;
                     case QuestionType.Multiple:
-                        var checkBox = new CheckBox();
+                        var checkBox = new CheckBox() { FontSize = 15 };
                         item = checkBox;
                         checkBox.Content = new TextBlock() { Text = answer.Text, TextWrapping = TextWrapping.Wrap };
                         break;
                     default:
-                        var textBox = new TextBox() { TextWrapping = TextWrapping.Wrap };
+                        var textBox = new TextBox() { TextWrapping = TextWrapping.Wrap, FontSize = 18 };
                         item = textBox;
                         break;
                 }
-                item.FontSize = 15;
                 item.FontFamily = fontFamily;
                 item.Tag = answer;
                 item.Margin = margin;

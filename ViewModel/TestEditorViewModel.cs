@@ -23,7 +23,7 @@ namespace PsychoTestProject.ViewModel
         Frame EditFrame;
         EditorPage editorPage;
         public ObservableCollection<TestClass> TestList { get; set; }
-
+        public string TestDirectory = Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний");
         public static List<Image> ImageList { get; set; }
         private TestClass test;
 
@@ -65,7 +65,7 @@ namespace PsychoTestProject.ViewModel
         private ObservableCollection<TestClass> GetTestList()
         {
             ObservableCollection<TestClass> testList = new ObservableCollection<TestClass>();
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний"), "*.xml"))
+            foreach (var file in Directory.GetFiles(TestDirectory, "*.xml"))
             {
                 testList.Add(new TestClass(false) { Name = Path.GetFileNameWithoutExtension(file), Filename = file });
             }
@@ -123,11 +123,10 @@ namespace PsychoTestProject.ViewModel
                 if (savePath == string.Empty)
                 {
                     MainViewModel.CurrentTest.Name = MainViewModel.FileNameNotNull(MainViewModel.CurrentTest.Name, 
-                        "Новый тест.xml", Environment.CurrentDirectory + $"\\Tests\\Тестирование знаний");
+                        "Новый тест.xml", TestDirectory);
 
                     if (MainViewModel.CurrentTest.Filename == null)
-                        savePath = Path.Combine(Environment.CurrentDirectory, "Tests\\Тестирование знаний", 
-                            MainViewModel.CurrentTest.Name + ".xml");
+                        savePath = Path.Combine(TestDirectory, MainViewModel.CurrentTest.Name + ".xml");
                     else
                         savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), 
                             MainViewModel.CurrentTest.Name + ".xml");
@@ -158,7 +157,7 @@ namespace PsychoTestProject.ViewModel
                 if (xmlDocument.Save())
                 {
                     if (editorPage?.Image != null)
-                        File.WriteAllBytes(Environment.CurrentDirectory + "\\Tests\\Тестирование знаний\\" + 
+                        File.WriteAllBytes(TestDirectory + 
                             MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                     WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                     UpdateTestList();
@@ -243,6 +242,8 @@ namespace PsychoTestProject.ViewModel
                                         Name = Path.GetFileNameWithoutExtension(fileDialog.FileName), 
                                         Filename = fileDialog.FileName 
                                     };
+                                    TestDirectory = Path.GetDirectoryName(MainViewModel.CurrentTest.Filename);
+                                    UpdateTestList();
                                 }
                                 else return;
                             }

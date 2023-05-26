@@ -564,7 +564,7 @@ namespace PsychoTestProject.View
                      (deleteAnswerCommand = new Command(obj =>
                      {
                          SaveQuestion();
-                         CurrentQuestion.Answers.Remove(CurrentQuestion.Answers.First(a => a.Id == (obj as AnswerClass).Id));
+                         CurrentQuestion.Answers.Remove(CurrentQuestion.Answers.FirstOrDefault(a => a.Id == (obj as AnswerClass).Id));
                          LoadQuestion();
                      }));
             }

@@ -6,10 +6,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PsychoTestProject.View"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        mc:Ignorable="d" Closing="Window_Closing"
-        Title="PsychoTest" Height="600" Width="800"
-        MinWidth="720" MinHeight="490">
-    <Grid>
+        mc:Ignorable="d" Closing="Window_Closing" WindowStartupLocation="CenterScreen"
+        Title="PsychoTest" Height="100" Width="100" MouseWheel="Window_MouseWheel"
+        MinWidth="{Binding MinWidthScale}" MinHeight="{Binding MinHeightScale}">
+    <Grid >
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding Scale}" ScaleY="{Binding Scale}"/>
+        </Grid.LayoutTransform>
         <Frame x:Name="MainFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <TextBlock x:Name="ScaleTB" HorizontalAlignment="Center" Text="{Binding ScalePercent, StringFormat={}{0}%}" VerticalAlignment="Top" FontSize="60" Margin="0,50,0,0" Foreground="#00000000"/>
     </Grid>
 </Window>

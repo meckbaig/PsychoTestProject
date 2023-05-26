@@ -34,10 +34,17 @@ namespace PsychoTestProject.View
             }
             Password.Focus();   
             MainViewModel.AllButtonsHover(this.Content);
+            DataContext = this;
         }
         static EnterPasswordDialog _dialog;
         static private bool _result = false;
         static private string _password;
+
+        public double Scale { get => Properties.Settings.Default.Scale; }
+        public double MaxWidthScale { get => Scale * 500; }
+        public double MaxHeightScale { get => Scale * 500; }
+        public double MinWidthScale { get => Scale * 300; }
+        public double MinHeightScale { get => Scale * 160; }
 
         public static bool Show()
         {

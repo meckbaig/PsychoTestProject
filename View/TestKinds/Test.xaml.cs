@@ -77,7 +77,7 @@ namespace PsychoTestProject.View
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            (DataContext as TestViewModel).ChangeQuestionMargin(QuestionGrid.ActualWidth, QuestionGrid.ActualHeight);
+            (DataContext as TestViewModel).ChangeQuestionMargin(QuestionGrid.ActualWidth, QuestionGrid.ActualHeight, Question);
         }
     }
 }
