@@ -32,7 +32,7 @@ namespace PsychoTestProject
         AnimationClass animationClass { get; set; }
         public Welcome()
         {
-            MainViewModel.MainWindow.Title = "Электонное пособие «Основы психологии личности»";
+            MainViewModel.MainWindow.Title = "Электронное пособие «Основы психологии личности»";
             InitializeComponent();
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)

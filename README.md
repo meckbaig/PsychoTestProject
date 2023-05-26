@@ -26,4 +26,5 @@
 ✔ Tests descriptions<br/>
 ❌ Picture test<br/>
 ✔ ToolTips<br/>
+✔ Interface scaling (ctrl+mouse wheel)<br/>
 ● Bug fixes...😨<br/>
