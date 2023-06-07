@@ -2,7 +2,6 @@
 using PsychoTestProject.View;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 
@@ -11,14 +10,18 @@ namespace PsychoTestProject.ViewModel
     internal class EditorPageControls
     {
         IEditorView view;
+        CheckBox IsExactCB;
+        CheckBox YesNoCB;
         public EditorPageControls(IEditorView view)
         {
             this.view = view;
+            IsExactCB = view.IsExactCB;
+            YesNoCB = view.YesNoCB;
         }
 
         public void AddToGrid(Grid grid, UIElement element, int column)
         {
-            if (column ==1)
+            if (column == 1)
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             else
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(0, GridUnitType.Auto) });
@@ -28,12 +31,17 @@ namespace PsychoTestProject.ViewModel
 
         public CheckBox AddCheckBox(string name, string text, bool value)
         {
-            CheckBox checkBox = new CheckBox();
+            CheckBox checkBox;
+            switch (name)
+            {
+                case "IsExactCheckBox": checkBox = IsExactCB; break;
+                case "YesNoCheckBox": checkBox = YesNoCB; break;
+                default: checkBox = new CheckBox(); break;
+            };
+            checkBox.Width = 75;
+            checkBox.Content = new TextBlock() { Text = text, TextWrapping = TextWrapping.Wrap };
             checkBox.IsChecked = value;
-            checkBox.Name = name;
-            checkBox.Content = text;
-            checkBox.FontSize = 14;
-            checkBox.Margin = new Thickness(5, 2, 5, 2);
+            checkBox.Visibility = Visibility.Visible;
             return checkBox;
         }
 
@@ -58,6 +66,7 @@ namespace PsychoTestProject.ViewModel
         public Control VariableAnswer(int answerCount, string word)
         {
             TextBox itemText = new TextBox();
+            itemText.MinWidth = 50;
             itemText.Name = "itemText" + (answerCount - 1);
             itemText.Text = word;
             itemText.TextWrapping = TextWrapping.Wrap;
@@ -65,7 +74,7 @@ namespace PsychoTestProject.ViewModel
             item = Fonts(item);
             item.Margin = new Thickness(5, 1, 5, 1);
             return item;
-        }   
+        }
         public Control OptionsAnswerTextBox(int answerCount, AnswerClass answer)
         {
             TextBox textBox = new TextBox(); // текст ответа
@@ -155,13 +164,13 @@ namespace PsychoTestProject.ViewModel
                 VerticalAlignment = VerticalAlignment.Center,
                 ToolTip = "Баллов за ответ"
             };
-            integerUpDown.ValueChanged += (s, e) => 
+            integerUpDown.ValueChanged += (s, e) =>
             {
                 var element = ((integerUpDown.Parent as StackPanel).Parent as Grid).Children[0];
                 switch (element)
                 {
-                    case RadioButton: 
-                        (element as RadioButton).IsChecked = (element as RadioButton).Focusable = integerUpDown.Value!=0; break;
+                    case RadioButton:
+                        (element as RadioButton).IsChecked = (element as RadioButton).Focusable = integerUpDown.Value != 0; break;
                     case CheckBox:
                         (element as CheckBox).IsChecked = integerUpDown.Value != 0; break;
                     default: break;

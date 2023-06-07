@@ -35,7 +35,7 @@
             <Button x:Name="BackButton" Content="Назад" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFFF8F6C" 
             BorderBrush="{x:Null}" Width="140" Height="25" Click="Back_Click" HorizontalAlignment="Left"/>
             <TextBlock TextWrapping="Wrap" Text="Следующее число:" FontSize="18" FontFamily="Microsoft YaHei UI" Margin="5,0,5,0" VerticalAlignment="Center"/>
-            <TextBlock x:Name="CurrentNumberTextBlock" TextWrapping="Wrap" Text="{Binding PreviousNumber}" 
+            <TextBlock x:Name="CurrentNumberTextBlock" TextWrapping="Wrap" Text="{Binding NextNumber}" 
                  FontSize="18" FontFamily="Microsoft YaHei UI" Margin="5,0,5,0" VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>

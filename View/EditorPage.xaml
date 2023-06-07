@@ -80,26 +80,29 @@
         </ResourceDictionary>
     </Page.Resources>
 
-
     <Grid x:Name="PageGrid" Background="Azure" SizeChanged="PageSizeChanged">
         <DockPanel LastChildFill="False">
-            <ScrollViewer x:Name="TopStackPanelScroll" DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                <StackPanel x:Name="TopStackPanel" Background="#FF9BA0A0" Orientation="Horizontal">
-                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="0,0,1,0">
+            <StackPanel x:Name="TopStackPanel" Orientation="Vertical" Background="#FF9BA0A0" DockPanel.Dock="Top" >
+                <DockPanel Margin="0,0,0,1">
+                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" >
                         <TextBlock FontFamily="Microsoft YaHei UI" FontSize="14" Text="Тип вопроса" 
                          VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-                        <ComboBox x:Name="NewQuestionType" Width="120" Margin="5,5,5,5" BorderBrush="#FFF8F8F8" SelectedIndex="0">
+                        <ComboBox x:Name="NewQuestionType" Width="120" Margin="5,5,5,5" SelectedIndex="0" Height="23">
                             <TextBlock x:Name="String">Открытый</TextBlock>
                             <TextBlock x:Name="Single">Один вар.</TextBlock>
                             <TextBlock x:Name="Multiple">Несколько вар.</TextBlock>
                         </ComboBox>
                         <Button Content="" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" Template="{DynamicResource AddButtonTemplate}" Background="White"
-                        Width="23" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Click="AddQuestionButton_Click" ToolTip="Добавить вопрос">
+                             Width="23" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Click="AddQuestionButton_Click" ToolTip="Добавить вопрос">
                         </Button>
+                        <Button FontSize="12" Background="#FF6CFFB6" BorderBrush="{x:Null}"  Template="{DynamicResource SaveButtonTemplate}" ToolTip="Сохранить вопрос"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="1,1,1,1" Width="23" Height="23" Click="SaveQuestionButton_Click"/>
+                        <Button Template="{DynamicResource DeleteButtonTemplate}" Background="#FFFF8F6C" Width="23" Height="23" ToolTip="Удалить вопрос"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" Click="DeleteQuestionButton_Click"/>
                     </StackPanel>
-                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">
+                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,0,0">
                         <TextBlock FontFamily="Microsoft YaHei UI" FontSize="14" Text="Номер вопроса" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-                        <ComboBox x:Name="QuestionsComboBox" Width="50" Margin="5,5,5,5" BorderBrush="#FFF8F8F8" SelectedIndex="1"
+                        <ComboBox x:Name="QuestionsComboBox" Width="50" Margin="5,5,0,5" SelectedIndex="1"
                             ItemsSource="{Binding QuestionList, Mode=TwoWay}" SelectedItem="{Binding CurrentQuestion}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -107,77 +110,68 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button x:Name="PrevQuestionButton" Content="&lt;" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Предыдущий вопрос"
-                                Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,1,0" Width="18" Click="PrevQuestionButton_Click"/>
-                        <Button x:Name="NextQuestionButton" Content=">" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Следующий вопрос"
-                                Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="1,0,5,0" Width="18" Click="NextQuestionButton_Click"/>
+                        <Button x:Name="PrevQuestionButton" Content="&lt;" FontSize="17" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Предыдущий вопрос"
+                                Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,2,0" Width="23" Click="PrevQuestionButton_Click" FontWeight="Bold"/>
+                        <Button x:Name="NextQuestionButton" Content=">" FontSize="17" Background="#FFF8F8F8" BorderBrush="{x:Null}" ToolTip="Следующий вопрос"
+                                Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="2,0,5,0" Width="23" Click="NextQuestionButton_Click" FontWeight="Bold"/>
                     </StackPanel>
-                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">
-                        <Button Content="Добавить ответ" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" 
-                                Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,5,0" Width="124" 
-                                Click="AddAnswerButton_Click"/>
-                    </StackPanel>
-                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="1,0,1,0">
-                        <TextBlock FontFamily="Microsoft YaHei UI" FontSize="10" Text="Количество отобр. вопросов" VerticalAlignment="Center" Margin="5,0,0,0" Width="86" Height="26" TextWrapping="Wrap"/>
-                        <xctk:IntegerUpDown Name="TakeUpDown" Minimum="0" Maximum="{Binding QuestionList.Count}" Width="60" Height="23" Margin="5,0,5,0"/>
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
+                </DockPanel>
 
-            <ScrollViewer x:Name="BottomStackPanelScroll" DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                <StackPanel x:Name="BottomStackPanel" Background="#FF9BA0A0" DockPanel.Dock="Bottom" Orientation="Horizontal" 
+                <Grid x:Name="TestSettingsGrid" Background="#FFD6E8E8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Добавить ответ" FontFamily="Microsoft YaHei UI" FontSize="14" Background="#FFF8F8F8" BorderBrush="{x:Null}" 
+                     Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,2" Width="124" 
+                     Click="AddAnswerButton_Click"  Grid.Column="0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,1" Grid.Column="1">
+                        <TextBlock FontFamily="Microsoft YaHei UI" Text="Баллов за вопрос" VerticalAlignment="Center" 
+                                   Margin="5,0,0,0" TextWrapping="Wrap" FontSize="14"/>
+                        <xctk:IntegerUpDown Name="QuestionValueUpDown" Minimum="1" Width="50" 
+                         Height="23" Margin="5,2,5,0" BorderBrush="{x:Null}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,1,0,1" Grid.Column="2">
+                        <TextBlock FontFamily="Microsoft YaHei UI" Text="Ответов для макс. балла" VerticalAlignment="Center" 
+                                   Margin="5,0,0,0" TextWrapping="Wrap" FontSize="14"/>
+                        <xctk:IntegerUpDown Name="TagretUpDown" Minimum="1" Width="50" Height="23"
+                         Margin="5,0,5,0" Value="{Binding AnswersTarget}" BorderBrush="{x:Null}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="IsExactCheckBox" Visibility="Collapsed" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="YesNoCheckBox" Visibility="Collapsed" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                    
+                </Grid>
+            </StackPanel>
+            <DockPanel x:Name="BottomStackPanel" Background="#FF9BA0A0" DockPanel.Dock="Bottom" 
                 Loaded="BottomStackPanel_Loaded" SizeChanged="PageSizeChanged">
-                    <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="0,0,1,0">
-                        <TextBlock FontFamily="Microsoft YaHei UI" FontSize="14" Text="Название теста" Margin="5,5,5,0" TextWrapping="Wrap" Width="74"/>
-                        <TextBox x:Name="TestTitleTB" TextWrapping="Wrap" FontSize="14" Margin="5,2,5,2" Text="{Binding TestTitle}" MaxWidth="200" KeyUp="TestTitleTB_KeyUp"/>
-                    </StackPanel>
-                    <StackPanel x:Name="TestSettingsStackPanel" Background="#FFD6E8E8" Margin="1,0,1,0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
-                            <TextBlock FontFamily="Microsoft YaHei UI" Text="Баллов за вопрос" VerticalAlignment="Center" 
-                                   Margin="5,0,0,0" TextWrapping="Wrap"/>
-                            <xctk:IntegerUpDown Name="QuestionValueUpDown" Minimum="1" Width="60" Height="23" Margin="45.5,2,5,0"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,1,0,1">
-                            <TextBlock FontFamily="Microsoft YaHei UI" Text="Ответов для макс. балла" VerticalAlignment="Center" 
-                                   Margin="5,0,0,0" TextWrapping="Wrap"/>
-                            <xctk:IntegerUpDown Name="TagretUpDown" Minimum="1" Width="60" Height="23" Margin="5,0,5,0" Value="{Binding AnswersTarget}"/>
-                        </StackPanel>
-                        <CheckBox x:Name="IsExactCheckBox" Visibility="Collapsed" Margin="5,3,5,5"/>
-                        <CheckBox x:Name="YesNoCheckBox" Visibility="Collapsed" Margin="5,3,5,5"/>
-                    </StackPanel>
-                    <StackPanel x:Name="AddImageStackPanel" Background="#FFD6E8E8" Margin="1,0,1,0" Orientation="Horizontal">
-                        <StackPanel Background="#FFD6E8E8">
-                            <TextBlock FontFamily="Microsoft YaHei UI" FontSize="11" Text="Фоновое изображение" Margin="5,0,5,0" TextWrapping="Wrap" Width="77"/>
-                            <Button Content="Добавить" FontFamily="Microsoft YaHei UI" FontSize="11" BorderBrush="{x:Null}" 
-                            Width="68" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                <StackPanel x:Name="AddImageStackPanel" DockPanel.Dock="Right" Background="#FFD6E8E8" Margin="1,0,0,0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <StackPanel Background="#FFD6E8E8">
+                        <TextBlock FontFamily="Microsoft YaHei UI" FontSize="12" Text="Фоновое изображение" Margin="5,0,5,0" TextWrapping="Wrap" Width="82"/>
+                        <Button Content="Добавить" FontFamily="Microsoft YaHei UI" FontSize="14" BorderBrush="{x:Null}" 
+                            Width="80" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Выбор изображения"
                             Margin="5,2,5,2" Click="AddImageButton_Click" HorizontalAlignment="Left" Background="#FFF8F8F8" Height="20"/>
-                        </StackPanel>
-                        <Image x:Name="TestImage" Width="100" Height="45" Margin="5,5,5,5" Visibility="{Binding BackgroundImage.Visibility}" 
-                           Source="{Binding BackgroundImage.Source}" Stretch="UniformToFill" VerticalAlignment="Top"/>
                     </StackPanel>
-                    <StackPanel Background="#FFD6E8E8" Margin="1,0,0,0">
-                        <Button Content="Сохранить вопрос" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
-                        Height="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" Width="120" Click="SaveQuestionButton_Click"/>
-                        <!--<Button Content="Сохранить тест" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
-                        Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" Click="SaveTestButton_Click"/>-->
-                        <Button Content="Удалить вопрос" FontFamily="Microsoft YaHei UI" FontSize="12" Background="#FFFF8F6C" BorderBrush="{x:Null}" 
-                        Height="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,2,5,1" BorderThickness="1,1,1,1" 
-                        Width="120" Click="DeleteQuestionButton_Click"/>
-                    </StackPanel>
-                    <StackPanel Background="#FFD6E8E8" Margin="1,0,0,0">
-                    </StackPanel>
+                    <Image x:Name="TestImage" Width="100" Height="45" Margin="5,5,5,5" Visibility="{Binding BackgroundImage.Visibility}"
+                           Source="{Binding BackgroundImage.Source}" VerticalAlignment="Top" />
                 </StackPanel>
-            </ScrollViewer>
+                <StackPanel Background="#FFD6E8E8" Orientation="Horizontal" Margin="0,0,1,0" HorizontalAlignment="Left" DockPanel.Dock="Left">
+                    <TextBlock FontFamily="Microsoft YaHei UI" Text="Количество отобр. вопросов" VerticalAlignment="Top" Margin="5,1,0,0" TextWrapping="Wrap" Width="102"/>
+                    <xctk:IntegerUpDown Name="TakeUpDown" Minimum="0" Maximum="{Binding QuestionList.Count}" Width="60" Height="23" Margin="5,5,5,0" BorderThickness="0" VerticalAlignment="Top"/>
+                </StackPanel>
+                <DockPanel Background="#FFD6E8E8" Margin="0,0,1,0">
+                    <TextBlock FontFamily="Microsoft YaHei UI" FontSize="14" Text="Название теста" Margin="5,5,5,0" TextWrapping="Wrap"/>
+                    <TextBox x:Name="TestTitleTB" TextWrapping="Wrap" FontSize="14" Margin="5,2,5,2"
+                     Text="{Binding TestTitle}" MinWidth="50" KeyUp="TestTitleTB_KeyUp"/>
+                </DockPanel>
+            </DockPanel>
         </DockPanel>
 
-        <ScrollViewer x:Name="ContentViewer" Margin="0,32,0,66" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="20,5,0,5">
-                <TextBox x:Name="QuestionTitle" TextWrapping="Wrap" FontSize="24" Margin="5,2,5,2" MinWidth="100" HorizontalAlignment="Left"/>
+        <ScrollViewer x:Name="ContentViewer" Margin="0,82,0,66" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20,5,20,5">
+                <TextBox x:Name="QuestionTitle" TextWrapping="Wrap" FontSize="24" Margin="5,2,5,7" MinWidth="100"/>
                 <ItemsControl x:Name="AnswersControl" HorizontalAlignment="Left"/>
-
-
-                <!--<StackPanel x:Name="AnswersStack">
-                </StackPanel>-->
             </StackPanel>
         </ScrollViewer>
         <Image Name="add_white" Source="/Resources/add_white.png" Visibility="Hidden" Width="23"/>

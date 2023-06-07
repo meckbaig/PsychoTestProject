@@ -186,7 +186,7 @@ namespace PsychoTestProject.View
             foreach (var answer in question.Answers)
             {
                 StackPanel stackPanel = new StackPanel();
-                StackPanel answersStackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
+                StackPanel answersStackPanel = new StackPanel() { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 5) };
                 switch (question.Type)
                 {
                     case QuestionType.Single:

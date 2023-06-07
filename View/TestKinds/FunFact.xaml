@@ -7,23 +7,25 @@
       mc:Ignorable="d" Background="Azure"
       Title="FunFact" Height="529" Width="371" SizeChanged="Page_SizeChanged">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="35*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="6*"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="PeopleImage" Source="{Binding Picture}" Stretch="UniformToFill" Grid.Row="1" Grid.Column="1"/>
-        <TextBlock TextWrapping="Wrap" Text="Ваш темперамент совпадает с ..." FontSize="{Binding TitleFont}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" FontFamily="Microsoft YaHei UI"/>
-        <TextBlock x:Name="PeopleName" TextWrapping="Wrap" FontSize="{Binding TitleFont}" TextAlignment="Center" Grid.Row="3" Grid.Column="1" FontWeight="Bold" FontFamily="Microsoft YaHei UI"> <Run Language="ru-ru" Text="{Binding PeopleNameText}"/></TextBlock>
-        <TextBlock x:Name="PeopleDescription" TextWrapping="Wrap" Text="{Binding PeopleDiscripitonText}" FontSize="{Binding DescriptionFont}" Grid.Row="4" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Top"  FontFamily="Microsoft YaHei UI"/>
+    <Border BorderBrush="#7F9BA0A0" BorderThickness="0.5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+            <Image x:Name="PeopleImage" Source="{Binding Picture}" Stretch="UniformToFill" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock TextWrapping="Wrap" Text="Ваш темперамент совпадает с ..." FontSize="{Binding TitleFont}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" FontFamily="Microsoft YaHei UI"/>
+            <TextBlock x:Name="PeopleName" TextWrapping="Wrap" FontSize="{Binding TitleFont}" TextAlignment="Center" Grid.Row="3" Grid.Column="1" FontWeight="Bold" FontFamily="Microsoft YaHei UI"> <Run Language="ru-ru" Text="{Binding PeopleNameText}"/></TextBlock>
+            <TextBlock x:Name="PeopleDescription" TextWrapping="Wrap" Text="{Binding PeopleDiscripitonText}" FontSize="{Binding DescriptionFont}" Grid.Row="4" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Top"  FontFamily="Microsoft YaHei UI"/>
 
-    </Grid>
+        </Grid>
+    </Border>
 </Page>

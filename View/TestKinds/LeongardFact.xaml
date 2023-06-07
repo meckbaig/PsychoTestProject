@@ -7,20 +7,22 @@
       mc:Ignorable="d" Background="Azure"
       Title="LeongardFact" Height="300" Width="450" SizeChanged="Page_SizeChanged">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="15*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="TypeImage" Margin="5" Source="{Binding Picture}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="TypeName" TextWrapping="Wrap" FontSize="{Binding TitleFont}" TextAlignment="Center" Grid.Row="0" 
+    <Border BorderBrush="#7F9BA0A0" BorderThickness="0.5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+            <Image x:Name="TypeImage" Margin="5" Source="{Binding Picture}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top"/>
+            <TextBlock x:Name="TypeName" TextWrapping="Wrap" FontSize="{Binding TitleFont}" TextAlignment="Center" Grid.Row="0" 
          Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="{Binding TitleText}" Margin="5"/>
-        <TextBlock x:Name="TypeDescription" Margin="5" TextWrapping="Wrap" Text="{Binding DiscripitonText}"
+            <TextBlock x:Name="TypeDescription" Margin="5" TextWrapping="Wrap" Text="{Binding DiscripitonText}"
          FontSize="{Binding DescriptionFont}" Grid.Row="1" Grid.Column="1" TextAlignment="Left" VerticalAlignment="Top"/>
 
-    </Grid>
+        </Grid>
+    </Border>
 </Page>

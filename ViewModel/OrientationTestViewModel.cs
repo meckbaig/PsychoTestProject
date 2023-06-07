@@ -20,7 +20,6 @@ namespace PsychoTestProject.ViewModel
 
         private void LoadTest(TestClass test)
         {
-            //= Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, $"Tests\\{Title}"), "*.xml")[0];
             MainViewModel.CurrentTest = test;
             MainViewModel.CurrentQuestionNumber = 1;
         }
@@ -42,20 +41,20 @@ namespace PsychoTestProject.ViewModel
 
 
             if (temp.ToLower().Contains("определение направленности личности"))
-                text.Text = one();
+                text.Text = PersonalOrientation();
             else if (temp.ToLower().Contains("потребность в общении"))
-                text.Text = two();
+                text.Text = Communication();
             else if (temp.ToLower().Contains("оценка потребности в одобрении"))
-                text.Text = three();
+                text.Text = NeedForApproval();
             else if (temp.ToLower().Contains("диагностика потребности в поисках ощущений"))
-                text.Text = four();
+                text.Text = NeedForSensations();
 
             scroll.Content = text;
             MainViewModel.TestStarted = false;
 
         }
 
-        private string one()
+        private string PersonalOrientation()
         {
             List<int> OrientationResult = new List<int>() { 0, 0, 0 };
             for (int i = 0; i < AnswersArray.Length; i++)
@@ -95,7 +94,7 @@ namespace PsychoTestProject.ViewModel
             return result;
         }
 
-        private string two()
+        private string Communication()
         {
             int[] indexPos = new int[] { 1, 2, 7, 8, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 30, 31, 32, 33 };
             int[] indexNeg = new int[] { 3, 4, 5, 6, 9, 10, 15, 16, 25, 27, 29 };
@@ -116,7 +115,7 @@ namespace PsychoTestProject.ViewModel
             return levelText;
         }
 
-        private string three()
+        private string NeedForApproval()
         {
             int[] indexPos = new int[] { 1, 2, 3, 4, 5, 9, 11, 14, 15, 16, 20 };
             int[] indexNeg = new int[] { 6, 7, 9, 10, 12, 13, 17, 18, 19 };
@@ -146,7 +145,7 @@ namespace PsychoTestProject.ViewModel
 
         }
 
-        private string four()
+        private string NeedForSensations()
         {
             int[] indexPos = new int[] { 1, 2, 4, 7, 9, 11, 13, 15 };
             int[] indexNeg = new int[] { 3, 5, 6, 8, 10, 12, 14, 16 };

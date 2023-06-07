@@ -176,11 +176,15 @@ namespace PsychoTestProject.ViewModel
             plot.Configuration.LeftClickDragPan = false;
             plot.Configuration.ScrollWheelZoom = false;
             plot.Configuration.DoubleClickBenchmark = false;
-
+            
 
             plot.Plot.AddHorizontalLine(10, System.Drawing.Color.Red);
             plot.Plot.AddHorizontalLine(-10, System.Drawing.Color.Red);
-            plot.Plot.AddBarGroups(Labels, new string[] { "" }, results, errors0);
+            BarPlot[] bars = plot.Plot.AddBarGroups(Labels, new string[] { "" }, results, errors0);
+            foreach (BarPlot bar in bars)
+            {
+                bar.ShowValuesAboveBars = true;
+            }
             plot.Plot.AddLine(-10, -16, -10, 16, System.Drawing.Color.Black);
             plot.Plot.SetAxisLimits(-0.5, 12.5, -16, 16);
 

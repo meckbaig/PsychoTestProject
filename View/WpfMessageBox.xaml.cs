@@ -65,6 +65,7 @@ namespace PsychoTestProject.View
             InitializeComponent();
             MainViewModel.AllButtonsHover(this.Content);
             DataContext = this;
+            _result = MessageBoxResult.Cancel;
         }
         public WpfMessageBox(string message, string title, MessageBoxType type)
         {
@@ -73,8 +74,9 @@ namespace PsychoTestProject.View
             DataContext = this;
             ShowMessage(message, title, type);
         }
+
         static WpfMessageBox _messageBox;
-        static MessageBoxResult _result = MessageBoxResult.Cancel;
+        static MessageBoxResult _result;
 
         public void ChangeMessage(string message)
         {
@@ -246,6 +248,7 @@ namespace PsychoTestProject.View
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+            _messageBox = null;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e) => DragMove();

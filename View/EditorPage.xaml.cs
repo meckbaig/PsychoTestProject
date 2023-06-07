@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using PsychoTestProject.Extensions;
 using PsychoTestProject.ViewModel;
+using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -62,6 +63,9 @@ namespace PsychoTestProject.View
                 TestTitle = MainViewModel.CurrentTest.Name;
             }
         }
+        public CheckBox IsExactCB { get => IsExactCheckBox; }
+        public CheckBox YesNoCB { get => YesNoCheckBox; }
+
         public AnswerClass Answer
         {
             get => answer;
@@ -128,24 +132,8 @@ namespace PsychoTestProject.View
         public EditorPage()
         {
             InitializeComponent();
-
-            foreach (DockPanel dockPanel in MainViewModel.GetVisualChilds<DockPanel>(this.Content as DependencyObject))
-            {
-                foreach (ScrollViewer scrollViewer in MainViewModel.GetVisualChilds<ScrollViewer>(dockPanel as DependencyObject))
-                {
-                    foreach (StackPanel stackPanel in (scrollViewer.Content as StackPanel).Children)
-                    {
-                        foreach (Button button in MainViewModel.GetVisualChilds<Button>(stackPanel))
-                        {
-                            if (button.Background.GetType() != (new ImageBrush()).GetType())
-                            {
-                                MainViewModel.MouseHover(button);
-                            }
-                        }
-                    }
-
-                }
-            }
+            MainViewModel.AllButtonsHover(PageGrid);
+            MainViewModel.AllButtonsHover(TopStackPanel);
             EditorControls = new EditorPageControls(this);
             QuestionList = MainViewModel.CurrentTest.Questions;
             this.CurrentQuestion = QuestionList.ToList()[0];
@@ -268,11 +256,8 @@ namespace PsychoTestProject.View
             openFileDialog.Filter = openFileDialog.Filter.Remove(openFileDialog.Filter.Length - 1);
             if (openFileDialog.ShowDialog() == true)
             {
-                //string savepath = Environment.CurrentDirectory + "\\Tests\\" + MainViewModel.CurrentTest.Name + $"{Path.GetExtension(openFileDialog.FileName)}";
-                //File.WriteAllBytes(savepath, File.ReadAllBytes(openFileDialog.FileName));
                 Image = File.ReadAllBytes(openFileDialog.FileName);
                 ImageExt = Path.GetExtension(openFileDialog.FileName);
-
 
                 BackgroundImage = new Image();
                 BackgroundImage.Source = MainViewModel.GetBitmap(openFileDialog.FileName);
@@ -457,12 +442,8 @@ namespace PsychoTestProject.View
         private void LoadQuestion()
         {
             AnswersControl.Items.Clear();
-            //AnswersStack.Children.Clear();
-            //ShownFlags.Children.Clear();
-            //ShownAnswers.Children.Clear();
-            //AnswerButtons.Children.Clear();
-            TestSettingsStackPanel.Children.Remove(IsExactCheckBox);
-            TestSettingsStackPanel.Children.Remove(YesNoCheckBox);
+            TestSettingsGrid.Children.Remove(IsExactCheckBox);
+            TestSettingsGrid.Children.Remove(YesNoCheckBox);
 
             AnswerList = this.CurrentQuestion.Answers;
             QuestionValueUpDown.Value = CurrentQuestion.Value;
@@ -472,8 +453,8 @@ namespace PsychoTestProject.View
             {
                 IsExactCheckBox = EditorControls.AddCheckBox("IsExactCheckBox", "Точный ответ", CurrentQuestion.IsExact);
                 IsExactCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
-                TestSettingsStackPanel.Children.Add(IsExactCheckBox);
-
+                TestSettingsGrid.Children.Add(IsExactCheckBox);
+                Grid.SetColumn(IsExactCheckBox, 3);
                 if (CurrentQuestion.Answers.Count > 0)
                 {
 
@@ -508,7 +489,8 @@ namespace PsychoTestProject.View
             {
                 YesNoCheckBox = EditorControls.AddCheckBox("YesNoCheckBox", "Выбор \"Да/Нет\"", CurrentQuestion.YesNo);
                 YesNoCheckBox.Loaded += (s, e) => { RaiseSizeChange(); };
-                TestSettingsStackPanel.Children.Add(YesNoCheckBox);
+                TestSettingsGrid.Children.Add(YesNoCheckBox);
+                Grid.SetColumn(YesNoCheckBox, 3);
                 int answerCount = 1;
                 foreach (var answer in question.Answers)
                 {
@@ -610,8 +592,9 @@ namespace PsychoTestProject.View
 
         private void ChangeMargin()
         {
-            ContentViewer.Margin = new Thickness(0, TopStackPanelScroll.ActualHeight + 5, 0, BottomStackPanelScroll.ActualHeight);
+            ContentViewer.Margin = new Thickness(0, TopStackPanel.ActualHeight + 5, 0, BottomStackPanel.ActualHeight);
         }
         #endregion
+
     }
 }

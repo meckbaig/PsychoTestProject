@@ -18,18 +18,18 @@ namespace PsychoTestProject.View.TestKinds
     {
         PreseveranceTestDictionary dictionary { get; set; }
         System.Windows.Threading.DispatcherTimer timer { get; set; }
-        double time = 0;
+        int time = 0;
 
-        private int previousNumber = 0;
+        private int nextNumber = 0;
         bool numberUp = true;
 
-        public int PreviousNumber
+        public int NextNumber
         {
-            get => previousNumber + 1;
+            get => nextNumber + 1;
             set
             {
-                previousNumber = value - 1;
-                OnPropertyChanged("PreviousNumber");
+                nextNumber = value - 1;
+                OnPropertyChanged("NextNumber");
             }
         }
 
@@ -41,12 +41,12 @@ namespace PsychoTestProject.View.TestKinds
             DataContext = this;
             dictionary = new PreseveranceTestDictionary();
             timer = new();
-            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            time += 0.01;
+            time += 1;
         }
 
 
@@ -66,53 +66,60 @@ namespace PsychoTestProject.View.TestKinds
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (previousNumber == 0)
+            if (nextNumber == 0)
                 timer.Start();
-            if (Convert.ToInt32((sender as Image).Name.Replace("img", "")) == previousNumber)
+            if (Convert.ToInt32((sender as Image).Name.Replace("img", "")) == nextNumber)
             {
-                PreviousNumber++;
+                NextNumber++;
+                SolidColorBrush gridBgColor = ThisGrid.Background as SolidColorBrush;
 
-                if ((ThisGrid.Background as SolidColorBrush).Color.G < (ThisGrid.Background as SolidColorBrush).Color.R)
-                    (ThisGrid.Background as SolidColorBrush).Color = Color.FromRgb(30, 55, 30);
+                if (gridBgColor.Color.G < gridBgColor.Color.R)
+                    gridBgColor.Color = Color.FromRgb(30, 55, 30);
 
                 if (numberUp)
                 {
-                    if ((ThisGrid.Background as SolidColorBrush).Color.G >= 55 && (ThisGrid.Background as SolidColorBrush).Color.G <= 235)
+                    if (gridBgColor.Color.G >= 55 && gridBgColor.Color.G <= 235)
                     {
                         ThisGrid.Background = new SolidColorBrush(Color.FromRgb(
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.R + 10),
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.G + 20),
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.B + 10)));
+                            (byte)(gridBgColor.Color.R + 10),
+                            (byte)(gridBgColor.Color.G + 20),
+                            (byte)(gridBgColor.Color.B + 10)));
                     }
                     else
                     {
                         numberUp = false;
-                        PreviousNumber--;
+                        NextNumber--;
                         Image_MouseDown(sender, e);
                     }
                 }
                 else
                 {
-                    if ((ThisGrid.Background as SolidColorBrush).Color.G >= 75 && (ThisGrid.Background as SolidColorBrush).Color.G <= 255)
+                    if (gridBgColor.Color.G >= 75 && gridBgColor.Color.G <= 255)
                     {
                         ThisGrid.Background = new SolidColorBrush(Color.FromRgb(
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.R - 10),
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.G - 20),
-                            (byte)((ThisGrid.Background as SolidColorBrush).Color.B - 10)));
+                            (byte)(gridBgColor.Color.R - 10),
+                            (byte)(gridBgColor.Color.G - 20),
+                            (byte)(gridBgColor.Color.B - 10)));
                     }
                     else
                     {
                         numberUp = true;
-                        PreviousNumber--;
+                        NextNumber--;
                         Image_MouseDown(sender, e);
                     }
                 }
 
-                if (PreviousNumber == dictionary.NumberImages.Count)
+                if (NextNumber == dictionary.NumberImages.Count && timer.IsEnabled)
                 {
                     timer.Stop();
-                    WpfMessageBox.Show(Math.Round(time, 2).ToString() + " секунд на решение");
-
+                    NextNumber = NextNumber - 1;
+                    foreach (Image c in ThisGrid.Children) 
+                    {
+                        c.IsEnabled = false;
+                    }
+                    int minutes = (int)(time / 60);
+                    int seconds = (int)(time % 60);
+                    WpfMessageBox.Show($"{minutes} мин. {seconds} сек. на решение");
                 }
             }
             else
@@ -180,13 +187,21 @@ namespace PsychoTestProject.View.TestKinds
         }
         private void ThisGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (dictionary.NumberImages.Count > 0)
+            try
             {
-                CreatePicture(dictionary.NumberImages.Count - 1, false);
-                for (int i = 0; i < dictionary.NumberImages.Count - 1; i++)
+                if (dictionary.NumberImages.Count > 0)
                 {
-                    CreatePicture(i);
+                    CreatePicture(dictionary.NumberImages.Count - 1, false);
+                    for (int i = 0; i < dictionary.NumberImages.Count - 1; i++)
+                    {
+                        CreatePicture(i);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.Show(ex.ToString(), WpfMessageBox.MessageBoxType.Error);
+                MainViewModel.Back();
             }
         }
 

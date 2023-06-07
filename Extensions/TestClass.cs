@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 
@@ -17,7 +15,7 @@ namespace PsychoTestProject.Extensions
         public string Name { get; set; }
         private ObservableCollection<QuestionClass> questions;
         public ObservableCollection<QuestionClass> Questions { get => questions ?? (questions = ParseFile(Filename)); }
-        public string Filename { get; set; } 
+        public string Filename { get; set; }
         public bool UseTake { get; set; }
         public int Take { get; set; }
         public bool Error { get; set; } = false;

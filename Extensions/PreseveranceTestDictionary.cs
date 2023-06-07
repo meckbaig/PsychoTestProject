@@ -1,18 +1,14 @@
-﻿using PsychoTestProject.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace PsychoTestProject.Extensions
 {
     class PreseveranceTestDictionary
     {
+        bool notAllowed = false;
         private List<string> Fonts = new List<string>()
         {
             "Tahoma",
@@ -27,10 +23,12 @@ namespace PsychoTestProject.Extensions
 
         public List<NumberImageClass> NumberImages = new List<NumberImageClass>();
 
+        private static string Path = Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость";
+
         public PreseveranceTestDictionary()
         {
             DeleteNumbersDirectory();
-            foreach (string image in Directory.GetFiles(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\SpreadSheets", "*.jpg"))
+            foreach (string image in Directory.GetFiles($"{Path}\\SpreadSheets", "*.jpg"))
             {
                 SpreadSheets.Add(image);
             }
@@ -39,7 +37,7 @@ namespace PsychoTestProject.Extensions
 
             if (numberImagesList.Count > 0 && SpreadSheets.Count > 0)
             {
-                NumberImages = Supporting.Shuffle(numberImagesList[Convert.ToInt32(Path.GetFileNameWithoutExtension(SpreadSheets[0].ToString())) - 1]);
+                NumberImages = Supporting.Shuffle(numberImagesList[Convert.ToInt32(System.IO.Path.GetFileNameWithoutExtension(SpreadSheets[0].ToString())) - 1]);
                 NumberImages.Add(new NumberImageClass(0, 1, 1, 0, 0));
 
                 for (int i = 1; i < NumberImages.Count; i++)
@@ -54,7 +52,7 @@ namespace PsychoTestProject.Extensions
         {
             var numberImagesList = new List<List<NumberImageClass>>();
 
-            foreach (string dictionaryPath in Directory.GetFiles(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\Dictionaries", "*.text"))
+            foreach (string dictionaryPath in Directory.GetFiles($"{Path}\\Dictionaries", "*.text"))
             {
                 List<NumberImageClass> imageClassList = new List<NumberImageClass>();
                 string dictionary = Encoding.UTF8.GetString(CryptoMethod.Decrypt(dictionaryPath));
@@ -75,20 +73,33 @@ namespace PsychoTestProject.Extensions
             return numberImagesList;
         }
 
-        private static void DeleteNumbersDirectory()
+        private void DeleteNumbersDirectory()
         {
-            try { Directory.Delete(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\Numbers", true); }
-            catch (System.IO.DirectoryNotFoundException) {}
-            Directory.CreateDirectory(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\Numbers");
+            try 
+            { 
+                Directory.Delete($"{Path}\\Numbers", true);
+                Directory.CreateDirectory($"{Path}\\Numbers");
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory($"{Path}\\Numbers");
+            }
+            catch (Exception)
+            {
+                notAllowed = true;
+            }
         }
 
         private string CreateImage(int number)
         {
+            string savesource = $"{Path}\\Numbers\\{number}.png";
+            if (notAllowed)
+                return savesource;
             Bitmap myBitmap;
-            if (number<10)
-                myBitmap = new Bitmap(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\blank1.png");
+            if (number < 10)
+                myBitmap = new Bitmap($"{Path}\\blank1.png");
             else
-                myBitmap = new Bitmap(Environment.CurrentDirectory + "\\Tests\\Тест на усидчивость\\blank2.png");
+                myBitmap = new Bitmap($"{Path}\\blank2.png");
             Graphics g = Graphics.FromImage(myBitmap);
             Font font = new Font(Fonts[new Random().Next(0, Fonts.Count)], 46, (FontStyle)new Random().Next(1, 2));
             PointF point = new PointF(myBitmap.Width / 2, myBitmap.Height / 2);
@@ -98,7 +109,7 @@ namespace PsychoTestProject.Extensions
             sf.Alignment = StringAlignment.Center;
             sf.LineAlignment = StringAlignment.Center;
             g.DrawString(number.ToString(), font, System.Drawing.Brushes.Black, point, sf);
-            string savesource = Environment.CurrentDirectory + $"\\Tests\\Тест на усидчивость\\Numbers\\{number}.png";
+            
             myBitmap.Save(savesource);
             return savesource;
         }

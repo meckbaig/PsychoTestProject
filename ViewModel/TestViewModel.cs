@@ -66,13 +66,5 @@ namespace PsychoTestProject.ViewModel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-        //public QuestionClass PreviousQuestion()
-        //{
-        //    if (idQuestion == 0)
-        //    {
-        //        return null;
-        //    }
-        //    return Supporting.CurrentTest.Questions[--idQuestion];
-        //}
     }
 }

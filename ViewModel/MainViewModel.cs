@@ -29,12 +29,18 @@ namespace PsychoTestProject.ViewModel
             catch (System.IO.DirectoryNotFoundException)
             {
             }
+            if (Properties.Settings.Default.FirstBoot)
+            {
+                Scale = Math.Round(SystemParameters.MaximizedPrimaryScreenHeight / 900, 1);
+                Properties.Settings.Default.FirstBoot = false;
+                Properties.Settings.Default.Save();
+            }
         }
 
         public static MainWindow MainWindow { get; set; }
         public static Frame? MainFrame { get; set; }
 
-        public static string UserDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
+        public static string UserDataFolder { get; } = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
         public static object TestFrame { get; set; }
         public static bool TestStarted { get; set; }
         public static TestClass CurrentTest { get; set; }
@@ -61,14 +67,20 @@ namespace PsychoTestProject.ViewModel
                     value = 0.5;
                     diff = 1;
                 }
-                else if (MinHeightScale * diff > SystemParameters.FullPrimaryScreenHeight)
+                else if (MinHeightScale * diff > SystemParameters.MaximizedPrimaryScreenHeight)
                 {
                     value = Properties.Settings.Default.Scale;
                     diff = 1;
                 }
-                
-                MainWindow.Width *= diff;
-                MainWindow.Height *= diff;
+                if (MainWindow.WindowState != WindowState.Maximized)
+                {
+                    MainWindow.Width *= diff;
+                    MainWindow.Height *= diff;
+                    if (MainWindow.Width > SystemParameters.MaximizedPrimaryScreenWidth)
+                        MainWindow.Width = SystemParameters.MaximizedPrimaryScreenWidth;
+                    if (MainWindow.Height > SystemParameters.MaximizedPrimaryScreenHeight)
+                        MainWindow.Height = SystemParameters.MaximizedPrimaryScreenHeight;
+                }
                 Properties.Settings.Default.Scale = value;
                 Properties.Settings.Default.Save();
                 OnPropertyChanged(nameof(Scale));
@@ -79,8 +91,8 @@ namespace PsychoTestProject.ViewModel
         }
 
         public double ScalePercent { get => Math.Round(Scale * 100, 0); }
-        public double MinWidthScale { get => Scale * 780; }
-        public double MinHeightScale { get => Scale * 490; }
+        public double MinWidthScale { get => Scale * 800; }
+        public double MinHeightScale { get => Scale * 515; }
         public double StartupX { get => (SystemParameters.FullPrimaryScreenWidth - 800) / 2; }
         public double StartupY { get => (SystemParameters.FullPrimaryScreenHeight - 600) / 2; }
 
@@ -94,6 +106,7 @@ namespace PsychoTestProject.ViewModel
 
         public void ShowScale()
         {
+            MainWindow.ScaleTB.Visibility = Visibility.Visible;
             OnPropertyChanged(nameof(ScalePercent));
             ColorAnimation animation = new ColorAnimation();
             animation.From = Color.FromArgb(0, 0, 0, 0);
@@ -101,6 +114,7 @@ namespace PsychoTestProject.ViewModel
             animation.Duration = TimeSpan.FromMilliseconds(500);
             animation.AutoReverse = true;
             animation.DecelerationRatio = 1;
+            animation.Completed += (s,e) => MainWindow.ScaleTB.Visibility = Visibility.Collapsed;
             MainWindow.ScaleTB.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
         }
 

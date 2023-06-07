@@ -50,7 +50,7 @@ namespace PsychoTestProject.View
                     Title = "Тест «Акцентуации характера К. Леонгард»"; 
                     break;
                 case TestType.AizenkTest:       
-                    Title = "Тест айзенка";
+                    Title = "Тест Айзенка";
                     break;
                 case TestType.PerseveranceTest: 
                     Title = "Тест на усидчивость"; 

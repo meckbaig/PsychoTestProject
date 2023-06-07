@@ -1,19 +1,13 @@
 ﻿using PsychoTestProject.View;
-using PsychoTestProject.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace PsychoTestProject.Extensions
 {
     public class XmlDocumentClass
     {
-        public XmlDocument XmlDoc { get; set; } 
+        public XmlDocument XmlDoc { get; set; }
         private TestClass CurrentTest { get; set; }
         private XmlElement Array { get; set; }
 
@@ -40,7 +34,7 @@ namespace PsychoTestProject.Extensions
                 WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
             }
         }
-        
+
 
         public bool Save(string savePath = null)
         {
@@ -77,6 +71,7 @@ namespace PsychoTestProject.Extensions
                 XmlElement answerElement = XmlDoc.CreateElement("Answer");
                 answerElement.Attributes.Append(AddAttribute("IsCorrect", answer.IsCorrect.ToString()));
                 answerElement.Attributes.Append(AddAttribute("Text", answer.Text));
+                answerElement.Attributes.Append(AddAttribute("Value", answer.Value.ToString()));
                 questionElement.AppendChild(answerElement);
             }
             return questionElement;

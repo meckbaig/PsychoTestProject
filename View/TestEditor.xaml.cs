@@ -21,12 +21,13 @@ namespace PsychoTestProject.View
     /// </summary>
     public partial class TestEditor : Page
     {
+        TestEditorViewModel context;
         public int PreviousSelected = -2;
         public TestEditor()
         {
             InitializeComponent();
             MainViewModel.MainWindow.Title = this.Title;
-            TestEditorViewModel context = new TestEditorViewModel(EditFrame);
+            context = new TestEditorViewModel(EditFrame);
             DataContext = context;
             context.PropertyChanged += Context_PropertyChanged; 
             MainViewModel.AllButtonsHover(this.Content);
@@ -49,16 +50,7 @@ namespace PsychoTestProject.View
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            //if (MainViewModel.CurrentTest != null)
-            //{
-            //    if (!(DataContext as TestEditorViewModel).CompareTest())
-            //        if (WpfMessageBox.Show($"Выбранный тест не сохранён. Вы точно хотите выйти?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            //        {
             MainViewModel.Back();
-            //        }
-            //}
-            //else
-            //    MainViewModel.Back();
         }
 
         private void ListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -70,6 +62,12 @@ namespace PsychoTestProject.View
             }
             else
                 PreviousSelected = ListBox.SelectedIndex;
+        }
+
+        private void EditorPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (context.TestDirectory == "")
+                MainViewModel.Back();
         }
     }
 }

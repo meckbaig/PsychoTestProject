@@ -8,7 +8,7 @@
     <ApplicationIcon>2560px-P_psychology2.svg.ico</ApplicationIcon>
     <Authors>$(meckbaig)</Authors>
     <FileVersion></FileVersion>
-    <AssemblyVersion>1.0.0.26</AssemblyVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -48,8 +48,6 @@
     <None Remove="View\icons8-plus-math-60.png" />
     <None Remove="View\information-48.png" />
     <None Remove="View\save.png" />
-    <None Remove="View\TestKinds\1.jpg" />
-    <None Remove="View\TestKinds\1.png" />
     <None Remove="View\TestKinds\suvorov-a..jpg" />
   </ItemGroup>
 
@@ -95,8 +93,6 @@
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\document-edit.png" />
     <Resource Include="Resources\sub.png" />
-    <Resource Include="View\TestKinds\1.jpg" />
-    <Resource Include="View\TestKinds\1.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,9 +3,7 @@ using Ionic.Zlib;
 using Microsoft.Win32;
 using PsychoTestProject.View;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -139,7 +137,7 @@ namespace PsychoTestProject.Extensions
                                 WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
                             else
                             {
-                                WpfMessageBox.Show("Импорт прерван.", WpfMessageBox.MessageBoxType.Error); 
+                                WpfMessageBox.Show("Импорт прерван.", WpfMessageBox.MessageBoxType.Error);
                             }
                             timer.Stop();
                         }
@@ -192,9 +190,9 @@ namespace PsychoTestProject.Extensions
                 {
                     zip.AlternateEncodingUsage = ZipOption.Always;
                     zip.AlternateEncoding = Encoding.UTF8;
-                    foreach (ZipEntry e in zip)
+                    foreach (ZipEntry entry in zip)
                     {
-                        e.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
+                        entry.Extract(outFolder, ExtractExistingFileAction.OverwriteSilently);
                     }
                 }
             }
@@ -243,7 +241,7 @@ namespace PsychoTestProject.Extensions
                 zip.AlternateEncodingUsage = ZipOption.Always;
                 zip.AlternateEncoding = Encoding.UTF8;
                 zip.CompressionLevel = CompressionLevel.Default;
-                zip.AddFile(filePath, ""); ;
+                zip.AddFile(filePath, "");
                 zip.Save();
             }
         }

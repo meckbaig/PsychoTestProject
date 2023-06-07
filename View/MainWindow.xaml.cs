@@ -14,25 +14,21 @@ namespace PsychoTestProject.View
         public MainWindow()
         {
             if (Process.GetProcesses().Where(p => p.ProcessName ==
-            System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count() > 1)
+                System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count() > 1)
             {
-                if (WpfMessageBox.Show("Копия программы уже открыта!", "Внимание!",
-                    MessageBoxButton.OK, MessageBoxImage.Error) == MessageBoxResult.OK)
-                    Close();
-                else
-                    Close();
+                WpfMessageBox.Show("Копия программы уже открыта!", "Внимание!",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
             InitializeComponent();
             DataContext = new MainViewModel(MainFrame, this);
             MainFrame.Navigate(new Welcome());
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (WpfMessageBox.Show("Вы точно хотите закрыть программу?", WpfMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.Yes)
-            {
                 Process.GetCurrentProcess().Kill();
-            }
             else
                 e.Cancel = true;
         }
@@ -44,7 +40,7 @@ namespace PsychoTestProject.View
                 if (e.Delta > 0)
                     (DataContext as MainViewModel).Scale += 0.1;
                 else
-                   (DataContext as MainViewModel).Scale -= 0.1;
+                    (DataContext as MainViewModel).Scale -= 0.1;
             }
         }
     }

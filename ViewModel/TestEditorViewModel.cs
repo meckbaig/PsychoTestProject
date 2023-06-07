@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using PsychoTestProject.Extensions;
 using PsychoTestProject.View;
 using System;
@@ -9,12 +8,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace PsychoTestProject.ViewModel
 {
@@ -54,12 +50,22 @@ namespace PsychoTestProject.ViewModel
             DeleteTestBTCommand = new Command(o => DeleteTest());
             GoToLectionsEditorCommand = new Command(o => GoToLectionsEditor());
             CreateNewTest();
-;        }
+        }
 
         private void UpdateTestList()
         {
-            TestList = GetTestList();
-            OnPropertyChanged("TestList");
+            if (Directory.Exists(TestDirectory))
+            {
+                TestList = GetTestList();
+                OnPropertyChanged("TestList");
+            }
+            else
+            {
+                TestDirectory = "";
+                WpfMessageBox.Show("Файлы тестирования отсутствуют или повреждены. Для импорта файлов обратитесь к администратору.",
+                    WpfMessageBox.MessageBoxType.Error);
+            }
+                
         }
 
         private ObservableCollection<TestClass> GetTestList()
@@ -79,18 +85,25 @@ namespace PsychoTestProject.ViewModel
 
         public void CreateNewTest()
         {
-            MainViewModel.CurrentTest = new TestClass(false);
-            ObservableCollection<TestClass> testList = GetTestList();
-            MainViewModel.CurrentTest.Name = "Новый тест";
-            for (int i = 1; i < testList.Count; i++)
+            try
             {
-                if (testList.FirstOrDefault(tl => tl.Name == MainViewModel.CurrentTest.Name) != null)
-                    MainViewModel.CurrentTest.Name = $"Новый тест {i}";
-                else break;
+                MainViewModel.CurrentTest = new TestClass(false);
+                ObservableCollection<TestClass> testList = GetTestList();
+                MainViewModel.CurrentTest.Name = "Новый тест";
+                for (int i = 1; i < testList.Count; i++)
+                {
+                    if (testList.FirstOrDefault(tl => tl.Name == MainViewModel.CurrentTest.Name) != null)
+                        MainViewModel.CurrentTest.Name = $"Новый тест {i}";
+                    else break;
+                }
+                MainViewModel.CurrentTest.Questions.Add(new QuestionClass());
+                editorPage = new EditorPage();
+                EditFrame.Navigate(editorPage);
             }
-            MainViewModel.CurrentTest.Questions.Add(new QuestionClass());
-            editorPage = new EditorPage();
-            EditFrame.Navigate(editorPage);
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public void SaveTest()
@@ -109,8 +122,8 @@ namespace PsychoTestProject.ViewModel
                 if (dialogResult == MessageBoxResult.No)
                 {
                     SaveFileDialog fileDialog = new SaveFileDialog()
-                    { 
-                        Title = "Сохранение файлов", 
+                    {
+                        Title = "Сохранение файлов",
                         FileName = MainViewModel.CurrentTest.Name,
                         Filter = "Файл тестирования|*.xml"
                     };
@@ -122,13 +135,13 @@ namespace PsychoTestProject.ViewModel
 
                 if (savePath == string.Empty)
                 {
-                    MainViewModel.CurrentTest.Name = MainViewModel.FileNameNotNull(MainViewModel.CurrentTest.Name, 
+                    MainViewModel.CurrentTest.Name = MainViewModel.FileNameNotNull(MainViewModel.CurrentTest.Name,
                         "Новый тест.xml", TestDirectory);
 
                     if (MainViewModel.CurrentTest.Filename == null)
                         savePath = Path.Combine(TestDirectory, MainViewModel.CurrentTest.Name + ".xml");
                     else
-                        savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename), 
+                        savePath = Path.Combine(Path.GetDirectoryName(MainViewModel.CurrentTest.Filename),
                             MainViewModel.CurrentTest.Name + ".xml");
                 }
 
@@ -157,7 +170,7 @@ namespace PsychoTestProject.ViewModel
                 if (xmlDocument.Save())
                 {
                     if (editorPage?.Image != null)
-                        File.WriteAllBytes(TestDirectory + 
+                        File.WriteAllBytes(TestDirectory +
                             MainViewModel.CurrentTest.Name + editorPage.ImageExt, editorPage.Image);
                     WpfMessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
                     UpdateTestList();
@@ -170,7 +183,7 @@ namespace PsychoTestProject.ViewModel
         {
             if (Test != null)
             {
-                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!", 
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!",
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     EditFrame.Content = null;
@@ -182,7 +195,7 @@ namespace PsychoTestProject.ViewModel
             }
             else if (MainViewModel.CurrentTest != null)
             {
-                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{MainViewModel.CurrentTest.Name}\"?", "Внимание!", 
+                if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{MainViewModel.CurrentTest.Name}\"?", "Внимание!",
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     EditFrame.Content = null;
@@ -208,7 +221,7 @@ namespace PsychoTestProject.ViewModel
             }
         }
 
-        public void GoToLectionsEditor ()
+        public void GoToLectionsEditor()
         {
             MainViewModel.CurrentTest = null;
             MainViewModel.MainFrame.Navigate(new Lections(true));
@@ -222,12 +235,10 @@ namespace PsychoTestProject.ViewModel
             {
                 return openTestCommand ?? (openTestCommand = new Command(obj =>
                 {
-                    try
-                    {
                         MainViewModel.CurrentTest = (obj as TestClass);
 
                         if (obj != null && MainViewModel.CurrentTest?.Questions?[0] == null)
-                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!", 
+                            WpfMessageBox.Show("Выберите другой файл или обратитесь к администратору", "Внимание!",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
@@ -237,10 +248,10 @@ namespace PsychoTestProject.ViewModel
 
                                 if (fileDialog.ShowDialog() == true)
                                 {
-                                    MainViewModel.CurrentTest = new TestClass(false) 
-                                    { 
-                                        Name = Path.GetFileNameWithoutExtension(fileDialog.FileName), 
-                                        Filename = fileDialog.FileName 
+                                    MainViewModel.CurrentTest = new TestClass(false)
+                                    {
+                                        Name = Path.GetFileNameWithoutExtension(fileDialog.FileName),
+                                        Filename = fileDialog.FileName
                                     };
                                     TestDirectory = Path.GetDirectoryName(MainViewModel.CurrentTest.Filename);
                                     UpdateTestList();
@@ -250,11 +261,7 @@ namespace PsychoTestProject.ViewModel
                             editorPage = new EditorPage();
                             EditFrame.Navigate(editorPage);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        WpfMessageBox.Show(ex.Message, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    
                 }));
             }
         }

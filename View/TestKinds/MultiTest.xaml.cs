@@ -61,7 +61,6 @@ namespace PsychoTestProject.View.TestKinds
 
         private void NextQuestion(object sender, EventArgs e)
         {
-            //viewModel.PrintResults(ThisGrid, Scroll);
             viewModel.AnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswer();
             if (viewModel.NegativeAnswersArray?.Count() > 0)
                 viewModel.NegativeAnswersArray[viewModel.CurrentQuestion.Id - 1] = (int)Question.CheckAnswerYesNo(false);
