@@ -24,7 +24,6 @@
 ✔ Editor for lections<br/>
 ✔ Admin app <br/>
 ✔ Tests descriptions<br/>
-❌ Picture test<br/>
 ✔ ToolTips<br/>
 ✔ Interface scaling (ctrl+mouse wheel)<br/>
 ● Bug fixes...😨<br/>
