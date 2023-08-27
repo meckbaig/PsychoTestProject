@@ -34,12 +34,14 @@ namespace PsychoTestControlPanel
             }
             catch (UnauthorizedAccessException)
             {
-                if (MessageBox.Show($"Ошибка доступа к файлу {Path.GetFileName(filePath)}\n" +
-                    $"Хотите продолжить операцию?", "Серьёзная ошибка!",
+                if (WpfMessageBox.Show($"Ошибка доступа к файлу {Path.GetFileName(filePath)}\n" +
+                    $"Хотите перезапустить программу от имени администратора?", "Серьёзная ошибка!",
                     MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.No)
                 {
                     view.operationAllowed = false;
                 }
+                else
+                    MainViewModel.RunAsAdmin();
             }
         }
 

@@ -27,8 +27,7 @@ namespace PsychoTestControlPanel
             if (Process.GetProcesses().Where(p => p.ProcessName ==
             System.IO.Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)).Count() > 1)
             {
-                if (MessageBox.Show("Копия программы уже открыта!", "Внимание!",
-                    MessageBoxButton.OK, MessageBoxImage.Error) == MessageBoxResult.OK)
+                if (WpfMessageBox.Show("Копия программы уже открыта!", WpfMessageBox.MessageBoxType.Error) == MessageBoxResult.OK)
                     this.Close();
                 else
                     this.Close();

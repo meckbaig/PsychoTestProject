@@ -2,6 +2,7 @@
 using Ionic.Zlib;
 using Microsoft.Win32;
 using PsychoTestProject.View;
+using PsychoTestProject.ViewModel;
 using System;
 using System.IO;
 using System.Reflection;
@@ -106,6 +107,18 @@ namespace PsychoTestProject.Extensions
                     timer.Start();
                 }
             }
+            catch (UnauthorizedAccessException)
+            {
+                MainViewModel.FilesEditPermission = false;
+                if (WpfMessageBox.Show($"Ошибка доступа к файлам\n" +
+                    $"Хотите перезапустить программу от имени администратора?", "Серьёзная ошибка!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    MainViewModel.RunAsAdmin();
+                }
+                else
+                    error = true;
+            }
             catch (Exception)
             {
                 error = true;
@@ -119,10 +132,18 @@ namespace PsychoTestProject.Extensions
                 if (Path.GetExtension(fileName) == ".psychoExp")
                 {
                     error = false;
+                    Exception exception = null;
                     WpfMessageBox mBox = new WpfMessageBox("", "Импорт файлов...", WpfMessageBox.MessageBoxType.Information);
                     Task task = new Task(() =>
                     {
-                        DecodeExtract(mBox, fileName);
+                        try
+                        {
+                            DecodeExtract(mBox, fileName, ref error, ref exception);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     });
                     task.Start();
 
@@ -133,8 +154,21 @@ namespace PsychoTestProject.Extensions
                         if (task.IsCompleted)
                         {
                             mBox.CloseMessage();
-                            if (!error)
+                            if (!error && task.IsCompletedSuccessfully)
                                 WpfMessageBox.Show("Успешно импортировано", "Операция выполнена", MessageBoxButton.OK, MessageBoxImage.Information);
+                            else if (exception != null)
+                            {
+                                if (MainViewModel.IsAdmin())
+                                    DecodeExtract(mBox, fileName, ref error, ref exception);
+                                else if (WpfMessageBox.Show($"Ошибка доступа к файлам программы\n" +
+                                    $"Хотите перезапустить программу от имени администратора?", "Серьёзная ошибка!",
+                                    MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                                {
+                                    MainViewModel.RunAsAdmin();
+                                }
+                                else
+                                    error = true;
+                            }
                             else
                             {
                                 WpfMessageBox.Show("Импорт прерван.", WpfMessageBox.MessageBoxType.Error);
@@ -147,36 +181,55 @@ namespace PsychoTestProject.Extensions
                 else
                     WpfMessageBox.Show($"Выбран файл с неверным форматом ({Path.GetExtension(fileName)} вместо .psychoExp)", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (UnauthorizedAccessException)
+            {
+                MainViewModel.FilesEditPermission = false;
+                if (WpfMessageBox.Show($"Ошибка доступа к файлам программы\n" +
+                    $"Хотите перезапустить программу от имени администратора?", "Серьёзная ошибка!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    MainViewModel.RunAsAdmin();
+                }
+                else
+                    error = true;
+            }
             catch (Exception)
             {
                 error = true;
             }
-
         }
 
-        private static void DecodeExtract(WpfMessageBox mBox, string fileName)
+        private static void DecodeExtract(WpfMessageBox mBox, string fileName, ref bool error, ref Exception exception)
         {
-            string tmpPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
-            if (Path.GetExtension(fileName) == ".psychoExp")
-                tmpPath = Environment.CurrentDirectory;
-            else
-                Directory.CreateDirectory(tmpPath);
-            string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
-
-            mBox.ChangeMessage($"Импортирую {Path.GetFileName(fileName)}");
-            File.WriteAllBytes(zipPath, Decrypt(fileName));
-
-            ExtractFiles(zipPath, tmpPath);
-            File.Delete(zipPath);
-
-
-            foreach (string file in Directory.GetFiles(tmpPath))
+            try
             {
-                if (Path.GetExtension(file) == ".tmp")
+                string tmpPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
+                if (Path.GetExtension(fileName) == ".psychoExp")
+                    tmpPath = Environment.CurrentDirectory;
+                else
+                    Directory.CreateDirectory(tmpPath);
+                string zipPath = Path.Combine(tmpPath, $"{Path.GetFileNameWithoutExtension(fileName)}.zip");
+
+                mBox.ChangeMessage($"Импортирую {Path.GetFileName(fileName)}");
+                File.WriteAllBytes(zipPath, Decrypt(fileName));
+
+                ExtractFiles(zipPath, tmpPath);
+                File.Delete(zipPath);
+
+                foreach (string file in Directory.GetFiles(tmpPath))
                 {
-                    DecodeExtract(mBox, file);
-                    File.Delete(file);
+                    if (Path.GetExtension(file) == ".tmp")
+                    {
+                        DecodeExtract(mBox, file, ref error, ref exception);
+                        File.Delete(file);
+                    }
                 }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MainViewModel.FilesEditPermission = false;
+                error = true;
+                exception = ex;
             }
         }
 

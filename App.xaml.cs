@@ -17,9 +17,15 @@ namespace PsychoTestProject
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-            MainWindow = new MainWindow();
-            MainWindow.Show();
+            try
+            {
+                base.OnStartup(e);
+                MainWindow = new MainWindow();
+                MainWindow.Show();
+            }
+            catch (Exception)
+            { }
+            
         }
 
         public static MainWindow MainWindow { get; private set; }

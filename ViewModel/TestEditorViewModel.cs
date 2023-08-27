@@ -108,6 +108,13 @@ namespace PsychoTestProject.ViewModel
 
         public void SaveTest()
         {
+            if (!MainViewModel.FilesEditPermission)
+            {
+                WpfMessageBox.Show("Программа запущена не от имени администратора, доступ к редактированию файлов запрещён",
+                    "Внимание!", MessageBoxButton.OK);
+                return;
+            }
+
             XmlDocumentClass xmlDocument = new XmlDocumentClass();
             if (MainViewModel.CurrentTest != null)
             {
@@ -181,6 +188,12 @@ namespace PsychoTestProject.ViewModel
 
         public void DeleteTest()
         {
+            if (!MainViewModel.FilesEditPermission)
+            {
+                WpfMessageBox.Show("Программа запущена не от имени администратора, доступ к редактированию файлов запрещён",
+                    "Внимание!", MessageBoxButton.OK);
+                return;
+            }
             if (Test != null)
             {
                 if (WpfMessageBox.Show($"Вы точно хотите удалить тест \"{Test.Name}\"?", "Внимание!",
@@ -210,6 +223,12 @@ namespace PsychoTestProject.ViewModel
 
         private void DeletePicture(string fileName)
         {
+            if (!MainViewModel.FilesEditPermission)
+            {
+                WpfMessageBox.Show("Программа запущена не от имени администратора, доступ к редактированию файлов запрещён",
+                    "Внимание!", MessageBoxButton.OK);
+                return;
+            }
             for (int i = 0; i < Enum.GetNames(typeof(ImageExtension)).Length; i++)
             {
                 string path = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + $".{(ImageExtension)i}");

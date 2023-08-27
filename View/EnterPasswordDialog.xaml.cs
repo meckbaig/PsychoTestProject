@@ -29,7 +29,9 @@ namespace PsychoTestProject.View
                 _password = Encoding.UTF8.GetString(CryptoMethod.Decrypt(Environment.CurrentDirectory + "\\mgmt.cfg"));
             else
             {
-                WpfMessageBox.Show("Для доступа к редактированию требуется установить пароль администратора!", WpfMessageBox.MessageBoxType.Warning);
+                WpfMessageBox.Show("Для доступа к редактированию требуется установить пароль администратора!" +
+                    "\nПуть к программе скопирован в буфер обмена", WpfMessageBox.MessageBoxType.Warning);
+                Clipboard.SetData(DataFormats.Text, (Object)Environment.CurrentDirectory);
                 Close();
             }
             Password.Focus();   
@@ -65,6 +67,21 @@ namespace PsychoTestProject.View
         {
             if (Password.Password == _password)
             {
+                try
+                {
+                    File.WriteAllText(Environment.CurrentDirectory + "/tmp.txt", "");
+                    File.Delete(Environment.CurrentDirectory + "/tmp.txt");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MainViewModel.FilesEditPermission = false;
+                    if (WpfMessageBox.Show("Программа запущена не от имени администратора, доступ к редактированию файлов запрещён\n" +
+                        "Хотите перезапустить программу от имени администратора?", "Внимание!",
+                        MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                    {
+                        MainViewModel.RunAsAdmin();
+                    };
+                }
                 _result = true;
                 _dialog = null;
                 Close();

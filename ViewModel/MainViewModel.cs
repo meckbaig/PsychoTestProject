@@ -3,6 +3,7 @@ using PsychoTestProject.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -40,6 +41,7 @@ namespace PsychoTestProject.ViewModel
         public static MainWindow MainWindow { get; set; }
         public static Frame? MainFrame { get; set; }
 
+        public static bool FilesEditPermission { get; set; } = true;
         public static string UserDataFolder { get; } = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\PsychoTest";
         public static object TestFrame { get; set; }
         public static bool TestStarted { get; set; }
@@ -90,6 +92,23 @@ namespace PsychoTestProject.ViewModel
             }
         }
 
+        public static void RunAsAdmin()
+        {
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = Process.GetCurrentProcess().MainModule.FileName;
+            psi.UseShellExecute = true;
+            psi.Verb = "runas";
+            Process.Start(psi);
+            Application.Current.Shutdown();
+        }
+
+        public static bool IsAdmin()
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var principal = new System.Security.Principal.WindowsPrincipal(identity);
+            return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+
         public double ScalePercent { get => Math.Round(Scale * 100, 0); }
         public double MinWidthScale { get => Scale * 800; }
         public double MinHeightScale { get => Scale * 515; }
@@ -117,7 +136,6 @@ namespace PsychoTestProject.ViewModel
             animation.Completed += (s,e) => MainWindow.ScaleTB.Visibility = Visibility.Collapsed;
             MainWindow.ScaleTB.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
         }
-
 
         public static List<T> GetVisualChilds<T>(DependencyObject parent) where T : DependencyObject
         {

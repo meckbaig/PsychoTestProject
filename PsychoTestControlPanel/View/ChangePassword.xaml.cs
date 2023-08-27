@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -34,9 +35,20 @@ namespace PsychoTestControlPanel
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            string filePath = Properties.Settings.Default.PsychoTestPath+"\\mgmt.cfg";
-            File.WriteAllBytes(filePath, Algorythm.Encrypt(Encoding.UTF8.GetBytes(PasswordTB.Text)));
-            MainViewModel.MainFrame.NavigationService.GoBack();
+            try
+            {
+                string filePath = Properties.Settings.Default.PsychoTestPath+"\\mgmt.cfg";
+                File.WriteAllBytes(filePath, Algorythm.Encrypt(Encoding.UTF8.GetBytes(PasswordTB.Text)));
+                MainViewModel.MainFrame.NavigationService.GoBack();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MainViewModel.RunAsAdmin();
+            }
+            catch(Exception ex)
+            {
+                WpfMessageBox.Show(ex.Message, WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private void PasswordTB_KeyDown(object sender, KeyEventArgs e)

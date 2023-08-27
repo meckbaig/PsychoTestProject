@@ -59,7 +59,6 @@
         <Button x:Name="TestsButton" Content="Приступить к тестам" HorizontalAlignment="Left" Grid.Row="1" Height="51" 
                 Width="170" FontFamily="Microsoft YaHei UI" FontSize="15" Background="#FF6CFFB6" BorderBrush="{x:Null}" 
                 Click="TestsButton_Click"  Grid.Column="3" Margin="0,50,0,0" VerticalAlignment="Top"/>
-
         <Button x:Name="InfoButton" Template="{DynamicResource InfoButtonTemplate}" Content="&#xD;&#xA;" Margin="0,10,10,0" Width="36" Height="36" 
                 VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Click="InfoButton_Click" Background="#00000000" ToolTip="Информация"/>
         <Button x:Name="AdminButton" Template="{DynamicResource AdminButtonTemplate}" Content="&#xA;" Margin="10,10,0,0" Width="40" ToolTip="Редактор"
@@ -68,6 +67,5 @@
             Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ImportButton_Click" RenderTransformOrigin="1.092,0.486" Background="#00000000" Grid.Row="1"/>
         <Button x:Name="ExportButton" Template="{DynamicResource ExportButtonTemplate}" Content="&#xA;" Margin="55,0,0,10" Width="40" ToolTip="Экспорт"
             Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ExportButton_Click" RenderTransformOrigin="1.092,0.486" Background="#00000000" Grid.Row="1"/>
-
     </Grid>
 </Page>

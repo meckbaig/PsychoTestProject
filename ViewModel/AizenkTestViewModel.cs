@@ -44,7 +44,6 @@ namespace PsychoTestProject.ViewModel
             MainViewModel.CurrentQuestionNumber = 1;
         }
 
-
         public override void PrintResults(Grid thisGrid, ScrollViewer Scroll)
         {
             if (CalculateIndicator(indexAPos, indexANeg) <= 4)
@@ -102,7 +101,6 @@ namespace PsychoTestProject.ViewModel
                         FunFact.Height = thisGrid.ActualHeight / 1.7;
                         FunFact.Width = FunFact.Height / 1.5;
                     }
-
                 };
                 WpfPlot plot = Plot(stackPanel, extraversion, neuroticism, thisGrid);
 
@@ -110,19 +108,13 @@ namespace PsychoTestProject.ViewModel
                 stackPanel.Children.Add(plot);
                 stackPanel.Children.Add(textText);
                 thisGrid.Children.Add(FunFrame);
-
-
                 Scroll.Content = stackPanel;
-
-
-
                 SizeChangedInfo sifo = new SizeChangedInfo(thisGrid, new Size(Double.NaN, Double.NaN), true, true);
                 SizeChangedEventArgs ea = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).FirstOrDefault().Invoke(
                     new object[] { (thisGrid as FrameworkElement), sifo }) as SizeChangedEventArgs;
                 ea.RoutedEvent = Panel.SizeChangedEvent;
                 thisGrid.RaiseEvent(ea);
-
             }
 
             else WpfMessageBox.Show("Error 234-56:98");
@@ -159,8 +151,6 @@ namespace PsychoTestProject.ViewModel
                     plotSize = (float)(thisGrid.ActualWidth * 0.7);
                 title.FontSize = plotSize / 15; text.FontSize = plotSize / 30;
             };
-
-
             return (title, text, types);
         }
 
@@ -176,8 +166,6 @@ namespace PsychoTestProject.ViewModel
             plot.Configuration.LeftClickDragPan = false;
             plot.Configuration.ScrollWheelZoom = false;
             plot.Configuration.DoubleClickBenchmark = false;
-
-
             plot.Plot.SetAxisLimits(0, 24, 0, 24);
             plot.Plot.XAxis.ManualTickSpacing(2);
             plot.Plot.YAxis.ManualTickSpacing(2);
@@ -269,13 +257,9 @@ namespace PsychoTestProject.ViewModel
             stackPanel.Margin = new Thickness(thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20, thisGrid.ActualWidth / 20, thisGrid.ActualHeight / 20);
 
             if (thisGrid.ActualWidth > thisGrid.ActualHeight)
-            {
                 stackPanel.Width = thisGrid.ActualHeight * 0.7;
-            }
             else
-            {
                 stackPanel.Width = thisGrid.ActualWidth * 0.7;
-            }
             text1.FontSize = text2.FontSize = text3.FontSize = text4.FontSize = (float)(stackPanel.Width / 30);
             float sheetX = (float)(stackPanel.Width - 68);
             float sheetY = (float)(stackPanel.Width - 65);
@@ -362,7 +346,6 @@ namespace PsychoTestProject.ViewModel
                     }
                     break;
             }
-
             return type;
         }
 

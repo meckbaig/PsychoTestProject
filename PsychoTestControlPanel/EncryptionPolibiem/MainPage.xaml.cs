@@ -21,6 +21,14 @@ namespace PsychoTestControlPanel
         public bool operationAllowed { get; set; } = true;
         public bool atLeastOneSuccessfull { get; set; } = false;
         public bool isEncodeChecked { get => Encode.IsChecked ?? false; }
+        public Visibility IsAdmin
+        {
+            get => MainViewModel.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+            set
+            {
+                IsAdmin = value;
+            }
+        }
 
         Encryptions Encryptions;
 
@@ -29,6 +37,7 @@ namespace PsychoTestControlPanel
             InitializeComponent();
             CoolLook.AllButtonsHover(Content);
             Encryptions = new Encryptions(this);
+            DataContext = this;
         }
 
         private void File_Click(object sender, RoutedEventArgs e)
