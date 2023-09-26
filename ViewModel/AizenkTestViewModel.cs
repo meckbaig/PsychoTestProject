@@ -117,7 +117,7 @@ namespace PsychoTestProject.ViewModel
                 thisGrid.RaiseEvent(ea);
             }
 
-            else WpfMessageBox.Show("Error 234-56:98");
+            else WpfMessageBox.Show("Ваши ответы были не достаточно честны", WpfMessageBox.MessageBoxType.Error);
         }
 
         private (TextBlock title, TextBlock text, List<string> types) CreateTitle(string type, Grid thisGrid)

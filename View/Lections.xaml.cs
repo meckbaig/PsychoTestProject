@@ -98,14 +98,37 @@ namespace PsychoTestProject
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            string html = GetHtmlHead(LectionSource);
-            string outerHTML = await GetHtmlBody();
+            if (!MainViewModel.FilesEditPermission)
+            {
+                WpfMessageBox.Show("Программа запущена не от имени администратора, доступ к редактированию файлов запрещён",
+                    "Внимание!", MessageBoxButton.OK);
+                return;
+            }
+            try
+            {
+                string html = GetHtmlHead(LectionSource);
+                string outerHTML = await GetHtmlBody();
 
-            string fullHtml = html + outerHTML;
-            string fileName = MainViewModel.ProperFileName(LectionTitleTB.Text);
-            fileName = MainViewModel.FileNameNotNull(fileName, "Лекция.html", Environment.CurrentDirectory + $"\\Lections");
-            File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{fileName}.html", fullHtml);
-            (DataContext as LectionsViewModel).UpdateLectionList();
+                string fullHtml = html + outerHTML;
+                string fileName = MainViewModel.ProperFileName(LectionTitleTB.Text);
+                fileName = MainViewModel.FileNameNotNull(fileName, "Лекция.html", Environment.CurrentDirectory + $"\\Lections");
+                File.WriteAllText(Environment.CurrentDirectory + $"\\Lections\\{fileName}.html", fullHtml);
+                (DataContext as LectionsViewModel).UpdateLectionList();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MainViewModel.FilesEditPermission = false;
+                if (WpfMessageBox.Show($"Ошибка доступа к файлам\n" +
+                    $"Хотите перезапустить программу от имени администратора?", "Серьёзная ошибка!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    MainViewModel.RunAsAdmin();
+                }
+            }
+            catch (Exception)
+            {
+                WpfMessageBox.Show("Произошла непредвиденная ошибка!", WpfMessageBox.MessageBoxType.Error);
+            }
         }
 
         private async Task<string> GetHtmlBody()
